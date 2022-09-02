@@ -41,7 +41,7 @@ using namespace o2::framework::expressions;
 static const std::vector<std::string> highPtObjectsNames{"JetChHighPt"};
 
 struct jetFilter {
-  enum { kJetChHighPt= 0,
+  enum { kJetChHighPt = 0,
          kHighPtObjects };
 
   //event selection cuts
@@ -96,7 +96,7 @@ struct jetFilter {
         spectra.fill(HIST("fProcessedEvents"), iDecision);
       }
     }
-    tags(collision,keepEvent[kJetChHighPt]);
+    tags(collision, keepEvent[kJetChHighPt]);
   }
 };
 
