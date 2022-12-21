@@ -170,11 +170,11 @@ struct JetFinderHFTask {
           const auto& constituents = sorted_by_pt(jet.constituents());
           for (const auto& constituent : constituents) {
             if (constituent.user_index() != -1) {
-              auto track = tracks.rawIteratorAt(constituent.user_index() - tracks.offset()); //is this ok with the global index of the track table
+              auto track = tracks.rawIteratorAt(constituent.user_index() - tracks.offset()); // is this ok with the global index of the track table
               trackconst.push_back(constituent.user_index());
             }
           }
-          candconst.push_back(candidate.globalIndex()); //is this grouped per collision too?
+          candconst.push_back(candidate.globalIndex()); // is this grouped per collision too?
           trackConstituents(jetsTable.lastIndex(), trackconst, std::vector<int>(), candconst);
           hJetPt->Fill(jet.pt());
           hJetPhi->Fill(jet.phi());
@@ -203,7 +203,7 @@ struct JetFinderHFTask {
       if (candidate.pt() < candPtMin || candidate.pt() >= candPtMax) {
         continue;
       }
-      //are the next two ifs needed?
+      // are the next two ifs needed?
       if (!(candidate.hfflag() & 1 << aod::hf_cand_2prong::DecayType::D0ToPiK)) {
         continue;
       }
@@ -225,7 +225,7 @@ struct JetFinderHFTask {
       fastjet::ClusterSequenceArea clusterSeq(jetFinder.findJets(inputParticles, jets));
       for (const auto& jet : jets) {
         isHFJet = false;
-        if (jet.eta() < trackEtaMin + jetR || jet.eta() > trackEtaMax - jetR) { //is this needed?
+        if (jet.eta() < trackEtaMin + jetR || jet.eta() > trackEtaMax - jetR) { // is this needed?
           continue;
         }
         if (jet.perp() < jetPtMin || jet.perp() >= jetPtMax) {
@@ -249,7 +249,7 @@ struct JetFinderHFTask {
               trackconst.push_back(constituent.user_index());
             }
           }
-          candconst.push_back(candidate.globalIndex()); //check if its correct
+          candconst.push_back(candidate.globalIndex()); // check if its correct
           trackConstituents(jetsTable.lastIndex(), trackconst, std::vector<int>(), candconst);
           hJetPt->Fill(jet.pt());
           hJetPhi->Fill(jet.phi());
