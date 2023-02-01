@@ -55,8 +55,8 @@ namespace o2::aod
 {
 namespace jetsubstructurehf
 {
-//add an index to the jet table
-//add a coloumn to make it unique for data, MC det and MC gen
+// add an index to the jet table
+// add a coloumn to make it unique for data, MC det and MC gen
 DECLARE_SOA_COLUMN(Zg, zg, float);
 DECLARE_SOA_COLUMN(Rg, rg, float);
 DECLARE_SOA_COLUMN(Nsd, nsd, float);
@@ -64,9 +64,9 @@ DECLARE_SOA_COLUMN(Nsd, nsd, float);
 DECLARE_SOA_TABLE(JetSubtructureHF, "AOD", "JETSUBSTRUCTHF", jetsubstructurehf::Zg, jetsubstructurehf::Rg, jetsubstructurehf::Nsd);
 } // namespace o2::aod
 
-template <typename JetTable, typename TrackConstituentTable> //add one more for output table type
+template <typename JetTable, typename TrackConstituentTable> // add one more for output table type
 struct JetSubstructureHFTask {
-  //Produces<aod::JetSubtructureHF> jetSubstructurehf;
+  // Produces<aod::JetSubtructureHF> jetSubstructurehf;
   OutputObj<TH1F> hZg{"h_jet_zg"};
   OutputObj<TH1F> hRg{"h_jet_rg"};
   OutputObj<TH1F> hNsd{"h_jet_nsd"};
@@ -94,25 +94,25 @@ struct JetSubstructureHFTask {
   }
   enum pdgCode { pdgD0 = 421 };
 
-  //Filter jetCuts = aod::jet::pt > f_jetPtMin;
+  // Filter jetCuts = aod::jet::pt > f_jetPtMin;
 
-  void processData(soa::Join<aod::HFJets, aod::HFJetConstituents>::iterator const& jet, //add template back
+  void processData(soa::Join<aod::HFJets, aod::HFJetConstituents>::iterator const& jet, // add template back
                    soa::Join<aod::HfCand2Prong, aod::HfSelD0> const& candidates,
                    aod::Tracks const& tracks)
   {
     jetConstituents.clear();
     jetReclustered.clear();
-    //if (b_DoConstSub) {
-    //for (const auto& constituent : constituentsSub) {
-    // fillConstituents(constituent, jetConstituents);
-    // }
-    //} else {
-    // for (auto& jetConstituentIndex : jet.trackIds()) {
-    // auto jetConstituent = tracks.rawIteratorAt(jetConstituentIndex - tracks.offset());
+    // if (b_DoConstSub) {
+    // for (const auto& constituent : constituentsSub) {
+    //  fillConstituents(constituent, jetConstituents);
+    //  }
+    // } else {
+    //  for (auto& jetConstituentIndex : jet.trackIds()) {
+    //  auto jetConstituent = tracks.rawIteratorAt(jetConstituentIndex - tracks.offset());
     for (auto& jetConstituent : jet.tracks_as<aod::Tracks>()) {
       fillConstituents(jetConstituent, jetConstituents);
     }
-    for (auto& jetHFCandidate : jet.hfcandidates_as<soa::Join<aod::HfCand2Prong, aod::HfSelD0>>()) { //should only be one at the moment
+    for (auto& jetHFCandidate : jet.hfcandidates_as<soa::Join<aod::HfCand2Prong, aod::HfSelD0>>()) { // should only be one at the moment
       fillConstituents(jetHFCandidate, jetConstituents, -1, RecoDecay::getMassPDG(pdgD0));
     }
     //}
@@ -155,26 +155,26 @@ struct JetSubstructureHFTask {
       }
     }
     hNsd->Fill(nsd);
-    //jetSubstructurehf(zg, rg, nsd);
+    // jetSubstructurehf(zg, rg, nsd);
   }
   PROCESS_SWITCH(JetSubstructureHFTask, processData, "HF jet substructure on data", true);
 
   void processMCD(soa::Join<aod::MCDetectorLevelHFJets, aod::MCDetectorLevelHFJetConstituents>::iterator const& jet,
                   soa::Join<aod::HfCand2Prong, aod::HfSelD0, aod::HfCand2ProngMcRec> const& candidates,
-                  //aod::JetConstituentsSub const& constituentsSub,
+                  // aod::JetConstituentsSub const& constituentsSub,
                   aod::Tracks const& tracks)
   {
     jetConstituents.clear();
     jetReclustered.clear();
-    //if (b_DoConstSub) {
-    //for (const auto& constituent : constituentsSub) {
-    // fillConstituents(constituent, jetConstituents);
-    // }
-    //} else {
+    // if (b_DoConstSub) {
+    // for (const auto& constituent : constituentsSub) {
+    //  fillConstituents(constituent, jetConstituents);
+    //  }
+    // } else {
     for (auto& jetConstituent : jet.tracks_as<aod::Tracks>()) {
       fillConstituents(jetConstituent, jetConstituents);
     }
-    for (auto& jetHFCandidate : jet.hfcandidates_as<soa::Join<aod::HfCand2Prong, aod::HfSelD0, aod::HfCand2ProngMcRec>>()) { //should only be one at the moment
+    for (auto& jetHFCandidate : jet.hfcandidates_as<soa::Join<aod::HfCand2Prong, aod::HfSelD0, aod::HfCand2ProngMcRec>>()) { // should only be one at the moment
       fillConstituents(jetHFCandidate, jetConstituents, -1, RecoDecay::getMassPDG(pdgD0));
     }
     //}
@@ -217,25 +217,25 @@ struct JetSubstructureHFTask {
       }
     }
     hNsd->Fill(nsd);
-    //jetSubstructurehf(zg, rg, nsd);
+    // jetSubstructurehf(zg, rg, nsd);
   }
   PROCESS_SWITCH(JetSubstructureHFTask, processMCD, "HF jet substructure on MC detector level", true);
 
   void processMCP(soa::Join<aod::MCParticleLevelHFJets, aod::MCParticleLevelHFJetConstituents>::iterator const& jet,
-                  //aod::JetConstituentsSub const& constituentsSub,
+                  // aod::JetConstituentsSub const& constituentsSub,
                   soa::Join<aod::McParticles, aod::HfCand2ProngMcGen> const& particles)
   {
     jetConstituents.clear();
     jetReclustered.clear();
-    //if (b_DoConstSub) {
-    //for (const auto& constituent : constituentsSub) {
-    // fillConstituents(constituent, jetConstituents);
-    // }
-    //} else {
+    // if (b_DoConstSub) {
+    // for (const auto& constituent : constituentsSub) {
+    //  fillConstituents(constituent, jetConstituents);
+    //  }
+    // } else {
     for (auto& jetConstituent : jet.tracks_as<soa::Join<aod::McParticles, aod::HfCand2ProngMcGen>>()) {
       fillConstituents(jetConstituent, jetConstituents, -2, RecoDecay::getMassPDG(jetConstituent.pdgCode()));
     }
-    for (auto& jetHFCandidate : jet.hfcandidates_as<soa::Join<aod::McParticles, aod::HfCand2ProngMcGen>>()) { //should only be one at the moment
+    for (auto& jetHFCandidate : jet.hfcandidates_as<soa::Join<aod::McParticles, aod::HfCand2ProngMcGen>>()) { // should only be one at the moment
       fillConstituents(jetHFCandidate, jetConstituents, -1, RecoDecay::getMassPDG(jetHFCandidate.pdgCode()));
     }
     //}
@@ -278,7 +278,7 @@ struct JetSubstructureHFTask {
       }
     }
     hNsd->Fill(nsd);
-    //jetSubstructurehf(zg, rg, nsd);
+    // jetSubstructurehf(zg, rg, nsd);
   }
   PROCESS_SWITCH(JetSubstructureHFTask, processMCP, "HF jet substructure on MC particle level", true);
 };

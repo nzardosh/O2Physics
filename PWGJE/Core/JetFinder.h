@@ -31,7 +31,6 @@
 #include "fastjet/tools/Subtractor.hh"
 #include "fastjet/contrib/ConstituentSubtractor.hh"
 
-
 class JetFinder
 {
 
@@ -181,7 +180,7 @@ void fillConstituents(const T& constituent, std::vector<fastjet::PseudoJet>& con
   auto energy = std::sqrt((p * p) + (mass * mass));
   constituents.emplace_back(constituent.px(), constituent.py(), constituent.pz(), energy);
   if (index != -99999)
-    constituents.back().set_user_index(index); //can the index of a track be -99999?
+    constituents.back().set_user_index(index); // can the index of a track be -99999?
 }
 
 #endif // PWGJE_CORE_JETFINDER_H_
