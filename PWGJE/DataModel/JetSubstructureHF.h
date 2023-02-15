@@ -68,4 +68,4 @@ DECLARE_SOA_TABLE(JetSubstructureHFOutputMCGen, "AOD", "JETSUBOutMCP", jetsubstr
 
 } // namespace o2::aod
 
-#endif //PWGJE_DATAMODEL_JETSUBSTRUCTUREHF_H_
+#endif // PWGJE_DATAMODEL_JETSUBSTRUCTUREHF_H_
