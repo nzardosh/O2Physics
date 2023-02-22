@@ -137,7 +137,6 @@ struct JetFinderTask {
     jetFinder.ghostArea = jetGhostArea;
   }
 
-
   Filter collisionFilter = nabs(aod::collision::posZ) < vertexZCut;
   Filter trackCuts = (aod::track::pt >= trackPtMin && aod::track::pt < trackPtMax && aod::track::eta > trackEtaMin && aod::track::eta < trackEtaMax); // do we need eta cut both here and in globalselection?
   Filter partCuts = (aod::mcparticle::pt >= trackPtMin && aod::mcparticle::pt < trackPtMax);

@@ -441,12 +441,12 @@ WorkflowSpec defineDataProcessing(ConfigContext const& cfgc)
 
   if (hfjetMode.find("mcp") != std::string::npos || hfjetMode.empty())
     tasks.emplace_back(adaptAnalysisTask<MCParticleLevelJetFinderHF>(cfgc,
-                                                                     SetDefaultProcesses{{{"processData", false},{"processMCP", true}}},
+                                                                     SetDefaultProcesses{{{"processData", false}, {"processMCP", true}}},
                                                                      TaskName{"jet-finder-hf-mcp"}));
 
   if (hfjetMode.find("mcd") != std::string::npos || hfjetMode.empty())
     tasks.emplace_back(adaptAnalysisTask<MCDetectorLevelJetFinderHF>(cfgc,
-                                                                     SetDefaultProcesses{{{"processData", false},{"processMCD", true}}},
+                                                                     SetDefaultProcesses{{{"processData", false}, {"processMCD", true}}},
                                                                      TaskName{"jet-finder-hf-mcd"}));
 
   return WorkflowSpec{tasks};
