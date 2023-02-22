@@ -28,6 +28,7 @@
 #include "Common/DataModel/TrackSelectionTables.h"
 
 #include "PWGJE/Core/JetFinder.h"
+#include "PWGJE/Core/FastJetUtilities.h"
 #include "PWGJE/DataModel/EMCALClusters.h"
 #include "PWGJE/DataModel/Jet.h"
 
@@ -145,10 +146,10 @@ struct jetFilter {
         spectra.fill(HIST("ptetaGoodTracks"), trk.pt(), trk.eta());
 
         if (trk.pt() > cfgJetPtMin) { // jet constituents
-          fillConstituents(trk,
-                           jetConstituents); // ./PWGJE/Core/JetFinder.h
-                                             // recombination scheme is assumed
-                                             // to be Escheme with pion mass
+          FastJetUtilities::fillTracks(trk,
+                                       jetConstituents); // ./PWGJE/Core/JetFinder.h
+                                                         // recombination scheme is assumed
+                                                         // to be Escheme with pion mass
         }
       }
     }
