@@ -30,6 +30,7 @@
 #include "Common/DataModel/TrackSelectionTables.h"
 
 #include "PWGJE/Core/JetFinder.h"
+#include "PWGJE/Core/FastJetUtilities.h"
 #include "PWGJE/DataModel/EMCALClusters.h"
 #include "PWGJE/DataModel/Jet.h"
 
@@ -193,7 +194,7 @@ struct ChJetTriggerQATask {
           HIST("ptetaTrackInclGood"), trk.pt(),
           trk.eta()); // Inclusive Track pT vs eta spectrum in TPC volume
 
-        fillConstituents(
+        FastJetUtilities::fillTracks(
           trk,
           jetConstituents); // ./PWGJE/Core/JetFinder.h
                             // recombination scheme is assumed

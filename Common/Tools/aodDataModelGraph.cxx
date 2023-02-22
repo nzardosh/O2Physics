@@ -272,8 +272,7 @@ int main(int, char**)
   displayEntity<McTrackLabels>();
 
   displayEntity<Jets>();
-  displayEntity<JetTrackConstituents>();
-  displayEntity<JetClusterConstituents>();
+  displayEntity<JetConstituents>();
 
   displayEntities<V0s, V0Datas>();
 

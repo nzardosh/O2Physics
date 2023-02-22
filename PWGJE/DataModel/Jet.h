@@ -233,9 +233,8 @@ DECLARE_SOA_DYNAMIC_COLUMN(P, p,
 JET_TABLE_DEF(Collision, Jet, jet, "JET");
 using Jet = Jets::iterator;
 using MatchedJet = MatchedJets::iterator;
-JET_CONSTITUENTS_TABLE_DEF(Jet, jet, "JET", Track);
-using JetTrackConstituent = JetTrackConstituents::iterator;
-using JetClusterConstituent = JetClusterConstituents::iterator;
+JET_CONSTITUENTS_ARRAY_TABLE_DEF(Jet, jet, "JET", Track, HfCand2Prong);
+using JetConstituent = JetConstituents::iterator;
 JET_CONSTITUENTS_SUB_TABLE_DEF(Jet, jet, "JET");
 using JetConstituentSub = JetConstituentsSub::iterator;
 
@@ -250,9 +249,8 @@ using JetConstituentSub = JetConstituentsSub::iterator;
 JET_TABLE_DEF(McCollision, MCParticleLevelJet, mcparticleleveljet, "JETMCPART");
 using MCParticleLevelJet = MCParticleLevelJets::iterator;
 using MatchedMCParticleLevelJet = MatchedMCParticleLevelJets::iterator;
-JET_CONSTITUENTS_TABLE_DEF(MCParticleLevelJet, mcparticleleveljet, "MCP", McParticle);
-using MCParticleLevelJetTrackConstituent = MCParticleLevelJetTrackConstituents::iterator;
-using MCParticleLevelJetClusterConstituent = MCParticleLevelJetClusterConstituents::iterator;
+JET_CONSTITUENTS_ARRAY_TABLE_DEF(MCParticleLevelJet, mcparticleleveljet, "MCP", McParticle, McParticles);
+using MCParticleLevelJetConstituent = MCParticleLevelJetConstituents::iterator;
 JET_CONSTITUENTS_SUB_TABLE_DEF(MCParticleLevelJet, mcparticleleveljet, "MCP");
 using MCParticleLevelJetConstituentSub = MCParticleLevelJetConstituentsSub::iterator;
 
@@ -262,9 +260,8 @@ using MCParticleLevelJetConstituentSub = MCParticleLevelJetConstituentsSub::iter
 JET_TABLE_DEF(Collision, MCDetectorLevelJet, mcdetectorleveljet, "JETMCDET");
 using MCDetectorLevelJet = MCDetectorLevelJets::iterator;
 using MatchedMCDetectorLevelJet = MatchedMCDetectorLevelJets::iterator;
-JET_CONSTITUENTS_TABLE_DEF(MCDetectorLevelJet, mcdetectorleveljet, "MCD", Track);
-using MCDetectorLevelJetTrackConstituent = MCDetectorLevelJetTrackConstituents::iterator;
-using MCDetectorLevelJetClusterConstituent = MCDetectorLevelJetClusterConstituents::iterator;
+JET_CONSTITUENTS_ARRAY_TABLE_DEF(MCDetectorLevelJet, mcdetectorleveljet, "MCD", Track, HfCand2Prong);
+using MCDetectorLevelJetConstituent = MCDetectorLevelJetConstituents::iterator;
 JET_CONSTITUENTS_SUB_TABLE_DEF(MCDetectorLevelJet, mcdetectorleveljet, "MCD");
 using MCDetectorLevelJetConstituentSub = MCDetectorLevelJetConstituentsSub::iterator;
 
@@ -272,9 +269,8 @@ using MCDetectorLevelJetConstituentSub = MCDetectorLevelJetConstituentsSub::iter
 JET_TABLE_DEF(Collision, HybridIntermediateJet, hybridintermediatejet, "JETHYBINT");
 using HybridIntermediateJet = HybridIntermediateJets::iterator;
 using MatchedHybridIntermediateJet = MatchedHybridIntermediateJets::iterator;
-JET_CONSTITUENTS_TABLE_DEF(HybridIntermediateJet, hybridintermediate, "HYBINT", Track);
-using HybridIntermediateJetTrackConstituent = HybridIntermediateJetTrackConstituents::iterator;
-using HybridIntermediateJetClusterConstituent = HybridIntermediateJetClusterConstituents::iterator;
+JET_CONSTITUENTS_ARRAY_TABLE_DEF(HybridIntermediateJet, hybridintermediate, "HYBINT", Track, HfCand2Prong);
+using HybridIntermediateJetConstituent = HybridIntermediateJetConstituents::iterator;
 JET_CONSTITUENTS_SUB_TABLE_DEF(HybridIntermediateJet, hybridintermediate, "HYBINT");
 using HybridIntermediateJetConstituentSub = HybridIntermediateJetConstituentsSub::iterator;
 

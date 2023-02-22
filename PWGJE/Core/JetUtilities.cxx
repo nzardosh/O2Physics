@@ -9,10 +9,7 @@
 // granted to it by virtue of its status as an Intergovernmental Organization
 // or submit itself to any jurisdiction.
 
-#pragma link off all globals;
-#pragma link off all classes;
-#pragma link off all functions;
-
-#pragma link C++ class JetFinder + ;
-#pragma link C++ namespace JetUtilities + ;
-#pragma link C++ namespace FastJetUtilities + ;
+// jet finder task
+//
+// Author: Nima Zardoshti
+#include "PWGJE/Core/JetUtilities.h"

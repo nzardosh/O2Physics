@@ -31,8 +31,9 @@
 #include "PWGHF/DataModel/CandidateSelectionTables.h"
 
 #include "PWGJE/DataModel/Jet.h"
-#include "PWGJE/DataModel/JetSubstructureHF.h"
+#include "PWGJE/DataModel/JetSubstructure.h"
 #include "PWGJE/Core/JetFinder.h"
+#include "PWGJE/Core/FastJetUtilities.h"
 
 using namespace o2;
 using namespace o2::framework;
@@ -54,7 +55,7 @@ void customize(std::vector<o2::framework::ConfigParamSpec>& workflowOptions)
 
 template <typename SubstructureTable>
 struct JetSubstructureHFTask {
-  Produces<SubstructureTable> jetSubstructurehf;
+  Produces<SubstructureTable> jetSubstructurehfTable;
   OutputObj<TH1F> hZg{"h_jet_zg"};
   OutputObj<TH1F> hRg{"h_jet_rg"};
   OutputObj<TH1F> hNsd{"h_jet_nsd"};
@@ -84,26 +85,10 @@ struct JetSubstructureHFTask {
 
   // Filter jetCuts = aod::jet::pt > f_jetPtMin;
 
-  void processData(soa::Join<aod::HFJets, aod::HFJetConstituents>::iterator const& jet, // add template back
-                   soa::Join<aod::HfCand2Prong, aod::HfSelD0> const& candidates,
-                   aod::Tracks const& tracks)
+  template <typename T>
+  void jetReclustering(T const& jet)
   {
-    jetConstituents.clear();
     jetReclustered.clear();
-    // if (b_DoConstSub) {
-    // for (const auto& constituent : constituentsSub) {
-    //  fillConstituents(constituent, jetConstituents);
-    //  }
-    // } else {
-    //  for (auto& jetConstituentIndex : jet.trackIds()) {
-    //  auto jetConstituent = tracks.rawIteratorAt(jetConstituentIndex - tracks.offset());
-    for (auto& jetConstituent : jet.tracks_as<aod::Tracks>()) {
-      fillConstituents(jetConstituent, jetConstituents);
-    }
-    for (auto& jetHFCandidate : jet.hfcandidates_as<soa::Join<aod::HfCand2Prong, aod::HfSelD0>>()) { // should only be one at the moment
-      fillConstituents(jetHFCandidate, jetConstituents, -1, RecoDecay::getMassPDG(pdgD0));
-    }
-    //}
     fastjet::ClusterSequenceArea clusterSeq(jetReclusterer.findJets(jetConstituents, jetReclustered));
     jetReclustered = sorted_by_pt(jetReclustered);
     fastjet::PseudoJet daughterSubJet = jetReclustered[0];
@@ -131,7 +116,7 @@ struct JetSubstructureHFTask {
       }
       bool isHFInSubjet1 = false;
       for (auto& subjet1Constituent : parentSubJet1.constituents()) {
-        if (subjet1Constituent.user_index() == -1) {
+        if (subjet1Constituent.user_info<FastJetUtilities::fastjet_user_info>().getStatus() == static_cast<int>(JetConstituentStatus::candidateHF)) {
           isHFInSubjet1 = true;
           break;
         }
@@ -143,7 +128,28 @@ struct JetSubstructureHFTask {
       }
     }
     hNsd->Fill(nsd);
-    jetSubstructurehf(jet.globalIndex(), zg, rg, nsd);
+    jetSubstructurehfTable(jet.globalIndex(), zg, rg, nsd);
+  }
+
+  void processData(soa::Join<aod::HFJets, aod::HFJetConstituents>::iterator const& jet, // add template back
+                   soa::Join<aod::HfCand2Prong, aod::HfSelD0> const& candidates,
+                   aod::Tracks const& tracks)
+  {
+    jetConstituents.clear();
+    // if (b_DoConstSub) {
+    // for (const auto& constituent : constituentsSub) {
+    //  fillConstituents(constituent, jetConstituents);
+    //  }
+    // } else {
+    //  for (auto& jetConstituentIndex : jet.trackIds()) {
+    //  auto jetConstituent = tracks.rawIteratorAt(jetConstituentIndex - tracks.offset());
+    for (auto& jetConstituent : jet.tracks_as<aod::Tracks>()) {
+      FastJetUtilities::fillTracks(jetConstituent, jetConstituents, jetConstituent.globalIndex());
+    }
+    for (auto& jetHFCandidate : jet.hfcandidates_as<soa::Join<aod::HfCand2Prong, aod::HfSelD0>>()) { // should only be one at the moment
+      FastJetUtilities::fillTracks(jetHFCandidate, jetConstituents, jetHFCandidate.globalIndex(), static_cast<int>(JetConstituentStatus::candidateHF), RecoDecay::getMassPDG(pdgD0));
+    }
+    jetReclustering(jet);
   }
   PROCESS_SWITCH(JetSubstructureHFTask, processData, "HF jet substructure on data", true);
 
@@ -153,59 +159,18 @@ struct JetSubstructureHFTask {
                   aod::Tracks const& tracks)
   {
     jetConstituents.clear();
-    jetReclustered.clear();
     // if (b_DoConstSub) {
     // for (const auto& constituent : constituentsSub) {
     //  fillConstituents(constituent, jetConstituents);
     //  }
     // } else {
     for (auto& jetConstituent : jet.tracks_as<aod::Tracks>()) {
-      fillConstituents(jetConstituent, jetConstituents);
+      FastJetUtilities::fillTracks(jetConstituent, jetConstituents, jetConstituent.globalIndex());
     }
     for (auto& jetHFCandidate : jet.hfcandidates_as<soa::Join<aod::HfCand2Prong, aod::HfSelD0, aod::HfCand2ProngMcRec>>()) { // should only be one at the moment
-      fillConstituents(jetHFCandidate, jetConstituents, -1, RecoDecay::getMassPDG(pdgD0));
+      FastJetUtilities::fillTracks(jetHFCandidate, jetConstituents, jetHFCandidate.globalIndex(), static_cast<int>(JetConstituentStatus::candidateHF), RecoDecay::getMassPDG(pdgD0));
     }
-    //}
-    fastjet::ClusterSequenceArea clusterSeq(jetReclusterer.findJets(jetConstituents, jetReclustered));
-    jetReclustered = sorted_by_pt(jetReclustered);
-    fastjet::PseudoJet daughterSubJet = jetReclustered[0];
-    fastjet::PseudoJet parentSubJet1;
-    fastjet::PseudoJet parentSubJet2;
-    bool softDropped = false;
-    auto nsd = 0.0;
-    auto zg = -1.0;
-    auto rg = -1.0;
-    while (daughterSubJet.has_parents(parentSubJet1, parentSubJet2)) {
-      if (parentSubJet1.perp() < parentSubJet2.perp()) {
-        std::swap(parentSubJet1, parentSubJet2);
-      }
-      auto z = parentSubJet2.perp() / (parentSubJet1.perp() + parentSubJet2.perp());
-      auto theta = parentSubJet1.delta_R(parentSubJet2);
-      if (z >= zCut * TMath::Power(theta / jetR, beta)) {
-        if (!softDropped) {
-          zg = z;
-          rg = theta;
-          hZg->Fill(zg);
-          hRg->Fill(rg);
-          softDropped = true;
-        }
-        nsd++;
-      }
-      bool isHFInSubjet1 = false;
-      for (auto& subjet1Constituent : parentSubJet1.constituents()) {
-        if (subjet1Constituent.user_index() == -1) {
-          isHFInSubjet1 = true;
-          break;
-        }
-      }
-      if (isHFInSubjet1) {
-        daughterSubJet = parentSubJet1;
-      } else {
-        daughterSubJet = parentSubJet2;
-      }
-    }
-    hNsd->Fill(nsd);
-    jetSubstructurehf(jet.globalIndex(), zg, rg, nsd);
+    jetReclustering(jet);
   }
   PROCESS_SWITCH(JetSubstructureHFTask, processMCD, "HF jet substructure on MC detector level", true);
 
@@ -214,59 +179,18 @@ struct JetSubstructureHFTask {
                   aod::McParticles const& particles)
   {
     jetConstituents.clear();
-    jetReclustered.clear();
     // if (b_DoConstSub) {
     // for (const auto& constituent : constituentsSub) {
     //  fillConstituents(constituent, jetConstituents);
     //  }
     // } else {
     for (auto& jetConstituent : jet.tracks_as<aod::McParticles>()) {
-      fillConstituents(jetConstituent, jetConstituents, -2, RecoDecay::getMassPDG(jetConstituent.pdgCode()));
+      FastJetUtilities::fillTracks(jetConstituent, jetConstituents, jetConstituent.globalIndex(), static_cast<int>(JetConstituentStatus::track), RecoDecay::getMassPDG(jetConstituent.pdgCode()));
     }
     for (auto& jetHFCandidate : jet.hfcandidates_as<aod::McParticles>()) { // should only be one at the moment
-      fillConstituents(jetHFCandidate, jetConstituents, -1, RecoDecay::getMassPDG(jetHFCandidate.pdgCode()));
+      FastJetUtilities::fillTracks(jetHFCandidate, jetConstituents, jetHFCandidate.globalIndex(), static_cast<int>(JetConstituentStatus::candidateHF), RecoDecay::getMassPDG(jetHFCandidate.pdgCode()));
     }
-    //}
-    fastjet::ClusterSequenceArea clusterSeq(jetReclusterer.findJets(jetConstituents, jetReclustered));
-    jetReclustered = sorted_by_pt(jetReclustered);
-    fastjet::PseudoJet daughterSubJet = jetReclustered[0];
-    fastjet::PseudoJet parentSubJet1;
-    fastjet::PseudoJet parentSubJet2;
-    bool softDropped = false;
-    auto nsd = 0.0;
-    auto zg = -1.0;
-    auto rg = -1.0;
-    while (daughterSubJet.has_parents(parentSubJet1, parentSubJet2)) {
-      if (parentSubJet1.perp() < parentSubJet2.perp()) {
-        std::swap(parentSubJet1, parentSubJet2);
-      }
-      auto z = parentSubJet2.perp() / (parentSubJet1.perp() + parentSubJet2.perp());
-      auto theta = parentSubJet1.delta_R(parentSubJet2);
-      if (z >= zCut * TMath::Power(theta / jetR, beta)) {
-        if (!softDropped) {
-          zg = z;
-          rg = theta;
-          hZg->Fill(zg);
-          hRg->Fill(rg);
-          softDropped = true;
-        }
-        nsd++;
-      }
-      bool isHFInSubjet1 = false;
-      for (auto& subjet1Constituent : parentSubJet1.constituents()) {
-        if (subjet1Constituent.user_index() == -1) {
-          isHFInSubjet1 = true;
-          break;
-        }
-      }
-      if (isHFInSubjet1) {
-        daughterSubJet = parentSubJet1;
-      } else {
-        daughterSubJet = parentSubJet2;
-      }
-    }
-    hNsd->Fill(nsd);
-    jetSubstructurehf(jet.globalIndex(), zg, rg, nsd);
+    jetReclustering(jet);
   }
   PROCESS_SWITCH(JetSubstructureHFTask, processMCP, "HF jet substructure on MC particle level", true);
 };

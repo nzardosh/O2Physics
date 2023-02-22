@@ -383,6 +383,7 @@ std::tuple<std::vector<std::vector<int>>, std::vector<std::vector<int>>> MatchCl
   }
   return std::make_tuple(matchIndexTrack, matchIndexCluster);
 }
+
 }; // namespace JetUtilities
 
 #endif

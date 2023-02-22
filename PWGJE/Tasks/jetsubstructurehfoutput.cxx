@@ -29,7 +29,7 @@
 #include "PWGHF/DataModel/CandidateSelectionTables.h"
 
 #include "PWGJE/DataModel/Jet.h"
-#include "PWGJE/DataModel/JetSubstructureHF.h"
+#include "PWGJE/DataModel/JetSubstructure.h"
 #include "PWGJE/Core/JetFinder.h"
 
 using namespace o2;
