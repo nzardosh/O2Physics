@@ -166,9 +166,9 @@ struct JetSubstructureHFTask {
   }
   PROCESS_SWITCH(JetSubstructureHFTask, processDummy, "Dummy process function turned on by default", true);
 
-  void processD0Data(soa::Join<aod::D0Jets, aod::D0JetConstituents>::iterator const& jet, 
-                   soa::Join<aod::HfCand2Prong, aod::HfSelD0> const& candidates,
-                   aod::Tracks const& tracks)
+  void processD0Data(soa::Join<aod::D0Jets, aod::D0JetConstituents>::iterator const& jet,
+                     soa::Join<aod::HfCand2Prong, aod::HfSelD0> const& candidates,
+                     aod::Tracks const& tracks)
   {
     processConstituents(jet);
     for (auto& jetHFCandidate : jet.hfcandidates_as<soa::Join<aod::HfCand2Prong, aod::HfSelD0>>()) { // should only be one at the moment
@@ -179,8 +179,8 @@ struct JetSubstructureHFTask {
   PROCESS_SWITCH(JetSubstructureHFTask, processD0Data, "D0 jet substructure on data", false);
 
   void processD0MCD(soa::Join<aod::MCDetectorLevelD0Jets, aod::MCDetectorLevelD0JetConstituents>::iterator const& jet,
-                  soa::Join<aod::HfCand2Prong, aod::HfSelD0, aod::HfCand2ProngMcRec> const& candidates,
-                  aod::Tracks const& tracks)
+                    soa::Join<aod::HfCand2Prong, aod::HfSelD0, aod::HfCand2ProngMcRec> const& candidates,
+                    aod::Tracks const& tracks)
   {
     processConstituents(jet);
     for (auto& jetHFCandidate : jet.hfcandidates_as<soa::Join<aod::HfCand2Prong, aod::HfSelD0, aod::HfCand2ProngMcRec>>()) { // should only be one at the moment
@@ -191,16 +191,15 @@ struct JetSubstructureHFTask {
   PROCESS_SWITCH(JetSubstructureHFTask, processD0MCD, "D0 jet substructure on MC detector level", false);
 
   void processD0MCP(soa::Join<aod::MCParticleLevelD0Jets, aod::MCParticleLevelD0JetConstituents>::iterator const& jet,
-                  aod::McParticles const& particles)
+                    aod::McParticles const& particles)
   {
     processGenLevel(jet);
   }
   PROCESS_SWITCH(JetSubstructureHFTask, processD0MCP, "D0 jet substructure on MC particle level", false);
 
-
-  void processLcData(soa::Join<aod::LcJets, aod::LcJetConstituents>::iterator const& jet, 
-                   soa::Join<aod::HfCand2Prong, aod::HfSelLc> const& candidates,
-                   aod::Tracks const& tracks)
+  void processLcData(soa::Join<aod::LcJets, aod::LcJetConstituents>::iterator const& jet,
+                     soa::Join<aod::HfCand2Prong, aod::HfSelLc> const& candidates,
+                     aod::Tracks const& tracks)
   {
     processConstituents(jet);
     for (auto& jetHFCandidate : jet.hfcandidates_as<soa::Join<aod::HfCand2Prong, aod::HfSelLc>>()) { // should only be one at the moment
@@ -211,8 +210,8 @@ struct JetSubstructureHFTask {
   PROCESS_SWITCH(JetSubstructureHFTask, processLcData, "Lc jet substructure on data", false);
 
   void processLcMCD(soa::Join<aod::MCDetectorLevelLcJets, aod::MCDetectorLevelLcJetConstituents>::iterator const& jet,
-                  soa::Join<aod::HfCand2Prong, aod::HfSelLc, aod::HfCand2ProngMcRec> const& candidates,
-                  aod::Tracks const& tracks)
+                    soa::Join<aod::HfCand2Prong, aod::HfSelLc, aod::HfCand2ProngMcRec> const& candidates,
+                    aod::Tracks const& tracks)
   {
     processConstituents(jet);
     for (auto& jetHFCandidate : jet.hfcandidates_as<soa::Join<aod::HfCand2Prong, aod::HfSelLc, aod::HfCand2ProngMcRec>>()) { // should only be one at the moment
@@ -223,15 +222,15 @@ struct JetSubstructureHFTask {
   PROCESS_SWITCH(JetSubstructureHFTask, processLcMCD, "Lc jet substructure on MC detector level", false);
 
   void processLcMCP(soa::Join<aod::MCParticleLevelLcJets, aod::MCParticleLevelLcJetConstituents>::iterator const& jet,
-                  aod::McParticles const& particles)
+                    aod::McParticles const& particles)
   {
     processGenLevel(jet);
   }
   PROCESS_SWITCH(JetSubstructureHFTask, processLcMCP, "Lc jet substructure on MC particle level", false);
 
-  void processBPlusData(soa::Join<aod::BPlusJets, aod::BPlusJetConstituents>::iterator const& jet, 
-                   soa::Join<aod::HfCandBplus, aod::HfSelBplusToD0Pi> const& candidates,
-                   aod::Tracks const& tracks)
+  void processBPlusData(soa::Join<aod::BPlusJets, aod::BPlusJetConstituents>::iterator const& jet,
+                        soa::Join<aod::HfCandBplus, aod::HfSelBplusToD0Pi> const& candidates,
+                        aod::Tracks const& tracks)
   {
     processConstituents(jet);
     for (auto& jetHFCandidate : jet.hfcandidates_as<soa::Join<aod::HfCandBplus, aod::HfSelBplusToD0Pi>>()) { // should only be one at the moment
@@ -242,8 +241,8 @@ struct JetSubstructureHFTask {
   PROCESS_SWITCH(JetSubstructureHFTask, processBPlusData, "BPlus jet substructure on data", false);
 
   void processBPlusMCD(soa::Join<aod::MCDetectorLevelBPlusJets, aod::MCDetectorLevelBPlusJetConstituents>::iterator const& jet,
-                  soa::Join<aod::HfCandBplus, aod::HfSelBplusToD0Pi, aod::HfCandBplusMcRec> const& candidates,
-                  aod::Tracks const& tracks)
+                       soa::Join<aod::HfCandBplus, aod::HfSelBplusToD0Pi, aod::HfCandBplusMcRec> const& candidates,
+                       aod::Tracks const& tracks)
   {
     processConstituents(jet);
     for (auto& jetHFCandidate : jet.hfcandidates_as<soa::Join<aod::HfCandBplus, aod::HfSelBplusToD0Pi, aod::HfCandBplusMcRec>>()) { // should only be one at the moment
@@ -254,7 +253,7 @@ struct JetSubstructureHFTask {
   PROCESS_SWITCH(JetSubstructureHFTask, processBPlusMCD, "BPlus jet substructure on MC detector level", false);
 
   void processBPlusMCP(soa::Join<aod::MCParticleLevelBPlusJets, aod::MCParticleLevelBPlusJetConstituents>::iterator const& jet,
-                  aod::McParticles const& particles)
+                       aod::McParticles const& particles)
   {
     processGenLevel(jet);
   }
@@ -299,16 +298,16 @@ WorkflowSpec defineDataProcessing(ConfigContext const& cfgc)
                                                                          TaskName{"jet-substructure-Lc-mcp"}));
 
   tasks.emplace_back(adaptAnalysisTask<JetSubstructureBPlus>(cfgc,
-                                                          SetDefaultProcesses{},
-                                                          TaskName{"jet-substructure-BPlus-data"}));
+                                                             SetDefaultProcesses{},
+                                                             TaskName{"jet-substructure-BPlus-data"}));
 
   tasks.emplace_back(adaptAnalysisTask<MCDetectorLevelJetSubstructureBPlus>(cfgc,
-                                                                         SetDefaultProcesses{},
-                                                                         TaskName{"jet-substructure-BPlus-mcd"}));
+                                                                            SetDefaultProcesses{},
+                                                                            TaskName{"jet-substructure-BPlus-mcd"}));
 
   tasks.emplace_back(adaptAnalysisTask<MCParticleLevelJetSubstructureBPlus>(cfgc,
-                                                                         SetDefaultProcesses{},
-                                                                         TaskName{"jet-substructure-BPlus-mcp"}));
+                                                                            SetDefaultProcesses{},
+                                                                            TaskName{"jet-substructure-BPlus-mcp"}));
 
   return WorkflowSpec{tasks};
 }

@@ -21,4 +21,3 @@
 #pragma link C++ namespace FastJetUtilities + ;
 
 #endif // PWGJE_CORE_PWGJECORELINKDEF_H_
-

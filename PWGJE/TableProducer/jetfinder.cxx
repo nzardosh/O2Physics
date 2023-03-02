@@ -128,7 +128,6 @@ struct JetFinderTask {
     jetFinder.recombScheme = static_cast<fastjet::RecombinationScheme>(static_cast<int>(jetRecombScheme));
     jetFinder.ghostArea = jetGhostArea;
     jetFinder.ghostRepeatN = ghostRepeat;
-
   }
 
   o2::aod::EMCALClusterDefinition clusterDefinition = o2::aod::emcalcluster::getClusterDefinitionFromString(clusterDefinitionS.value);
@@ -140,7 +139,7 @@ struct JetFinderTask {
   using JetTracks = soa::Filtered<soa::Join<aod::Tracks, aod::TracksExtra, aod::TracksDCA, aod::TrackSelection>>;
   using JetClusters = o2::soa::Filtered<o2::aod::EMCALClusters>;
 
-//function that performs track selections on each track
+  // function that performs track selections on each track
   template <typename T>
   bool processTrackSelection(T const& track)
   {
@@ -151,7 +150,7 @@ struct JetFinderTask {
     }
   }
 
-//function that adds tracks to the fastjet list
+  // function that adds tracks to the fastjet list
   template <typename T>
   void processTracks(T const& tracks)
   {
@@ -163,7 +162,7 @@ struct JetFinderTask {
     }
   }
 
-//function that adds clusters to the fastjet list
+  // function that adds clusters to the fastjet list
   template <typename T>
   void processClusters(T const& clusters)
   {
@@ -173,7 +172,7 @@ struct JetFinderTask {
     }
   }
 
-//function that calls the jet finding and fills the relevant tables
+  // function that calls the jet finding and fills the relevant tables
   template <typename T>
   void jetFinding(T const& collision)
   {

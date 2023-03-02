@@ -89,7 +89,7 @@ struct JetFinderHFTask {
   Configurable<float> candPtMax{"candPtMax", 100.0, "maximum candidate pT"};
   Configurable<float> candYMin{"candYMin", -0.8, "minimum candidate eta"};
   Configurable<float> candYMax{"candYMax", 0.8, "maximum candidate eta"};
-  //HF candidiate selection configurables
+  // HF candidiate selection configurables
   Configurable<int> selectionFlagD0{"selectionFlagD0", 1, "Selection Flag for D0"};
   Configurable<int> selectionFlagD0bar{"selectionFlagD0bar", 1, "Selection Flag for D0bar"};
   Configurable<int> selectionFlagLcToPKPi{"selectionFlagLcToPKPi", 1, "Selection Flag for Lc->PKPi"};
@@ -189,12 +189,12 @@ struct JetFinderHFTask {
   Filter trackCuts = (aod::track::pt >= trackPtMin && aod::track::pt < trackPtMax && aod::track::eta > trackEtaMin && aod::track::eta < trackEtaMax && aod::track::phi >= trackPhiMin && aod::track::phi <= trackPhiMax);
   Filter partCuts = (aod::mcparticle::pt >= trackPtMin && aod::mcparticle::pt < trackPtMax);
   Filter clusterFilter = (o2::aod::emcalcluster::definition == static_cast<int>(clusterDefinition) && aod::emcalcluster::eta > clusterEtaMin && aod::emcalcluster::eta < clusterEtaMax && aod::emcalcluster::phi >= clusterPhiMin && aod::emcalcluster::phi <= clusterPhiMax);
-  //Filter candidateCuts = (aod::hf_cand::Pt >= candPtMin && aod::hf_cand::Pt < candPtMax); FIXME: why wont this work?
+  // Filter candidateCuts = (aod::hf_cand::Pt >= candPtMin && aod::hf_cand::Pt < candPtMax); FIXME: why wont this work?
   Filter candidateCutsD0 = (aod::hf_sel_candidate_d0::isSelD0 >= selectionFlagD0 || aod::hf_sel_candidate_d0::isSelD0bar >= selectionFlagD0bar);
   Filter candidateCutsLc = (aod::hf_sel_candidate_lc::isSelLcToPKPi >= selectionFlagLcToPKPi || aod::hf_sel_candidate_lc::isSelLcToPiKP >= selectionFlagLcToPiPK);
   Filter candidateCutsBPlus = (aod::hf_sel_candidate_bplus::isSelBplusToD0Pi >= selectionFlagBPlus);
 
-  //function that takes any generic candidate, performs selections and adds the candidate to the fastjet list
+  // function that takes any generic candidate, performs selections and adds the candidate to the fastjet list
   template <typename T>
   bool processCandidate(T const& candidate)
   {
@@ -208,7 +208,7 @@ struct JetFinderHFTask {
     return true;
   }
 
-  //function that checks the MC status of a candidate and then calls the function to processCandidates
+  // function that checks the MC status of a candidate and then calls the function to processCandidates
   template <typename T>
   bool processCandidateMC(T const& candidate)
   {
@@ -218,7 +218,7 @@ struct JetFinderHFTask {
     return processCandidate(candidate);
   }
 
-//function that performs track selections on each track
+  // function that performs track selections on each track
   template <typename T>
   bool processTrackSelection(T const& track)
   {
@@ -229,7 +229,7 @@ struct JetFinderHFTask {
     }
   }
 
-//function that adds tracks to the fastjet list, removing daughters of 2Prong candidates
+  // function that adds tracks to the fastjet list, removing daughters of 2Prong candidates
   template <typename T, typename U>
   void processTracks2Prong(T const& tracks, U const& candidate)
   {
@@ -243,7 +243,7 @@ struct JetFinderHFTask {
       FastJetUtilities::fillTracks(track, inputParticles, track.globalIndex());
     }
   }
-//function that adds tracks to the fastjet list, removing daughters of 3Prong candidates
+  // function that adds tracks to the fastjet list, removing daughters of 3Prong candidates
   template <typename T, typename U>
   void processTracks3Prong(T const& tracks, U const& candidate)
   {
@@ -257,7 +257,7 @@ struct JetFinderHFTask {
       FastJetUtilities::fillTracks(track, inputParticles, track.globalIndex());
     }
   }
-//function that adds tracks to the fastjet list, removing daughters of B+ candidates
+  // function that adds tracks to the fastjet list, removing daughters of B+ candidates
   template <typename T, typename U>
   void processTracksBPlus(T const& tracks, U const& candidate)
   {
@@ -272,7 +272,7 @@ struct JetFinderHFTask {
     }
   }
 
-//function that adds clusters to the fastjet list
+  // function that adds clusters to the fastjet list
   template <typename T>
   void processClusters(T const& clusters)
   {
@@ -282,7 +282,7 @@ struct JetFinderHFTask {
     }
   }
 
-//function that calls the jet finding and fills the relevant tables
+  // function that calls the jet finding and fills the relevant tables
   template <typename T>
   void jetFinding(T const& collision)
   {
@@ -336,7 +336,7 @@ struct JetFinderHFTask {
     }
   }
 
-//function that processes data for all 2Prong candidates
+  // function that processes data for all 2Prong candidates
   template <typename T, typename U, typename M>
   void processData2Prong(T const& collision, U const& tracks, M const& candidates)
   {
@@ -353,7 +353,7 @@ struct JetFinderHFTask {
     }
   }
 
-//function that processes MC det for all 2Prong candidates
+  // function that processes MC det for all 2Prong candidates
   template <typename T, typename U, typename M>
   void processMCD2Prong(T const& collision, U const& tracks, M const& candidates)
   {
@@ -370,7 +370,7 @@ struct JetFinderHFTask {
     }
   }
 
-//function that processes data for all 3Prong candidates
+  // function that processes data for all 3Prong candidates
   template <typename T, typename U, typename M>
   void processData3Prong(T const& collision, U const& tracks, M const& candidates)
   {
@@ -386,7 +386,7 @@ struct JetFinderHFTask {
       jetFinding(collision);
     }
   }
-//function that processes MC det for all 3Prong candidates
+  // function that processes MC det for all 3Prong candidates
   template <typename T, typename U, typename M>
   void processMCD3Prong(T const& collision, U const& tracks, M const& candidates)
   {
@@ -403,7 +403,7 @@ struct JetFinderHFTask {
     }
   }
 
-//function that processes data for all B+ candidates
+  // function that processes data for all B+ candidates
   template <typename T, typename U, typename M>
   void processDataBPlus(T const& collision, U const& tracks, M const& candidates)
   {
@@ -420,7 +420,7 @@ struct JetFinderHFTask {
     }
   }
 
-//function that processes MC det for all B+ candidates
+  // function that processes MC det for all B+ candidates
   template <typename T, typename U, typename M>
   void processMCDBPlus(T const& collision, U const& tracks, M const& candidates)
   {
@@ -437,8 +437,8 @@ struct JetFinderHFTask {
     }
   }
 
-//function that checks if a candidate has any daughters that need to be removed from the event at gen level
-  template <typename T, typename U> //CHECK if this works for everything
+  // function that checks if a candidate has any daughters that need to be removed from the event at gen level
+  template <typename T, typename U> // CHECK if this works for everything
   bool checkDaughters(T const& particle, U const globalIndex)
   {
     for (auto daughter : particle.template daughters_as<aod::McParticles>()) {
@@ -452,7 +452,7 @@ struct JetFinderHFTask {
     return false;
   }
 
-//function that generalically processes gen level events
+  // function that generalically processes gen level events
   template <typename T, typename U>
   void processParticlesMCGen(T const& particles, U& candidates)
   {
@@ -477,7 +477,7 @@ struct JetFinderHFTask {
         if (particle.eta() < trackEtaMin || particle.eta() > trackEtaMax) {
           continue;
         }
-        if (particle.getGenStatusCode() != 1) { //CHECK : Does this include HF hadrons that decay?
+        if (particle.getGenStatusCode() != 1) { // CHECK : Does this include HF hadrons that decay?
           continue;
         }
         auto pdgParticle = pdg->GetParticle(particle.pdgCode());
@@ -497,8 +497,8 @@ struct JetFinderHFTask {
     }
   }
 
-  //check if type JetParticles2Prong can be templated. then you can just use one function everywhere
-  //function that is called for gen level events with 2 prong candidates
+  // check if type JetParticles2Prong can be templated. then you can just use one function everywhere
+  // function that is called for gen level events with 2 prong candidates
   template <typename T, typename U>
   void processHFGen2Prong(T const& collision, U const& particles)
   {
@@ -507,7 +507,7 @@ struct JetFinderHFTask {
     processParticlesMCGen(particles, candidates);
     jetFinding(collision);
   }
-  //function that is called for gen level events with 3 prong candidates
+  // function that is called for gen level events with 3 prong candidates
   template <typename T, typename U>
   void processHFGen3Prong(T const& collision, U const& particles)
   {
@@ -516,7 +516,7 @@ struct JetFinderHFTask {
     processParticlesMCGen(particles, candidates);
     jetFinding(collision);
   }
-  //function that is called for gen level events with B+ candidates
+  // function that is called for gen level events with B+ candidates
   template <typename T, typename U>
   void processHFGenBPlus(T const& collision, U const& particles)
   {
