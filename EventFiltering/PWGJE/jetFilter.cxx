@@ -116,7 +116,6 @@ struct jetFilter {
       }
     }
 
-
     for (int iDecision{0}; iDecision < kHighPtObjects; ++iDecision) {
       if (keepEvent[iDecision]) {
         spectra.fill(HIST("fProcessedEvents"), iDecision);

@@ -52,7 +52,7 @@ using namespace o2::framework::expressions;
 
 struct ChJetTriggerQATask {
 
-  Configurable<bool>  cfgEventSel8{"cfgEventSel8", true, "event selection count post sel8 cut"};
+  Configurable<bool> cfgEventSel8{"cfgEventSel8", true, "event selection count post sel8 cut"};
   Configurable<float> cfgVertexCut{"cfgVertexCut", 10.0,
                                    "Accepted z-vertex range"};
   Configurable<float> cfgTPCVolume{"cfgTPCVolume", 0.9,
@@ -78,7 +78,6 @@ struct ChJetTriggerQATask {
 
   float fiducialVolume;                        // 0.9 - jetR
 
-
   HistogramRegistry spectra{
     "spectra",
     {
@@ -91,10 +90,10 @@ struct ChJetTriggerQATask {
        {HistType::kTH2F, {{100, 0., +100.}, {80, -1., 1.}}}}, //
       {"phietaTrackInclGoodAll",
        "phi vs eta all inclusive good tracks",
-       {HistType::kTH2F, {{80, -1., 1.},{60, 0, TMath::TwoPi()}}}}, //
+       {HistType::kTH2F, {{80, -1., 1.}, {60, 0, TMath::TwoPi()}}}}, //
       {"phietaTrackInclGoodHighPt",
        "phi vs eta inclusive good tracks with pT > 10 GeV",
-       {HistType::kTH2F, {{80, -1., 1.},{60, 0, TMath::TwoPi()}}}}, //
+       {HistType::kTH2F, {{80, -1., 1.}, {60, 0, TMath::TwoPi()}}}}, //
       {"ptJetChPtInclFidVol",
        "inclusive charged jet pT in fiducial volume",
        {HistType::kTH1F, {{200, 0., +200.}}}}, //
@@ -155,7 +154,7 @@ struct ChJetTriggerQATask {
        {HistType::kTH2F, {{100, 0., +100.}, {50, 0., 2.}}}} //
     }};
 
-TrackSelection globalTracks;
+  TrackSelection globalTracks;
 
   // TrackSelection globalTracks;
   void init(o2::framework::InitContext&)
@@ -167,14 +166,13 @@ TrackSelection globalTracks;
     }
   }
 
-
- // declare filters on collisions 
+  // declare filters on collisions
   Filter collisionFilter = (nabs(aod::collision::posZ) < cfgVertexCut);
 
-  // declare filters on tracks 
+  // declare filters on tracks
   Filter trackFilter = (nabs(aod::track::eta) < cfgTPCVolume) && (aod::track::phi > cfgTrackPhiMinCut) && (aod::track::phi < cfgTrackPhiMaxCut) && (aod::track::pt > cfgJetPtMin);
 
-  // declare filters on jets 
+  // declare filters on jets
   Filter jetRadiusSelection = o2::aod::jet::r == std::round(cfgJetR * 100);
 
   using filteredJets = o2::soa::Filtered<o2::aod::Jets>;
