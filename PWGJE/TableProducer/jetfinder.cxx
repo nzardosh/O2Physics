@@ -201,11 +201,11 @@ struct JetFinderTask {
                                  constituent.E(), constituent.m(), constituent.user_index());
           }
 
-          if (constituent.user_info<FastJetUtilities::fastjet_user_info>().getStatus() == static_cast<int>(JetConstituentStatus::track)) {
-            trackconst.push_back(constituent.user_info<FastJetUtilities::fastjet_user_info>().getIndex());
+          if (constituent.template user_info<FastJetUtilities::fastjet_user_info>().getStatus() == static_cast<int>(JetConstituentStatus::track)) {
+            trackconst.push_back(constituent.template user_info<FastJetUtilities::fastjet_user_info>().getIndex());
           }
-          if (constituent.user_info<FastJetUtilities::fastjet_user_info>().getStatus() == static_cast<int>(JetConstituentStatus::cluster)) {
-            clusterconst.push_back(constituent.user_info<FastJetUtilities::fastjet_user_info>().getIndex());
+          if (constituent.template user_info<FastJetUtilities::fastjet_user_info>().getStatus() == static_cast<int>(JetConstituentStatus::cluster)) {
+            clusterconst.push_back(constituent.template user_info<FastJetUtilities::fastjet_user_info>().getIndex());
           }
         }
         constituentsTable(jetsTable.lastIndex(), trackconst, clusterconst, std::vector<int>());
