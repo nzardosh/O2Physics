@@ -354,7 +354,7 @@ struct JetTriggerQA {
   }
 
   void process(soa::Join<aod::Collisions, aod::EvSels, aod::FullJetFilters>::iterator const& collision,
-               soa::Join<aod::Jets, aod::JetConstituents> const& jets,
+               soa::Join<aod::FullJets, aod::FullJetConstituents> const& jets,
                aod::Tracks const& tracks,
                selectedClusters const& clusters)
   {
@@ -416,8 +416,8 @@ struct JetTriggerQA {
 
     double maxClusterObservableEMCAL = -1., maxClusterObservableDCAL = -1.;
     selectedClusters::iterator maxClusterEMCAL, maxClusterDCAL;
-    std::vector<soa::Join<aod::Jets, aod::JetConstituents>::iterator> vecMaxJet;
-    std::vector<soa::Join<aod::Jets, aod::JetConstituents>::iterator> vecMaxJetNoFiducial;
+    std::vector<soa::Join<aod::FullJets, aod::FullJetConstituents>::iterator> vecMaxJet;
+    std::vector<soa::Join<aod::FullJets, aod::FullJetConstituents>::iterator> vecMaxJetNoFiducial;
 
     for (const auto& jet : jets) {
       double jetPt = jet.pt(), jetR = jet.r() * 1e-2;
