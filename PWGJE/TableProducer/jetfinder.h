@@ -73,7 +73,7 @@ bool selectTrack(T const& track, std::string trackSelection)
 
 // function that adds tracks to the fastjet list, removing daughters of 2Prong candidates
 template <typename T, typename U>
-void analyseTracks(std::vector<fastjet::PseudoJet> &inputParticles, T const& tracks, std::string trackSelection, std::optional<U> const& candidate = std::nullopt)
+void analyseTracks(std::vector<fastjet::PseudoJet>& inputParticles, T const& tracks, std::string trackSelection, std::optional<U> const& candidate = std::nullopt)
 {
   for (auto& track : tracks) {
     if (!selectTrack(track, trackSelection)) {
@@ -106,7 +106,7 @@ void analyseTracks(std::vector<fastjet::PseudoJet> &inputParticles, T const& tra
 
 // function that adds clusters to the fastjet list
 template <typename T>
-void analyseClusters(std::vector<fastjet::PseudoJet> &inputParticles, T const& clusters)
+void analyseClusters(std::vector<fastjet::PseudoJet>& inputParticles, T const& clusters)
 {
   for (auto& cluster : *clusters) {
     // add cluster selections
@@ -116,7 +116,7 @@ void analyseClusters(std::vector<fastjet::PseudoJet> &inputParticles, T const& c
 
 // function that takes any generic candidate, performs selections and adds the candidate to the fastjet list
 template <typename T>
-bool analyseCandidate(std::vector<fastjet::PseudoJet> &inputParticles, int candPDG, float candPtMin, float candPtMax, float candYMin, float candYMax, T const& candidate)
+bool analyseCandidate(std::vector<fastjet::PseudoJet>& inputParticles, int candPDG, float candPtMin, float candPtMax, float candYMin, float candYMax, T const& candidate)
 {
   if (candidate.y(RecoDecay::getMassPDG(candPDG)) < candYMin || candidate.y(RecoDecay::getMassPDG(candPDG)) > candYMax) {
     return false;
@@ -130,7 +130,7 @@ bool analyseCandidate(std::vector<fastjet::PseudoJet> &inputParticles, int candP
 
 // function that checks the MC status of a candidate and then calls the function to analyseCandidates
 template <typename T>
-bool analyseCandidateMC(std::vector<fastjet::PseudoJet> &inputParticles, int candPDG, int candDecay, float candPtMin, float candPtMax, float candYMin, float candYMax, T const& candidate, bool rejectBackgroundMCCandidates)
+bool analyseCandidateMC(std::vector<fastjet::PseudoJet>& inputParticles, int candPDG, int candDecay, float candPtMin, float candPtMax, float candYMin, float candYMax, T const& candidate, bool rejectBackgroundMCCandidates)
 {
   if (rejectBackgroundMCCandidates && !(std::abs(candidate.flagMcMatchRec()) == 1 << candDecay)) {
     return false;
@@ -140,7 +140,7 @@ bool analyseCandidateMC(std::vector<fastjet::PseudoJet> &inputParticles, int can
 
 // function that calls the jet finding and fills the relevant tables
 template <typename T, typename U, typename V, typename W>
-void findJets(JetFinder &jetFinder, std::vector<fastjet::PseudoJet> &inputParticles, std::vector<double> jetRadius, T const& collision, U& jetsTable, V& constituentsTable, W& constituentsSubTable, bool DoConstSub, bool doHFJetFinding = false)
+void findJets(JetFinder& jetFinder, std::vector<fastjet::PseudoJet>& inputParticles, std::vector<double> jetRadius, T const& collision, U& jetsTable, V& constituentsTable, W& constituentsSubTable, bool DoConstSub, bool doHFJetFinding = false)
 {
   // auto candidatepT = 0.0;
   auto jetRValues = static_cast<std::vector<double>>(jetRadius);
@@ -216,7 +216,7 @@ bool checkDaughters(T const& particle, int globalIndex)
 }
 
 template <typename T, typename U>
-void analyseParticles(std::vector<fastjet::PseudoJet> &inputParticles, float particleEtaMin, float particleEtaMax, int jetTypeParticleLevel, T const& particles, TDatabasePDG* pdg, std::optional<U> const& candidate = std::nullopt)
+void analyseParticles(std::vector<fastjet::PseudoJet>& inputParticles, float particleEtaMin, float particleEtaMax, int jetTypeParticleLevel, T const& particles, TDatabasePDG* pdg, std::optional<U> const& candidate = std::nullopt)
 {
   inputParticles.clear();
   for (auto& particle : particles) {

@@ -141,7 +141,7 @@ struct JetFinderTask {
     LOG(debug) << "Process data charged!";
     inputParticles.clear();
     analyseTracks<JetTracks, JetTracks::iterator>(inputParticles, tracks, trackSelection);
-    findJets(jetFinder, inputParticles, jetRadius, collision, jetsTable, constituentsTable, constituentsSubTable,DoConstSub);
+    findJets(jetFinder, inputParticles, jetRadius, collision, jetsTable, constituentsTable, constituentsSubTable, DoConstSub);
   }
 
   PROCESS_SWITCH(JetFinderTask, processChargedJets, "Data jet finding for charged jets", false);
@@ -155,7 +155,7 @@ struct JetFinderTask {
     LOG(debug) << "Process data neutral!";
     inputParticles.clear();
     analyseClusters(inputParticles, &clusters);
-    findJets(jetFinder, inputParticles, jetRadius, collision, jetsTable, constituentsTable, constituentsSubTable,DoConstSub);
+    findJets(jetFinder, inputParticles, jetRadius, collision, jetsTable, constituentsTable, constituentsSubTable, DoConstSub);
   }
   PROCESS_SWITCH(JetFinderTask, processNeutralJets, "Data jet finding for neutral jets", false);
 
@@ -168,9 +168,9 @@ struct JetFinderTask {
     }
     LOG(debug) << "Process data full!";
     inputParticles.clear();
-    analyseTracks<JetTracks, JetTracks::iterator>(inputParticles,tracks, trackSelection);
-    analyseClusters(inputParticles,&clusters);
-    findJets(jetFinder, inputParticles, jetRadius, collision, jetsTable, constituentsTable, constituentsSubTable,DoConstSub);
+    analyseTracks<JetTracks, JetTracks::iterator>(inputParticles, tracks, trackSelection);
+    analyseClusters(inputParticles, &clusters);
+    findJets(jetFinder, inputParticles, jetRadius, collision, jetsTable, constituentsTable, constituentsSubTable, DoConstSub);
   }
 
   PROCESS_SWITCH(JetFinderTask, processFullJets, "Data jet finding for full and neutral jets", false);
@@ -179,7 +179,7 @@ struct JetFinderTask {
   {
     // TODO: MC event selection?
     analyseParticles<aod::McParticles, aod::McParticles::iterator>(inputParticles, trackEtaMin, trackEtaMax, jetTypeParticleLevel, particles, pdg->Instance());
-    findJets(jetFinder, inputParticles, jetRadius, collision, jetsTable, constituentsTable, constituentsSubTable,DoConstSub);
+    findJets(jetFinder, inputParticles, jetRadius, collision, jetsTable, constituentsTable, constituentsSubTable, DoConstSub);
   }
 
   PROCESS_SWITCH(JetFinderTask, processParticleLevelJets, "Particle level jet finding", false);
