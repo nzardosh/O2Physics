@@ -83,7 +83,8 @@ struct JetFinderHFTask {
   int candPDG;
   int candDecay;
 
-  void init(InitContext const&) {
+  void init(InitContext const&)
+  {
     trackSelection = static_cast<std::string>(trackSelections);
 
     if (DoRhoAreaSub) {
@@ -199,7 +200,8 @@ struct JetFinderHFTask {
   // check if type JetParticles2Prong can be templated. then you can just use one function everywhere
   // function that is called for gen level events with 2 prong candidates
   template <typename T, typename U>
-  void analyseMCGen2Prong(T const& collision, U const& particles) {
+  void analyseMCGen2Prong(T const& collision, U const& particles)
+  {
     inputParticles.clear();
     std::vector<JetParticles2Prong::iterator> candidates;
     candidates.clear();
@@ -207,14 +209,16 @@ struct JetFinderHFTask {
   }
   // function that is called for gen level events with 3 prong candidates
   template <typename T, typename U>
-  void analyseMCGen3Prong(T const& collision, U const& particles) {
+  void analyseMCGen3Prong(T const& collision, U const& particles)
+  {
     inputParticles.clear();
     std::vector<JetParticles3Prong::iterator> candidates;
     analyseMCGenParticles(collision, particles, candidates);
   }
   // function that is called for gen level events with B+ candidates
   template <typename T, typename U>
-  void analyseMCGenBPlus(T const& collision, U const& particles) {
+  void analyseMCGenBPlus(T const& collision, U const& particles)
+  {
     inputParticles.clear();
     std::vector<JetParticlesBPlus::iterator> candidates;
     candidates.clear();

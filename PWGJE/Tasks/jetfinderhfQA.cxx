@@ -59,7 +59,8 @@ struct JetFinderHFQATask {
   OutputObj<TH1F> hJetNTracks_Part{"h_jet_ntracks_part"};
   OutputObj<TH1F> hCandPt_Part{"h_cand_pt_part"};
 
-  void init(o2::framework::InitContext&) {
+  void init(o2::framework::InitContext&)
+  {
     h2JetPt.setObject(new TH2F("h2_jet_pt", "jet p_{T};p_{T} (GeV/#it{c})", 100, 0., 100., 10, 0.05, 1.05));
     h2JetPhi.setObject(new TH2F("h2_jet_phi", "jet #phi;#phi", 80, -1., 7., 10, 0.05, 1.05));
     h2JetEta.setObject(new TH2F("h2_jet_eta", "jet #eta;#eta", 70, -0.7, 0.7, 10, 0.05, 1.05));
@@ -93,7 +94,8 @@ struct JetFinderHFQATask {
   void processDummy(aod::Tracks const& track) {}
   PROCESS_SWITCH(JetFinderHFQATask, processDummy, "Dummy process function turned on by default", true);
 
-  void processJetsData(soa::Join<aod::D0ChargedJets, aod::D0ChargedJetConstituents>::iterator const& jet, CandidateD0Data const& candidates, JetTracks const& tracks) {
+  void processJetsData(soa::Join<aod::D0ChargedJets, aod::D0ChargedJetConstituents>::iterator const& jet, CandidateD0Data const& candidates, JetTracks const& tracks)
+  {
     h2JetPt->Fill(jet.pt(), jet.r() / 100.0);
     h2JetPhi->Fill(jet.phi(), jet.r() / 100.0);
     h2JetEta->Fill(jet.eta(), jet.r() / 100.0);
@@ -108,7 +110,8 @@ struct JetFinderHFQATask {
   }
   PROCESS_SWITCH(JetFinderHFQATask, processJetsData, "jet finder HF QA data", false);
 
-  void processJetsMCD(soa::Join<aod::D0ChargedMCDetectorLevelJets, aod::D0ChargedMCDetectorLevelJetConstituents>::iterator const& jet, CandidateD0MC const& candidates, JetTracks const& tracks) {
+  void processJetsMCD(soa::Join<aod::D0ChargedMCDetectorLevelJets, aod::D0ChargedMCDetectorLevelJetConstituents>::iterator const& jet, CandidateD0MC const& candidates, JetTracks const& tracks)
+  {
     h2JetPt->Fill(jet.pt(), jet.r() / 100.0);
     h2JetPhi->Fill(jet.phi(), jet.r() / 100.0);
     h2JetEta->Fill(jet.eta(), jet.r() / 100.0);
@@ -123,7 +126,8 @@ struct JetFinderHFQATask {
   }
   PROCESS_SWITCH(JetFinderHFQATask, processJetsMCD, "jet finder HF QA mcd", false);
 
-  void processJetsMCP(soa::Join<aod::D0ChargedMCParticleLevelJets, aod::D0ChargedMCParticleLevelJetConstituents>::iterator const& jet, JetParticles2Prong const& particles) {
+  void processJetsMCP(soa::Join<aod::D0ChargedMCParticleLevelJets, aod::D0ChargedMCParticleLevelJetConstituents>::iterator const& jet, JetParticles2Prong const& particles)
+  {
     h2JetPt_Part->Fill(jet.pt(), jet.r() / 100.0);
     h2JetPhi_Part->Fill(jet.phi(), jet.r() / 100.0);
     h2JetEta_Part->Fill(jet.eta(), jet.r() / 100.0);

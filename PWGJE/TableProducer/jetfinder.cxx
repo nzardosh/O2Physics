@@ -69,7 +69,8 @@ struct JetFinderTask {
   JetFinder jetFinder;
   std::vector<fastjet::PseudoJet> inputParticles;
 
-  void init(InitContext const&) {
+  void init(InitContext const&)
+  {
     trackSelection = static_cast<std::string>(trackSelections);
 
     if (DoRhoAreaSub) {

@@ -67,7 +67,8 @@ struct JetTutorialTask {
 
   Filter jetCuts = aod::jet::pt > jetPtMin&& aod::jet::r == nround(jetR.node() * 100.0f);
 
-  void processDataCharged(soa::Filtered<aod::ChargedJets>::iterator const& jet) {
+  void processDataCharged(soa::Filtered<aod::ChargedJets>::iterator const& jet)
+  {
     // add aditional selection on jet eta
     registry.fill(HIST("h_jet_pt"), jet.pt());
     registry.fill(HIST("h_jet_eta"), jet.eta());
@@ -75,7 +76,8 @@ struct JetTutorialTask {
   }
   PROCESS_SWITCH(JetTutorialTask, processDataCharged, "jets data", true);
 
-  void processMCDetectorLevelCharged(soa::Filtered<aod::ChargedMCDetectorLevelJets>::iterator const& jet) {
+  void processMCDetectorLevelCharged(soa::Filtered<aod::ChargedMCDetectorLevelJets>::iterator const& jet)
+  {
     // add aditional selection on jet eta
     registry.fill(HIST("h_jet_pt"), jet.pt());
     registry.fill(HIST("h_jet_eta"), jet.eta());
@@ -83,7 +85,8 @@ struct JetTutorialTask {
   }
   PROCESS_SWITCH(JetTutorialTask, processMCDetectorLevelCharged, "jets on detector level MC", false);
 
-  void processMCParticleLevel(soa::Filtered<aod::ChargedMCParticleLevelJets>::iterator const& jet) {
+  void processMCParticleLevel(soa::Filtered<aod::ChargedMCParticleLevelJets>::iterator const& jet)
+  {
     // add aditional selection on jet eta
     registry.fill(HIST("h_part_jet_pt"), jet.pt());
     registry.fill(HIST("h_part_jet_eta"), jet.eta());
@@ -91,7 +94,8 @@ struct JetTutorialTask {
   }
   PROCESS_SWITCH(JetTutorialTask, processMCParticleLevel, "jets on particle level MC", false);
 
-  void processMCCharged(aod::Collisions const& collision, soa::Filtered<aod::ChargedMCDetectorLevelJets> const& MCDjets, soa::Filtered<aod::ChargedMCParticleLevelJets> const& MCPjets) {
+  void processMCCharged(aod::Collisions const& collision, soa::Filtered<aod::ChargedMCDetectorLevelJets> const& MCDjets, soa::Filtered<aod::ChargedMCParticleLevelJets> const& MCPjets)
+  {
     for (auto& MCDjet : MCDjets) {
       registry.fill(HIST("h_jet_pt"), MCDjet.pt());
       registry.fill(HIST("h_jet_eta"), MCDjet.eta());
@@ -105,7 +109,8 @@ struct JetTutorialTask {
   }
   PROCESS_SWITCH(JetTutorialTask, processMCCharged, "jets on detector and particle level MC", false);
 
-  void processDataChargedSubstructure(soa::Filtered<soa::Join<aod::ChargedJets, aod::ChargedJetConstituents>>::iterator const& jet, aod::Tracks const& tracks) {
+  void processDataChargedSubstructure(soa::Filtered<soa::Join<aod::ChargedJets, aod::ChargedJetConstituents>>::iterator const& jet, aod::Tracks const& tracks)
+  {
     // add aditional selection on jet eta
     registry.fill(HIST("h_jet_pt"), jet.pt());
     registry.fill(HIST("h_jet_eta"), jet.eta());
@@ -119,7 +124,8 @@ struct JetTutorialTask {
   }
   PROCESS_SWITCH(JetTutorialTask, processDataChargedSubstructure, "jet substructure charged jets", false);
 
-  void processDataFullSubstructure(soa::Filtered<soa::Join<aod::FullJets, aod::FullJetConstituents>>::iterator const& jet, aod::Tracks const& tracks, aod::EMCALClusters const& clusters) {
+  void processDataFullSubstructure(soa::Filtered<soa::Join<aod::FullJets, aod::FullJetConstituents>>::iterator const& jet, aod::Tracks const& tracks, aod::EMCALClusters const& clusters)
+  {
     // add aditional selection on jet eta
     registry.fill(HIST("h_full_jet_pt"), jet.pt());
     registry.fill(HIST("h_full_jet_eta"), jet.eta());
@@ -139,7 +145,8 @@ struct JetTutorialTask {
   }
   PROCESS_SWITCH(JetTutorialTask, processDataFullSubstructure, "jet substructure full jets", false);
 
-  void processMCParticleSubstructure(soa::Filtered<soa::Join<aod::FullMCParticleLevelJets, aod::FullMCParticleLevelJetConstituents>>::iterator const& jet, aod::McParticles const& particles) {
+  void processMCParticleSubstructure(soa::Filtered<soa::Join<aod::FullMCParticleLevelJets, aod::FullMCParticleLevelJetConstituents>>::iterator const& jet, aod::McParticles const& particles)
+  {
     double angularity = 0.0;
     for (auto& jetConstituents : jet.tracks_as<aod::McParticles>()) {
       angularity += jetConstituents.pt() * TMath::Sqrt(TMath::Power(jet.phi() - jetConstituents.phi(), 2.0) + TMath::Power(jet.eta() - jetConstituents.eta(), 2.0));
@@ -148,7 +155,8 @@ struct JetTutorialTask {
   }
   PROCESS_SWITCH(JetTutorialTask, processMCParticleSubstructure, "jet substructure particle level full jets", false);
 
-  void processDataRecoil(aod::Collision const& collision, soa::Filtered<aod::ChargedJets> const& jets, aod::Tracks const& tracks) {
+  void processDataRecoil(aod::Collision const& collision, soa::Filtered<aod::ChargedJets> const& jets, aod::Tracks const& tracks)
+  {
     double leadingTrackpT = 0.0;
     aod::Tracks::iterator leadingTrack;
     for (auto& track : tracks) {
@@ -172,7 +180,8 @@ struct JetTutorialTask {
 
   using MCDJetTable = soa::Filtered<soa::Join<aod::ChargedMCDetectorLevelJets, aod::ChargedMCDetectorLevelJetConstituents, aod::ChargedMCDetectorLevelJetsMatchedToChargedMCParticleLevelJets>>;
   using MCPJetTable = soa::Filtered<soa::Join<aod::ChargedMCParticleLevelJets, aod::ChargedMCParticleLevelJetConstituents, aod::ChargedMCParticleLevelJetsMatchedToChargedMCDetectorLevelJets>>;
-  void processMCMatched(aod::Collision const& collision, MCDJetTable const& MCDjets, MCPJetTable const& MCPjets) {
+  void processMCMatched(aod::Collision const& collision, MCDJetTable const& MCDjets, MCPJetTable const& MCPjets)
+  {
     for (const auto& MCDjet : MCDjets) {
       if (MCDjet.has_matchedJetGeo() && MCDjet.matchedJetGeoId() >= 0) {
         const auto& MCPjet = MCDjet.matchedJetGeo_as<MCPJetTable>();
