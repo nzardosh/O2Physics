@@ -28,23 +28,26 @@ using namespace o2::analysis;
 namespace o2::aod
 {
 
-namespace jetsubstructure {          //!
+namespace jetsubstructure
+{                                    //!
 DECLARE_SOA_COLUMN(Zg, zg, float);   //!
 DECLARE_SOA_COLUMN(Rg, rg, float);   //!
 DECLARE_SOA_COLUMN(Nsd, nsd, float); //!
-}  // namespace jetsubstructure
+} // namespace jetsubstructure
 
-namespace jetoutput {
+namespace jetoutput
+{
 DECLARE_SOA_COLUMN(JetPt, jetPt, float);                       //!
 DECLARE_SOA_COLUMN(JetPhi, jetPhi, float);                     //!
 DECLARE_SOA_COLUMN(JetEta, jetEta, float);                     //!
 DECLARE_SOA_COLUMN(JetNConstituents, jetNConstituents, int);   //!
 
-}  // namespace jetoutput
+} // namespace jetoutput
 
 // Defines the jet substrcuture table definition
 #define JETSUBSTRUCTURE_TABLE_DEF(_jet_type_, _cand_type_, _name_, _description_)                                                                                                                                                  \
-  namespace _name_##substructure {                                                                                                                                                                                                 \
+  namespace _name_##substructure                                                                                                                                                                                                   \
+  {                                                                                                                                                                                                                                \
     DECLARE_SOA_INDEX_COLUMN(_jet_type_, jet);                                                                                                                                                                                     \
     DECLARE_SOA_INDEX_COLUMN_FULL(Candidate, candidate, int, _cand_type_, "_0");                                                                                                                                                   \
     DECLARE_SOA_DYNAMIC_COLUMN(Dummy##_jet_type_, dummy##_jet_type_, []() -> int { return 0; });                                                                                                                                   \

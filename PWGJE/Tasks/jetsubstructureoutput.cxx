@@ -42,7 +42,8 @@ struct JetSubstructureOutputTask {
   Produces<SubstructureOutputTable> jetSubstructureOutputTable;
 
   template <typename T>
-  void fillTables(T const& jet) {
+  void fillTables(T const& jet)
+  {
     jetOutputTable(jet.globalIndex(), -1, jet.pt(), jet.phi(), jet.eta(), jet.tracks().size());
     jetSubstructureOutputTable(jet.globalIndex(), jet.zg(), jet.rg(), jet.nsd());
   }
@@ -50,8 +51,9 @@ struct JetSubstructureOutputTask {
   void processDummy(aod::Tracks const& track) {}
   PROCESS_SWITCH(JetSubstructureOutputTask, processDummy, "Dummy process function turned on by default", true);
 
-  void processData(soa::Join<aod::ChargedJets, aod::ChargedJetConstituents, aod::ChargedJetSubstructures>::iterator const& jet,  // add template back
-                   aod::Tracks const& tracks) {
+  void processData(soa::Join<aod::ChargedJets, aod::ChargedJetConstituents, aod::ChargedJetSubstructures>::iterator const& jet, // add template back
+                   aod::Tracks const& tracks)
+  {
     fillTables(jet);
   }
   PROCESS_SWITCH(JetSubstructureOutputTask, processData, "jet substructure output on data", false);
@@ -66,7 +68,8 @@ using JetSubstructureOutputData = JetSubstructureOutputTask<aod::ChargedJetOutpu
 using JetSubstructureOutputMCDetectorLevel = JetSubstructureOutputTask<aod::ChargedMCDetectorLevelJetOutput, aod::ChargedMCDetectorLevelJetSubstructureOutput>;
 using JetSubstructureOutputMCParticleLevel = JetSubstructureOutputTask<aod::ChargedMCParticleLevelJetOutput, aod::ChargedMCParticleLevelJetSubstructureOutput>;
 
-WorkflowSpec defineDataProcessing(ConfigContext const& cfgc) {
+WorkflowSpec defineDataProcessing(ConfigContext const& cfgc)
+{
   std::vector<o2::framework::DataProcessorSpec> tasks;
 
   tasks.emplace_back(adaptAnalysisTask<JetSubstructureOutputData>(cfgc, SetDefaultProcesses{}, TaskName{"jet-substructure-output-data"}));
