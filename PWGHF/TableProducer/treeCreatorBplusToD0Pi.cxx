@@ -34,6 +34,8 @@ namespace o2::aod
 {
 namespace full
 {
+DECLARE_SOA_INDEX_COLUMN_FULL(Candidate, candidate, int, HfCandBplus, "_0");
+DECLARE_SOA_INDEX_COLUMN_FULL(HfCandBplusParticle, hfcandbplusparticle, int, McParticles, "_0");
 DECLARE_SOA_COLUMN(RSecondaryVertex, rSecondaryVertex, float);
 DECLARE_SOA_COLUMN(PtProng0, ptProng0, float);
 DECLARE_SOA_COLUMN(PProng0, pProng0, float);
@@ -98,6 +100,7 @@ DECLARE_SOA_COLUMN(RunNumber, runNumber, int);
 
 // put the arguments into the table
 DECLARE_SOA_TABLE(HfCandBplusFull, "AOD", "HFCANDBPFull",
+                  full::CandidateId,
                   full::RSecondaryVertex,
                   full::PtProng0,
                   full::PProng0,
@@ -170,6 +173,7 @@ DECLARE_SOA_TABLE(HfCandBplusFullEvents, "AOD", "HFCANDBPFullE",
                   full::RunNumber);
 
 DECLARE_SOA_TABLE(HfCandBplusFullParticles, "AOD", "HFCANDBPFullP",
+                  full::HfCandBplusParticleId,
                   collision::BCId,
                   full::Pt,
                   full::Eta,
@@ -237,6 +241,7 @@ struct HfTreeCreatorBplusToD0Pi {
         if (std::abs(candidate.flagMcMatchRec()) >= isSignal) {
 
           rowCandidateFull(
+            candidate.globalIndex(),
             candidate.rSecondaryVertex(),
             candidate.ptProng0(),
             RecoDecay::p(candidate.pxProng0(), candidate.pyProng0(), candidate.pzProng0()),
@@ -310,6 +315,7 @@ struct HfTreeCreatorBplusToD0Pi {
     for (auto& particle : particles) {
       if (std::abs(particle.flagMcMatchGen()) == 1 << DecayType::BplusToD0Pi) {
         rowCandidateFullParticles(
+          particle.globalIndex(),
           particle.mcCollision().bcId(),
           particle.pt(),
           particle.eta(),

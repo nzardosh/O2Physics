@@ -32,6 +32,8 @@ namespace o2::aod
 {
 namespace full
 {
+DECLARE_SOA_INDEX_COLUMN_FULL(Candidate, candidate, int, HfCand2Prong, "_0");
+DECLARE_SOA_INDEX_COLUMN_FULL(HfCand2ProngParticle, hfcand2prongparticle, int, McParticles, "_0");
 DECLARE_SOA_COLUMN(RSecondaryVertex, rSecondaryVertex, float);
 DECLARE_SOA_COLUMN(PtProng0, ptProng0, float);
 DECLARE_SOA_COLUMN(PProng0, pProng0, float);
@@ -73,6 +75,7 @@ DECLARE_SOA_COLUMN(OriginMcGen, originMcGen, int8_t); // is prompt or non-prompt
 } // namespace full
 
 DECLARE_SOA_TABLE(HfCand2ProngFull, "AOD", "HFCAND2PFull",
+                  full::CandidateId,
                   collision::BCId,
                   collision::NumContrib,
                   collision::PosX,
@@ -139,6 +142,7 @@ DECLARE_SOA_TABLE(HfCand2ProngFullEvents, "AOD", "HFCAND2PFullE",
                   full::RunNumber);
 
 DECLARE_SOA_TABLE(HfCand2ProngFullParticles, "AOD", "HFCAND2PFullP",
+                  full::HfCand2ProngParticleId,
                   collision::BCId,
                   full::Pt,
                   full::Eta,
@@ -178,6 +182,7 @@ struct HfTreeCreatorD0ToKPi {
   {
     if (selection >= 1) {
       rowCandidateFull(
+        candidate.globalIndex(),
         prong0.collision().bcId(),
         prong0.collision().numContrib(),
         candidate.posX(),
@@ -289,7 +294,7 @@ struct HfTreeCreatorD0ToKPi {
     rowCandidateFullParticles.reserve(particles.size());
     for (auto const& particle : particles) {
       if (std::abs(particle.flagMcMatchGen()) == 1 << DecayType::D0ToPiK) {
-        rowCandidateFullParticles(
+        rowCandidateFullParticles(particle.globalIndex(),
           particle.mcCollision().bcId(),
           particle.pt(),
           particle.eta(),

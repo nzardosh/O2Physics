@@ -31,6 +31,8 @@ namespace o2::aod
 {
 namespace full
 {
+DECLARE_SOA_INDEX_COLUMN_FULL(Candidate, candidate, int, HfCand3Prong, "_0");
+DECLARE_SOA_INDEX_COLUMN_FULL(HfCand3ProngParticle, hfcand3prongparticle, int, McParticles, "_0");
 DECLARE_SOA_COLUMN(RSecondaryVertex, rSecondaryVertex, float);
 DECLARE_SOA_COLUMN(PtProng0, ptProng0, float);
 DECLARE_SOA_COLUMN(PProng0, pProng0, float);
@@ -84,6 +86,7 @@ DECLARE_SOA_COLUMN(RunNumber, runNumber, int);
 } // namespace full
 
 DECLARE_SOA_TABLE(HfCand3ProngFull, "AOD", "HFCAND3PFull",
+                  full::CandidateId,
                   collision::BCId,
                   collision::NumContrib,
                   collision::PosX,
@@ -167,6 +170,7 @@ DECLARE_SOA_TABLE(HfCand3ProngFullEvents, "AOD", "HFCAND3PFullE",
                   full::RunNumber);
 
 DECLARE_SOA_TABLE(HfCand3ProngFullParticles, "AOD", "HFCAND3PFullP",
+                  full::HfCand3ProngParticleId,
                   collision::BCId,
                   full::Pt,
                   full::Eta,
@@ -224,6 +228,7 @@ struct HfTreeCreatorLcToPKPi {
         double pseudoRndm = trackPos1.pt() * 1000. - (long)(trackPos1.pt() * 1000);
         if (FunctionSelection >= 1 && std::abs(candidate.flagMcMatchRec()) == 1 << DecayType::LcToPKPi && pseudoRndm < downSampleBkgFactor) {
           rowCandidateFull(
+            candidate.globalIndex(),
             trackPos1.collision().bcId(),
             trackPos1.collision().numContrib(),
             candidate.posX(),
@@ -308,6 +313,7 @@ struct HfTreeCreatorLcToPKPi {
     for (auto& particle : particles) {
       if (std::abs(particle.flagMcMatchGen()) == 1 << DecayType::LcToPKPi) {
         rowCandidateFullParticles(
+          particle.globalIndex(),
           particle.mcCollision().bcId(),
           particle.pt(),
           particle.eta(),
@@ -353,6 +359,7 @@ struct HfTreeCreatorLcToPKPi {
         double pseudoRndm = trackPos1.pt() * 1000. - (long)(trackPos1.pt() * 1000);
         if (FunctionSelection >= 1 && pseudoRndm < downSampleBkgFactor) {
           rowCandidateFull(
+            candidate.globalIndex(),
             trackPos1.collision().bcId(),
             trackPos1.collision().numContrib(),
             candidate.posX(),
