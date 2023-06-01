@@ -301,7 +301,7 @@ struct HfTreeCreatorBplusToD0Pi {
             d0Daughter1.tofNSigmaKa(),
             d0Daughter1.tpcNSigmaPi(),
             d0Daughter1.tpcNSigmaKa(),
-            candidate.globalIndex(),);
+            candidate.globalIndex(), );
         }
       };
 
