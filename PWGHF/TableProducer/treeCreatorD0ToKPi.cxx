@@ -295,13 +295,13 @@ struct HfTreeCreatorD0ToKPi {
     for (auto const& particle : particles) {
       if (std::abs(particle.flagMcMatchGen()) == 1 << DecayType::D0ToPiK) {
         rowCandidateFullParticles(particle.globalIndex(),
-          particle.mcCollision().bcId(),
-          particle.pt(),
-          particle.eta(),
-          particle.phi(),
-          RecoDecay::y(array{particle.px(), particle.py(), particle.pz()}, RecoDecay::getMassPDG(particle.pdgCode())),
-          particle.flagMcMatchGen(),
-          particle.originMcGen());
+                                  particle.mcCollision().bcId(),
+                                  particle.pt(),
+                                  particle.eta(),
+                                  particle.phi(),
+                                  RecoDecay::y(array{particle.px(), particle.py(), particle.pz()}, RecoDecay::getMassPDG(particle.pdgCode())),
+                                  particle.flagMcMatchGen(),
+                                  particle.originMcGen());
       }
     }
   }
