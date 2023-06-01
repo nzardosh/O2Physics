@@ -32,6 +32,8 @@ namespace o2::aod
 {
 namespace full
 {
+DECLARE_SOA_INDEX_COLUMN_FULL(Candidate, candidate, int, HfCand2Prong, "_0");
+DECLARE_SOA_INDEX_COLUMN_FULL(HfCand2ProngParticle, hfcand2prongparticle, int, McParticles, "_0");
 DECLARE_SOA_COLUMN(RSecondaryVertex, rSecondaryVertex, float);
 DECLARE_SOA_COLUMN(PtProng0, ptProng0, float);
 DECLARE_SOA_COLUMN(PProng0, pProng0, float);
@@ -72,62 +74,7 @@ DECLARE_SOA_COLUMN(OriginMcRec, originMcRec, int8_t); // is prompt or non-prompt
 DECLARE_SOA_COLUMN(OriginMcGen, originMcGen, int8_t); // is prompt or non-prompt, Gen level
 } // namespace full
 
-DECLARE_SOA_TABLE(HfCand2ProngFull, "AOD", "HFCAND2PFull",
-                  collision::BCId,
-                  collision::NumContrib,
-                  collision::PosX,
-                  collision::PosY,
-                  collision::PosZ,
-                  hf_cand::XSecondaryVertex,
-                  hf_cand::YSecondaryVertex,
-                  hf_cand::ZSecondaryVertex,
-                  hf_cand::ErrorDecayLength,
-                  hf_cand::ErrorDecayLengthXY,
-                  hf_cand::Chi2PCA,
-                  full::RSecondaryVertex,
-                  full::DecayLength,
-                  full::DecayLengthXY,
-                  full::DecayLengthNormalised,
-                  full::DecayLengthXYNormalised,
-                  full::ImpactParameterNormalised0,
-                  full::PtProng0,
-                  full::PProng0,
-                  full::ImpactParameterNormalised1,
-                  full::PtProng1,
-                  full::PProng1,
-                  hf_cand::PxProng0,
-                  hf_cand::PyProng0,
-                  hf_cand::PzProng0,
-                  hf_cand::PxProng1,
-                  hf_cand::PyProng1,
-                  hf_cand::PzProng1,
-                  hf_cand::ImpactParameter0,
-                  hf_cand::ImpactParameter1,
-                  hf_cand::ErrorImpactParameter0,
-                  hf_cand::ErrorImpactParameter1,
-                  full::NSigTpcPi0,
-                  full::NSigTpcKa0,
-                  full::NSigTofPi0,
-                  full::NSigTofKa0,
-                  full::NSigTpcPi1,
-                  full::NSigTpcKa1,
-                  full::NSigTofPi1,
-                  full::NSigTofKa1,
-                  full::CandidateSelFlag,
-                  full::M,
-                  full::ImpactParameterProduct,
-                  full::CosThetaStar,
-                  full::Pt,
-                  full::P,
-                  full::Cpa,
-                  full::CpaXY,
-                  full::Ct,
-                  full::Eta,
-                  full::Phi,
-                  full::Y,
-                  full::E,
-                  full::FlagMc,
-                  full::OriginMcRec);
+DECLARE_SOA_TABLE(HfCand2ProngFull, "AOD", "HFCAND2PFull", full::CandidateId, collision::BCId, collision::NumContrib, collision::PosX, collision::PosY, collision::PosZ, hf_cand::XSecondaryVertex, hf_cand::YSecondaryVertex, hf_cand::ZSecondaryVertex, hf_cand::ErrorDecayLength, hf_cand::ErrorDecayLengthXY, hf_cand::Chi2PCA, full::RSecondaryVertex, full::DecayLength, full::DecayLengthXY, full::DecayLengthNormalised, full::DecayLengthXYNormalised, full::ImpactParameterNormalised0, full::PtProng0, full::PProng0, full::ImpactParameterNormalised1, full::PtProng1, full::PProng1, hf_cand::PxProng0, hf_cand::PyProng0, hf_cand::PzProng0, hf_cand::PxProng1, hf_cand::PyProng1, hf_cand::PzProng1, hf_cand::ImpactParameter0, hf_cand::ImpactParameter1, hf_cand::ErrorImpactParameter0, hf_cand::ErrorImpactParameter1, full::NSigTpcPi0, full::NSigTpcKa0, full::NSigTofPi0, full::NSigTofKa0, full::NSigTpcPi1, full::NSigTpcKa1, full::NSigTofPi1, full::NSigTofKa1, full::CandidateSelFlag, full::M, full::ImpactParameterProduct, full::CosThetaStar, full::Pt, full::P, full::Cpa, full::CpaXY, full::Ct, full::Eta, full::Phi, full::Y, full::E, full::FlagMc, full::OriginMcRec);
 
 DECLARE_SOA_TABLE(HfCand2ProngFullEvents, "AOD", "HFCAND2PFullE",
                   collision::BCId,
@@ -138,14 +85,7 @@ DECLARE_SOA_TABLE(HfCand2ProngFullEvents, "AOD", "HFCAND2PFullE",
                   full::IsEventReject,
                   full::RunNumber);
 
-DECLARE_SOA_TABLE(HfCand2ProngFullParticles, "AOD", "HFCAND2PFullP",
-                  collision::BCId,
-                  full::Pt,
-                  full::Eta,
-                  full::Phi,
-                  full::Y,
-                  full::FlagMc,
-                  full::OriginMcGen);
+DECLARE_SOA_TABLE(HfCand2ProngFullParticles, "AOD", "HFCAND2PFullP", full::HfCand2ProngParticleId, collision::BCId, full::Pt, full::Eta, full::Phi, full::Y, full::FlagMc, full::OriginMcGen);
 
 } // namespace o2::aod
 
@@ -177,62 +117,7 @@ struct HfTreeCreatorD0ToKPi {
                  double ct, double y, double e, int8_t flagMc, int8_t origin)
   {
     if (selection >= 1) {
-      rowCandidateFull(
-        prong0.collision().bcId(),
-        prong0.collision().numContrib(),
-        candidate.posX(),
-        candidate.posY(),
-        candidate.posZ(),
-        candidate.xSecondaryVertex(),
-        candidate.ySecondaryVertex(),
-        candidate.zSecondaryVertex(),
-        candidate.errorDecayLength(),
-        candidate.errorDecayLengthXY(),
-        candidate.chi2PCA(),
-        candidate.rSecondaryVertex(),
-        candidate.decayLength(),
-        candidate.decayLengthXY(),
-        candidate.decayLengthNormalised(),
-        candidate.decayLengthXYNormalised(),
-        candidate.impactParameterNormalised0(),
-        candidate.ptProng0(),
-        RecoDecay::p(candidate.pxProng0(), candidate.pyProng0(), candidate.pzProng0()),
-        candidate.impactParameterNormalised1(),
-        candidate.ptProng1(),
-        RecoDecay::p(candidate.pxProng1(), candidate.pyProng1(), candidate.pzProng1()),
-        candidate.pxProng0(),
-        candidate.pyProng0(),
-        candidate.pzProng0(),
-        candidate.pxProng1(),
-        candidate.pyProng1(),
-        candidate.pzProng1(),
-        candidate.impactParameter0(),
-        candidate.impactParameter1(),
-        candidate.errorImpactParameter0(),
-        candidate.errorImpactParameter1(),
-        prong0.tpcNSigmaPi(),
-        prong0.tpcNSigmaKa(),
-        prong0.tofNSigmaPi(),
-        prong0.tofNSigmaKa(),
-        prong1.tpcNSigmaPi(),
-        prong1.tpcNSigmaKa(),
-        prong1.tofNSigmaPi(),
-        prong1.tofNSigmaKa(),
-        1 << candFlag,
-        invMass,
-        candidate.impactParameterProduct(),
-        cosThetaStar,
-        candidate.pt(),
-        candidate.p(),
-        candidate.cpa(),
-        candidate.cpaXY(),
-        ct,
-        candidate.eta(),
-        candidate.phi(),
-        y,
-        e,
-        flagMc,
-        origin);
+      rowCandidateFull(candidate.globalIndex(), prong0.collision().bcId(), prong0.collision().numContrib(), candidate.posX(), candidate.posY(), candidate.posZ(), candidate.xSecondaryVertex(), candidate.ySecondaryVertex(), candidate.zSecondaryVertex(), candidate.errorDecayLength(), candidate.errorDecayLengthXY(), candidate.chi2PCA(), candidate.rSecondaryVertex(), candidate.decayLength(), candidate.decayLengthXY(), candidate.decayLengthNormalised(), candidate.decayLengthXYNormalised(), candidate.impactParameterNormalised0(), candidate.ptProng0(), RecoDecay::p(candidate.pxProng0(), candidate.pyProng0(), candidate.pzProng0()), candidate.impactParameterNormalised1(), candidate.ptProng1(), RecoDecay::p(candidate.pxProng1(), candidate.pyProng1(), candidate.pzProng1()), candidate.pxProng0(), candidate.pyProng0(), candidate.pzProng0(), candidate.pxProng1(), candidate.pyProng1(), candidate.pzProng1(), candidate.impactParameter0(), candidate.impactParameter1(), candidate.errorImpactParameter0(), candidate.errorImpactParameter1(), prong0.tpcNSigmaPi(), prong0.tpcNSigmaKa(), prong0.tofNSigmaPi(), prong0.tofNSigmaKa(), prong1.tpcNSigmaPi(), prong1.tpcNSigmaKa(), prong1.tofNSigmaPi(), prong1.tofNSigmaKa(), 1 << candFlag, invMass, candidate.impactParameterProduct(), cosThetaStar, candidate.pt(), candidate.p(), candidate.cpa(), candidate.cpaXY(), ct, candidate.eta(), candidate.phi(), y, e, flagMc, origin);
     }
   }
 
@@ -289,14 +174,7 @@ struct HfTreeCreatorD0ToKPi {
     rowCandidateFullParticles.reserve(particles.size());
     for (auto const& particle : particles) {
       if (std::abs(particle.flagMcMatchGen()) == 1 << DecayType::D0ToPiK) {
-        rowCandidateFullParticles(
-          particle.mcCollision().bcId(),
-          particle.pt(),
-          particle.eta(),
-          particle.phi(),
-          RecoDecay::y(array{particle.px(), particle.py(), particle.pz()}, RecoDecay::getMassPDG(particle.pdgCode())),
-          particle.flagMcMatchGen(),
-          particle.originMcGen());
+        rowCandidateFullParticles(particle.globalIndex(), particle.mcCollision().bcId(), particle.pt(), particle.eta(), particle.phi(), RecoDecay::y(array{particle.px(), particle.py(), particle.pz()}, RecoDecay::getMassPDG(particle.pdgCode())), particle.flagMcMatchGen(), particle.originMcGen());
       }
     }
   }
