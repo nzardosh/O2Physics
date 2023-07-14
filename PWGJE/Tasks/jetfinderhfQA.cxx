@@ -169,15 +169,15 @@ struct JetFinderHFQATask {
   }
 
   using JetTracks = soa::Join<aod::Tracks, aod::TrackSelection>;
-  using JetTableDataJoined = soa::Join<JetTableData,JetConstituentTableData>;
-  using JetTableMCDJoined = soa::Join<JetTableMCD,  JetConstituentTableMCD>;
-  using JetTableMCDWeightedJoined = soa::Join< JetTableMCD,  JetConstituentTableMCD,  JetTableMCDWeighted>;
-  using JetTableMCDMatchedJoined = soa::Join< JetTableMCD,  JetConstituentTableMCD,  JetMatchingTableMCDMCP>;
-  using JetTableMCDMatchedWeightedJoined = soa::Join< JetTableMCD,  JetConstituentTableMCD,  JetMatchingTableMCDMCP,  JetTableMCDWeighted>;
-  using JetTableMCPJoined = soa::Join< JetTableMCP,  JetConstituentTableMCP>;
-  using JetTableMCPWeightedJoined = soa::Join< JetTableMCP,  JetConstituentTableMCP,  JetTableMCPWeighted>;
-  using JetTableMCPMatchedJoined = soa::Join< JetTableMCP,  JetConstituentTableMCP,  JetMatchingTableMCPMCD>;
-  using JetTableMCPMatchedWeightedJoined = soa::Join< JetTableMCD,  JetConstituentTableMCP,  JetMatchingTableMCPMCD, JetTableMCPWeighted>;
+  using JetTableDataJoined = soa::Join<JetTableData, JetConstituentTableData>;
+  using JetTableMCDJoined = soa::Join<JetTableMCD, JetConstituentTableMCD>;
+  using JetTableMCDWeightedJoined = soa::Join<JetTableMCD, JetConstituentTableMCD, JetTableMCDWeighted>;
+  using JetTableMCDMatchedJoined = soa::Join<JetTableMCD, JetConstituentTableMCD, JetMatchingTableMCDMCP>;
+  using JetTableMCDMatchedWeightedJoined = soa::Join<JetTableMCD, JetConstituentTableMCD, JetMatchingTableMCDMCP, JetTableMCDWeighted>;
+  using JetTableMCPJoined = soa::Join<JetTableMCP, JetConstituentTableMCP>;
+  using JetTableMCPWeightedJoined = soa::Join<JetTableMCP, JetConstituentTableMCP, JetTableMCPWeighted>;
+  using JetTableMCPMatchedJoined = soa::Join<JetTableMCP, JetConstituentTableMCP, JetMatchingTableMCPMCD>;
+  using JetTableMCPMatchedWeightedJoined = soa::Join<JetTableMCD, JetConstituentTableMCP, JetMatchingTableMCPMCD, JetTableMCPWeighted>;
 
   template <typename T>
   bool selectTrack(T const& track)
@@ -232,31 +232,30 @@ struct JetFinderHFQATask {
       registry.fill(HIST("h3_jet_r_jet_pt_candidate_y"), jet.r() / 100.0, jet.pt(), hfcandidate.y(RecoDecay::getMassPDG(421)), weight);
 
       if (jet.r() == round(selectedJetsRadius * 100.0f)) {
-        if constexpr (std::is_same_v<std::decay_t<U>, soa::Join<aod::HfCand2Prong, aod::HfSelD0>> || std::is_same_v<std::decay_t<U>, soa::Join<aod::HfCand2Prong, aod::HfSelD0, aod::HfCand2ProngMcRec>>){
-        if (hfcandidate.isSelD0() >= selectionFlagD0) {
-          registry.fill(HIST("h3_candidate_invmass_jet_pt_candidate_pt"), invMassD0ToPiK(hfcandidate), jet.pt(), hfcandidate.pt(), weight);
-        }
-        if (hfcandidate.isSelD0bar() >= selectionFlagD0bar) {
-          registry.fill(HIST("h3_candidatebar_invmass_jet_pt_candidate_pt"), invMassD0barToKPi(hfcandidate), jet.pt(), hfcandidate.pt(), weight);
-        }
-        }
-
-        if constexpr (std::is_same_v<std::decay_t<U>, soa::Join<aod::HfCand3Prong, aod::HfSelLc>> || std::is_same_v<std::decay_t<U>, soa::Join<aod::HfCand3Prong, aod::HfSelLc, aod::HfCand3ProngMcRec>>){
-        if (hfcandidate.isSelLcToPKPi() >= selectionFlagLcToPKPi) {
-          registry.fill(HIST("h3_candidate_invmass_jet_pt_candidate_pt"), invMassLcToPKPi(hfcandidate), jet.pt(), hfcandidate.pt(), weight);
-        }
-        if (hfcandidate.isSelLcToPiKP() >= selectionFlagLcToPiPK) {
-          registry.fill(HIST("h3_candidatebar_invmass_jet_pt_candidate_pt"), invMassLcToPiKP(hfcandidate), jet.pt(), hfcandidate.pt(), weight);
-        }
+        if constexpr (std::is_same_v<std::decay_t<U>, soa::Join<aod::HfCand2Prong, aod::HfSelD0>> || std::is_same_v<std::decay_t<U>, soa::Join<aod::HfCand2Prong, aod::HfSelD0, aod::HfCand2ProngMcRec>>) {
+          if (hfcandidate.isSelD0() >= selectionFlagD0) {
+            registry.fill(HIST("h3_candidate_invmass_jet_pt_candidate_pt"), invMassD0ToPiK(hfcandidate), jet.pt(), hfcandidate.pt(), weight);
+          }
+          if (hfcandidate.isSelD0bar() >= selectionFlagD0bar) {
+            registry.fill(HIST("h3_candidatebar_invmass_jet_pt_candidate_pt"), invMassD0barToKPi(hfcandidate), jet.pt(), hfcandidate.pt(), weight);
+          }
         }
 
-        if constexpr (std::is_same_v<std::decay_t<U>, soa::Join<aod::HfCandBplus, aod::HfSelBplusToD0Pi>> || std::is_same_v<std::decay_t<U>, soa::Join<aod::HfCandBplus, aod::HfSelBplusToD0Pi, aod::HfCandBplusMcRec>>){
-        if (hfcandidate.isSelBplusToD0Pi() >= selectionFlagBplus) {
-          registry.fill(HIST("h3_candidate_invmass_jet_pt_candidate_pt"), invMassBplusToD0Pi(hfcandidate), jet.pt(), hfcandidate.pt(), weight);
-          registry.fill(HIST("h3_candidatebar_invmass_jet_pt_candidate_pt"), invMassBplusToD0Pi(hfcandidate), jet.pt(), hfcandidate.pt(), weight);
+        if constexpr (std::is_same_v<std::decay_t<U>, soa::Join<aod::HfCand3Prong, aod::HfSelLc>> || std::is_same_v<std::decay_t<U>, soa::Join<aod::HfCand3Prong, aod::HfSelLc, aod::HfCand3ProngMcRec>>) {
+          if (hfcandidate.isSelLcToPKPi() >= selectionFlagLcToPKPi) {
+            registry.fill(HIST("h3_candidate_invmass_jet_pt_candidate_pt"), invMassLcToPKPi(hfcandidate), jet.pt(), hfcandidate.pt(), weight);
+          }
+          if (hfcandidate.isSelLcToPiKP() >= selectionFlagLcToPiPK) {
+            registry.fill(HIST("h3_candidatebar_invmass_jet_pt_candidate_pt"), invMassLcToPiKP(hfcandidate), jet.pt(), hfcandidate.pt(), weight);
+          }
         }
+
+        if constexpr (std::is_same_v<std::decay_t<U>, soa::Join<aod::HfCandBplus, aod::HfSelBplusToD0Pi>> || std::is_same_v<std::decay_t<U>, soa::Join<aod::HfCandBplus, aod::HfSelBplusToD0Pi, aod::HfCandBplusMcRec>>) {
+          if (hfcandidate.isSelBplusToD0Pi() >= selectionFlagBplus) {
+            registry.fill(HIST("h3_candidate_invmass_jet_pt_candidate_pt"), invMassBplusToD0Pi(hfcandidate), jet.pt(), hfcandidate.pt(), weight);
+            registry.fill(HIST("h3_candidatebar_invmass_jet_pt_candidate_pt"), invMassBplusToD0Pi(hfcandidate), jet.pt(), hfcandidate.pt(), weight);
+          }
         }
-        
       }
     }
   }
@@ -525,13 +524,12 @@ WorkflowSpec defineDataProcessing(ConfigContext const& cfgc)
                                                           TaskName{"jet-finder-charged-d0-qa"}));
 
   tasks.emplace_back(adaptAnalysisTask<JetFinderBplusQATask>(cfgc,
-                                                          SetDefaultProcesses{},
-                                                          TaskName{"jet-finder-charged-bplus-qa"}));
+                                                             SetDefaultProcesses{},
+                                                             TaskName{"jet-finder-charged-bplus-qa"}));
 
   tasks.emplace_back(adaptAnalysisTask<JetFinderLcQATask>(cfgc,
                                                           SetDefaultProcesses{},
                                                           TaskName{"jet-finder-charged-lc-qa"}));
-                                              
 
   return WorkflowSpec{tasks};
 }
