@@ -269,9 +269,9 @@ struct JetFinderQATask {
       if (!selectTrack(track)) {
         continue;
       }
-      registry.fill(HIST("h_track_pt"), track.pt(),jet.eventWeight());
-      registry.fill(HIST("h_track_eta"), track.eta(),jet.eventWeight());
-      registry.fill(HIST("h_track_phi"), track.phi(),jet.eventWeight());
+      registry.fill(HIST("h_track_pt"), track.pt(), jet.eventWeight());
+      registry.fill(HIST("h_track_eta"), track.eta(), jet.eventWeight());
+      registry.fill(HIST("h_track_phi"), track.phi(), jet.eventWeight());
     }
   }
   PROCESS_SWITCH(JetFinderQATask, processJetsMCDWeighted, "jet finder QA mcd with weighted events", false);
