@@ -72,22 +72,22 @@ struct jetFilter {
   void init(o2::framework::InitContext&)
   {
 
-rand.SetSeed(0);
+    rand.SetSeed(0);
     triggeredJetPt = static_cast<std::vector<float>>(triggeredJetPtValues);
     downscaleFactor = static_cast<std::vector<int>>(downscaleFactorValues);
 
     spectra.add("fCollZpos", "collision z position", HistType::kTH1F,
                 {{200, -20., +20., "#it{z}_{vtx} position (cm)"}});
-                for (unsigned int i = 0; i < triggeredJetPt.size(); i++) {
-    spectra.add(Form("ptphiJetChSelected_thresholdpt_%.2f_downscaleFactor_%d",triggeredJetPt[i],downscaleFactor[i]),
-                "pT of selected high pT charged jets vs phi", HistType::kTH2F,
-                {{150, 0., +150., "charged jet #it{p}_{T} (GeV/#it{c})"},
-                 {60, 0, TMath::TwoPi()}});
-    spectra.add(Form("ptetaJetChSelected_thresholdpt_%.2f_downscaleFactor_%d",triggeredJetPt[i],downscaleFactor[i]),
-                "pT of selected high pT charged jets vs eta", HistType::kTH2F,
-                {{150, 0., +150., "charged jet #it{p}_{T} (GeV/#it{c})"},
-                 {40, -1.0, 1.0}});
-                }
+    for (unsigned int i = 0; i < triggeredJetPt.size(); i++) {
+      spectra.add(Form("ptphiJetChSelected_thresholdpt_%.2f_downscaleFactor_%d", triggeredJetPt[i], downscaleFactor[i]),
+                  "pT of selected high pT charged jets vs phi", HistType::kTH2F,
+                  {{150, 0., +150., "charged jet #it{p}_{T} (GeV/#it{c})"},
+                   {60, 0, TMath::TwoPi()}});
+      spectra.add(Form("ptetaJetChSelected_thresholdpt_%.2f_downscaleFactor_%d", triggeredJetPt[i], downscaleFactor[i]),
+                  "pT of selected high pT charged jets vs eta", HistType::kTH2F,
+                  {{150, 0., +150., "charged jet #it{p}_{T} (GeV/#it{c})"},
+                   {40, -1.0, 1.0}});
+    }
 
     auto scalers{std::get<std::shared_ptr<TH1>>(spectra.add(
       "fProcessedEvents", ";;Number of filtered events", HistType::kTH1F,
@@ -95,7 +95,6 @@ rand.SetSeed(0);
     for (uint32_t iS{1}; iS <= highPtObjectsNames.size(); ++iS) {
       scalers->GetXaxis()->SetBinLabel(iS, highPtObjectsNames[iS - 1].data());
     }
-
   }
 
   // declare filters on tracks
@@ -114,16 +113,16 @@ rand.SetSeed(0);
     for (const auto& jet : jets) {
       for (unsigned int i = 0; i < triggeredJetPt.size(); i++) {
         if (jet.pt() >= triggeredJetPt[i] && rand.Integer(downscaleFactor[i]) == 0) {
-          spectra.fill(HIST(Form("ptphiJetChSelected_thresholdpt_%.2f_downscaleFactor_%d",triggeredJetPt[i],downscaleFactor[i])), jet.pt(),
+          spectra.fill(HIST(Form("ptphiJetChSelected_thresholdpt_%.2f_downscaleFactor_%d", triggeredJetPt[i], downscaleFactor[i])), jet.pt(),
                        jet.phi()); // charged jet pT vs phi
-          spectra.fill(HIST(Form("ptetaJetChSelected_thresholdpt_%.2f_downscaleFactor_%d",triggeredJetPt[i],downscaleFactor[i])), jet.pt(),
+          spectra.fill(HIST(Form("ptetaJetChSelected_thresholdpt_%.2f_downscaleFactor_%d", triggeredJetPt[i], downscaleFactor[i])), jet.pt(),
                        jet.eta()); // charged jet pT vs eta
           keepEvent[kJetChHighPt] = true;
-          //break; // can these break statements go back?
+          // break; // can these break statements go back?
         }
       }
-      //if (keepEvent[kJetChHighPt]) {
-        //break;
+      // if (keepEvent[kJetChHighPt]) {
+      // break;
       //}
     }
 
