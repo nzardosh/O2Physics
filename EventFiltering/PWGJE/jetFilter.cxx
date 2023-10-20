@@ -12,6 +12,7 @@
 // Author: Filip Krizek
 
 #include <TMath.h>
+#include <TRandom3.h>
 #include <cmath>
 #include <string>
 
@@ -46,13 +47,6 @@ struct jetFilter {
   enum { kJetChHighPt = 0,
          kHighPtObjects };
 
-  // event selection cuts
-  Configurable<float> selectionJetChHighPt{
-    "selectionJetChHighPt", 33.,
-    "Minimum charged jet pT trigger threshold"}; // we want to keep all events
-                                                 // having a charged jet with
-                                                 // pT above this
-
   Produces<aod::JetFilters> tags;
 
   Configurable<float> cfgJetR{"cfgJetR", 0.6,
@@ -61,6 +55,9 @@ struct jetFilter {
     "cfgJetPtMin", 0.1,
     "minimum jet pT constituent cut"}; // minimum jet constituent pT
 
+  Configurable<std::vector<float>> triggeredJetPtValues{"triggeredJetPtValues", {33.0}, "jet pT lower limits for trigger"};
+  Configurable<std::vector<int>> downscaleFactorValues{"downscaleFactorValues", {1}, "downscale factor for different jet pT selections"};
+
   HistogramRegistry spectra{
     "spectra",
     {},
@@ -68,19 +65,31 @@ struct jetFilter {
     true,
     true};
 
+  std::vector<float> triggeredJetPt;
+  std::vector<int> downscaleFactor;
+  TRandom3 rand;
+  std::vector<std::shared_ptr<TH2>> h_ptphiJetChSelected;
+std::vector<std::shared_ptr<TH2>> h_ptetaJetChSelected;
+
   void init(o2::framework::InitContext&)
   {
 
+    rand.SetSeed(0);
+    triggeredJetPt = static_cast<std::vector<float>>(triggeredJetPtValues);
+    downscaleFactor = static_cast<std::vector<int>>(downscaleFactorValues);
+
     spectra.add("fCollZpos", "collision z position", HistType::kTH1F,
                 {{200, -20., +20., "#it{z}_{vtx} position (cm)"}});
-    spectra.add("ptphiJetChSelected",
-                "pT of selected high pT charged jets vs phi", HistType::kTH2F,
-                {{150, 0., +150., "charged jet #it{p}_{T} (GeV/#it{c})"},
-                 {60, 0, TMath::TwoPi()}});
-    spectra.add("ptetaJetChSelected",
-                "pT of selected high pT charged jets vs eta", HistType::kTH2F,
-                {{150, 0., +150., "charged jet #it{p}_{T} (GeV/#it{c})"},
-                 {40, -1.0, 1.0}});
+    for (unsigned int i = 0; i < triggeredJetPt.size(); i++) {
+      h_ptphiJetChSelected.push_back(std::get<std::shared_ptr<TH2>>(spectra.add(Form("ptphiJetChSelected_thresholdpt_%.2f_downscaleFactor_%d", triggeredJetPt[i], downscaleFactor[i]),
+                  "pT of selected high pT charged jets vs phi", HistType::kTH2F,
+                  {{150, 0., +150., "charged jet #it{p}_{T} (GeV/#it{c})"},
+                   {60, 0, TMath::TwoPi()}})));
+      h_ptphiJetChSelected.push_back(std::get<std::shared_ptr<TH2>>(spectra.add(Form("ptetaJetChSelected_thresholdpt_%.2f_downscaleFactor_%d", triggeredJetPt[i], downscaleFactor[i]),
+                  "pT of selected high pT charged jets vs eta", HistType::kTH2F,
+                  {{150, 0., +150., "charged jet #it{p}_{T} (GeV/#it{c})"},
+                   {40, -1.0, 1.0}})));
+    }
 
     auto scalers{std::get<std::shared_ptr<TH1>>(spectra.add(
       "fProcessedEvents", ";;Number of filtered events", HistType::kTH1F,
@@ -96,24 +105,29 @@ struct jetFilter {
   Filter jetRadiusSelection = o2::aod::jet::r == nround(cfgJetR.node() * 100.0f);
   using filteredJets = o2::soa::Filtered<o2::aod::ChargedJets>;
 
-  void
-    process(soa::Join<aod::Collisions, aod::EvSels>::iterator const& collision, filteredJets const& jets)
+  void process(soa::Join<aod::Collisions, aod::EvSels>::iterator const& collision, filteredJets const& jets)
   {
     // collision process loop
     bool keepEvent[kHighPtObjects]{false};
-    //
     spectra.fill(HIST("fCollZpos"), collision.posZ());
 
-    // Check whether there is a high pT charged jet
-    for (const auto& jet : jets) {
-      if (jet.pt() >= selectionJetChHighPt) {
-        spectra.fill(HIST("ptphiJetChSelected"), jet.pt(),
-                     jet.phi()); // charged jet pT vs phi
-        spectra.fill(HIST("ptetaJetChSelected"), jet.pt(),
-                     jet.eta()); // charged jet pT vs eta
-        keepEvent[kJetChHighPt] = true;
-        break;
+    for (const auto& jet : jets) { //jets are ordered by pT
+      for (unsigned int i = 0; i < triggeredJetPt.size(); i++) {
+        if (jet.pt() >= triggeredJetPt[i] && rand.Integer(downscaleFactor[i]) == 0) {
+
+          h_ptphiJetChSelected[i]->Fill(jet.pt(),
+                       jet.phi()); // charged jet pT vs phi
+          h_ptetaJetChSelected[i]->Fill(jet.pt(),
+                       jet.eta()); // charged jet pT vs eta
+          
+          keepEvent[kJetChHighPt] = true;
+          // break; // can these break statements go back?
+        }
       }
+      break; //this means only the first jet is looked at
+      // if (keepEvent[kJetChHighPt]) {
+      // break;
+      //}
     }
 
     for (int iDecision{0}; iDecision < kHighPtObjects; ++iDecision) {
