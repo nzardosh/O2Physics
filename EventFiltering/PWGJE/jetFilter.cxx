@@ -69,7 +69,7 @@ struct jetFilter {
   std::vector<int> downscaleFactor;
   TRandom3 rand;
   std::vector<std::shared_ptr<TH2>> h_ptphiJetChSelected;
-std::vector<std::shared_ptr<TH2>> h_ptetaJetChSelected;
+  std::vector<std::shared_ptr<TH2>> h_ptetaJetChSelected;
 
   void init(o2::framework::InitContext&)
   {
@@ -82,13 +82,13 @@ std::vector<std::shared_ptr<TH2>> h_ptetaJetChSelected;
                 {{200, -20., +20., "#it{z}_{vtx} position (cm)"}});
     for (unsigned int i = 0; i < triggeredJetPt.size(); i++) {
       h_ptphiJetChSelected.push_back(std::get<std::shared_ptr<TH2>>(spectra.add(Form("ptphiJetChSelected_thresholdpt_%.2f_downscaleFactor_%d", triggeredJetPt[i], downscaleFactor[i]),
-                  "pT of selected high pT charged jets vs phi", HistType::kTH2F,
-                  {{150, 0., +150., "charged jet #it{p}_{T} (GeV/#it{c})"},
-                   {60, 0, TMath::TwoPi()}})));
+                                                                                "pT of selected high pT charged jets vs phi", HistType::kTH2F,
+                                                                                {{150, 0., +150., "charged jet #it{p}_{T} (GeV/#it{c})"},
+                                                                                 {60, 0, TMath::TwoPi()}})));
       h_ptphiJetChSelected.push_back(std::get<std::shared_ptr<TH2>>(spectra.add(Form("ptetaJetChSelected_thresholdpt_%.2f_downscaleFactor_%d", triggeredJetPt[i], downscaleFactor[i]),
-                  "pT of selected high pT charged jets vs eta", HistType::kTH2F,
-                  {{150, 0., +150., "charged jet #it{p}_{T} (GeV/#it{c})"},
-                   {40, -1.0, 1.0}})));
+                                                                                "pT of selected high pT charged jets vs eta", HistType::kTH2F,
+                                                                                {{150, 0., +150., "charged jet #it{p}_{T} (GeV/#it{c})"},
+                                                                                 {40, -1.0, 1.0}})));
     }
 
     auto scalers{std::get<std::shared_ptr<TH1>>(spectra.add(
@@ -111,20 +111,20 @@ std::vector<std::shared_ptr<TH2>> h_ptetaJetChSelected;
     bool keepEvent[kHighPtObjects]{false};
     spectra.fill(HIST("fCollZpos"), collision.posZ());
 
-    for (const auto& jet : jets) { //jets are ordered by pT
+    for (const auto& jet : jets) { // jets are ordered by pT
       for (unsigned int i = 0; i < triggeredJetPt.size(); i++) {
         if (jet.pt() >= triggeredJetPt[i] && rand.Integer(downscaleFactor[i]) == 0) {
 
           h_ptphiJetChSelected[i]->Fill(jet.pt(),
-                       jet.phi()); // charged jet pT vs phi
+                                        jet.phi()); // charged jet pT vs phi
           h_ptetaJetChSelected[i]->Fill(jet.pt(),
-                       jet.eta()); // charged jet pT vs eta
-          
+                                        jet.eta()); // charged jet pT vs eta
+
           keepEvent[kJetChHighPt] = true;
           // break; // can these break statements go back?
         }
       }
-      break; //this means only the first jet is looked at
+      break; // this means only the first jet is looked at
       // if (keepEvent[kJetChHighPt]) {
       // break;
       //}
