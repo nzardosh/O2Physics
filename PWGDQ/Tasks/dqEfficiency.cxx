@@ -892,7 +892,6 @@ struct AnalysisSameEventPairing {
     runMCGen(groupedMCTracks);
   }
 
-
   void processDecayToEEVertexingSkimmed(soa::Filtered<MyEventsVtxCovSelected>::iterator const& event,
                                         soa::Filtered<MyBarrelTracksSelectedWithCov> const& tracks,
                                         ReducedMCEvents const& eventsMC, ReducedMCTracks const& tracksMC)
@@ -909,8 +908,8 @@ struct AnalysisSameEventPairing {
   }
 
   void processDecayToEESkimmedWithColl(soa::Filtered<MyEventsSelected>::iterator const& event,
-                               soa::Filtered<MyBarrelTracksSelectedWithColl> const& tracks,
-                               ReducedMCEvents const& eventsMC, ReducedMCTracks const& tracksMC)
+                                       soa::Filtered<MyBarrelTracksSelectedWithColl> const& tracks,
+                                       ReducedMCEvents const& eventsMC, ReducedMCTracks const& tracksMC)
   {
     // Reset the fValues array
     VarManager::ResetValues(0, VarManager::kNVars);
