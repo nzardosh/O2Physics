@@ -545,7 +545,7 @@ struct mcJetTrackCollisionQa {
           }
         }
       } // end of loop particle level jets
-    } //   end of loop if mc collision
+    }   //   end of loop if mc collision
     fillMcTrackHistos(tracks, collision, false);
     for (const auto& detJet : mcDetJets) {
       if (detJet.collisionId() == collision.globalIndex()) {
