@@ -37,7 +37,7 @@ DECLARE_SOA_COLUMN(EventSel, eventSel, uint8_t);   //!
 } // namespace jetcollision
 
 namespace jetsubstructure
-{                                    //!
+{                                                                   //!
 DECLARE_SOA_COLUMN(EnergyMother, energyMother, std::vector<float>); //!
 DECLARE_SOA_COLUMN(PtLeading, ptLeading, std::vector<float>);       //!
 DECLARE_SOA_COLUMN(PtSubLeading, ptSubLeading, std::vector<float>); //!
