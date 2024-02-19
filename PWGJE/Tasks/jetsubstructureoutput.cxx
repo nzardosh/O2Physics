@@ -143,20 +143,20 @@ struct JetSubstructureOutputTask {
               }
             }
           }
-            if (jet.has_matchedJetPt()) {
-              for (auto& jetTagId : jet.matchedJetPtIds()) {
-                auto jetTagIndex = jetTagMapping.find(jetTagId);
-                if (jetTagIndex != jetTagMapping.end()) {
-                  ptMatching.push_back(jetTagIndex->second);
-                }
+          if (jet.has_matchedJetPt()) {
+            for (auto& jetTagId : jet.matchedJetPtIds()) {
+              auto jetTagIndex = jetTagMapping.find(jetTagId);
+              if (jetTagIndex != jetTagMapping.end()) {
+                ptMatching.push_back(jetTagIndex->second);
               }
             }
-            int storedJetIndex = -1;
-            auto jetIndex = jetMapping.find(jet.globalIndex());
-            if (jetIndex != jetMapping.end()) {
-              storedJetIndex = jetIndex->second;
-            }
-            matchingOutputTable(storedJetIndex, geoMatching, ptMatching, candMatching);
+          }
+          int storedJetIndex = -1;
+          auto jetIndex = jetMapping.find(jet.globalIndex());
+          if (jetIndex != jetMapping.end()) {
+            storedJetIndex = jetIndex->second;
+          }
+          matchingOutputTable(storedJetIndex, geoMatching, ptMatching, candMatching);
         }
       }
     }
