@@ -185,7 +185,7 @@ struct NSubjettinessTask {
     nSub_Kt_results = jetsubstructureutilities::getNSubjettiness(jet, tracks, tracks, tracks, 2, fastjet::contrib::KT_Axes());
     nSub_CA_results = jetsubstructureutilities::getNSubjettiness(jet, tracks, tracks, tracks, 2, fastjet::contrib::CA_Axes());
     nSub_CASD_results = jetsubstructureutilities::getNSubjettiness(jet, tracks, tracks, tracks, 2, fastjet::contrib::CA_Axes(), true, SD_z_cut, SD_beta);
-    
+
     if (jet.tracksIds().size() > 1) {
       if constexpr (isMCP) {
 
