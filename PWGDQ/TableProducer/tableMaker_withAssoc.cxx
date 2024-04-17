@@ -615,7 +615,7 @@ struct TableMaker {
         uint32_t reducedEventIdx = fCollIndexMap[collision.globalIndex()];
         // NOTE: trackBarrelInfo stores the index of the collision as in AO2D (for use in some cases where the analysis on skims is done
         //   in workflows where the original AO2Ds are also present)
-        trackBarrelInfo(collision.globalIndex(), collision.posX(), collision.posY(), collision.posZ());
+        trackBarrelInfo(collision.globalIndex(), collision.posX(), collision.posY(), collision.posZ(), track.globalIndex());
         trackBasic(reducedEventIdx, trackFilteringTag, track.pt(), track.eta(), track.phi(), track.sign(), 0);
         trackBarrel(track.x(), track.alpha(), track.y(), track.z(), track.snp(), track.tgl(), track.signed1Pt(),
                     track.tpcInnerParam(), track.flags(), track.itsClusterMap(), track.itsChi2NCl(),
@@ -765,7 +765,7 @@ struct TableMaker {
                 muon.mchBitMap(), muon.midBitMap(),
                 muon.midBoards(), muon.trackType(), muon.fwdDcaX(), muon.fwdDcaY(),
                 muon.trackTime(), muon.trackTimeRes());
-      muonInfo(muon.collisionId(), collision.posX(), collision.posY(), collision.posZ());
+      muonInfo(muon.collisionId(), collision.posX(), collision.posY(), collision.posZ(), muon.globalIndex());
       if constexpr (static_cast<bool>(TMuonFillMap & VarManager::ObjTypes::MuonCov)) {
         muonCov(muon.x(), muon.y(), muon.z(), muon.phi(), muon.tgl(), muon.sign() / muon.pt(),
                 muon.cXX(), muon.cXY(), muon.cYY(), muon.cPhiX(), muon.cPhiY(), muon.cPhiPhi(),

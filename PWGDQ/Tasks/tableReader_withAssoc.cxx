@@ -791,6 +791,8 @@ struct AnalysisSameEventPairing {
   Produces<aod::DimuonsAll> dimuonAllList;
   Produces<aod::DileptonFlow> dileptonFlowList;
   Produces<aod::DileptonsInfo> dileptonInfoList;
+  Produces<aod::DielectronsTrackInfo> dielectronsTrackInfoList;
+  Produces<aod::DimuonsFwdTrackInfo> dimuonsFwdTrackInfoList;
 
   o2::base::MatLayerCylSet* fLUT = nullptr;
   int fCurrentRun; // needed to detect if the run changed and trigger update of calibrations etc.
@@ -1118,7 +1120,9 @@ struct AnalysisSameEventPairing {
     dielectronList.reserve(1);
     dimuonList.reserve(1);
     dielectronsExtraList.reserve(1);
+    dielectronsTrackInfoList.reserve(1);
     dimuonsExtraList.reserve(1);
+    dimuonsFwdTrackInfoList.reserve(1);
     dileptonInfoList.reserve(1);
     dileptonFlowList.reserve(1);
     if (fConfigFlatTables.value) {
@@ -1182,6 +1186,12 @@ struct AnalysisSameEventPairing {
 
           if constexpr ((TTrackFillMap & VarManager::ObjTypes::ReducedTrackCollInfo) > 0) {
             dileptonInfoList(t1.collisionId(), event.posX(), event.posY(), event.posZ());
+            if constexpr (TPairType == pairTypeEE) {
+        dielectronsTrackInfoList(t1.trackId(), t2.trackId());
+}
+if constexpr (TPairType == pairTypeMuMu) {
+  dimuonsFwdTrackInfoList(t1.trackId(), t2.trackId());
+}
           }
           if constexpr (trackHasCov && TTwoProngFitter) {
             dielectronsExtraList(t1.globalIndex(), t2.globalIndex(), VarManager::fgValues[VarManager::kVertexingTauzProjected], VarManager::fgValues[VarManager::kVertexingLzProjected], VarManager::fgValues[VarManager::kVertexingLxyProjected]);

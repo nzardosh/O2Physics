@@ -545,7 +545,7 @@ struct TableMaker {
                     track.length(), track.dcaXY(), track.dcaZ(),
                     track.trackTime(), track.trackTimeRes(), track.tofExpMom(),
                     track.detectorMap());
-        trackBarrelInfo(track.collisionId(), collision.posX(), collision.posY(), collision.posZ());
+        trackBarrelInfo(track.collisionId(), collision.posX(), collision.posY(), collision.posZ(), track.globalIndex());
         if constexpr (static_cast<bool>(TTrackFillMap & VarManager::ObjTypes::TrackCov)) {
           trackBarrelCov(track.cYY(), track.cZY(), track.cZZ(), track.cSnpY(), track.cSnpZ(),
                          track.cSnpSnp(), track.cTglY(), track.cTglZ(), track.cTglSnp(), track.cTglTgl(),
@@ -740,7 +740,7 @@ struct TableMaker {
         }
 
         muonBasic(event.lastIndex(), newMatchIndex.find(muon.index())->second, newMFTMatchIndex.find(muon.index())->second, trackFilteringTag, VarManager::fgValues[VarManager::kPt], VarManager::fgValues[VarManager::kEta], VarManager::fgValues[VarManager::kPhi], muon.sign(), isAmbiguous);
-        muonInfo(muon.collisionId(), collision.posX(), collision.posY(), collision.posZ());
+        muonInfo(muon.collisionId(), collision.posX(), collision.posY(), collision.posZ(), muon.globalIndex());
         if constexpr (static_cast<bool>(TMuonFillMap & VarManager::ObjTypes::MuonCov)) {
 
           if (fPropMuon) {
@@ -962,7 +962,7 @@ struct TableMaker {
                     track.length(), track.dcaXY(), track.dcaZ(),
                     track.trackTime(), track.trackTimeRes(), track.tofExpMom(),
                     track.detectorMap());
-        trackBarrelInfo(track.collisionId(), collision.posX(), collision.posY(), collision.posZ());
+        trackBarrelInfo(track.collisionId(), collision.posX(), collision.posY(), collision.posZ(), track.globalIndex());
         if constexpr (static_cast<bool>(TTrackFillMap & VarManager::ObjTypes::TrackCov)) {
           trackBarrelCov(track.x(), track.alpha(), track.y(), track.z(), track.snp(), track.tgl(), track.signed1Pt(),
                          track.cYY(), track.cZY(), track.cZZ(), track.cSnpY(), track.cSnpZ(),
@@ -1099,7 +1099,7 @@ struct TableMaker {
         }
 
         muonBasic(event.lastIndex(), newMatchIndex.find(muon.index())->second, -1, trackFilteringTag, VarManager::fgValues[VarManager::kPt], VarManager::fgValues[VarManager::kEta], VarManager::fgValues[VarManager::kPhi], muon.sign(), isAmbiguous);
-        muonInfo(muon.collisionId(), collision.posX(), collision.posY(), collision.posZ());
+        muonInfo(muon.collisionId(), collision.posX(), collision.posY(), collision.posZ(), muon.globalIndex());
         if constexpr (static_cast<bool>(TMuonFillMap & VarManager::ObjTypes::MuonCov)) {
 
           if (fPropMuon) {

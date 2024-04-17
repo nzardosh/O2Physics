@@ -116,6 +116,7 @@ struct TableMakerMC {
   Produces<ReducedTracksBarrelPID> trackBarrelPID;
   Produces<ReducedTracksBarrelLabels> trackBarrelLabels;
   Produces<ReducedMCTracks> trackMC;
+  Produces<ReducedMCTracksInfo> trackMCInfo;
   Produces<ReducedMuons> muonBasic;
   Produces<ReducedMuonsExtra> muonExtra;
   Produces<ReducedMuonsCov> muonCov;
@@ -858,6 +859,7 @@ struct TableMakerMC {
               mothers, daughterRange,
               mctrack.weight(), mctrack.pt(), mctrack.eta(), mctrack.phi(), mctrack.e(),
               mctrack.vx(), mctrack.vy(), mctrack.vz(), mctrack.vt(), mcflags);
+      trackMCInfo(mctrack.globalIndex());
       for (unsigned int isig = 0; isig < fMCSignals.size(); isig++) {
         if (mcflags & (uint16_t(1) << isig)) {
           (reinterpret_cast<TH1I*>(fStatsList->At(3)))->Fill(static_cast<float>(isig));
