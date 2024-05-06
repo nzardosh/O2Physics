@@ -164,14 +164,14 @@ DECLARE_SOA_DYNAMIC_COLUMN(P, p, //! absolute p
 #define STRINGIFY(x) #x
 
 // add duplicate tables for each predefined jet table so that the same jets can be run with multiple settings
-#define DECLARE_JET_DUPLICATE_TABLES_LEVELS(_jet_type_, _subtracted_track_type_, _hfcand_type_, _hfparticle_type_, _shortname_, _duplicatenumber_)          \
-  DECLARE_JET_TABLES_LEVELS(_jet_type_##_duplicatenumber_, _subtracted_track_type_, _hfcand_type_, _hfparticle_type_, _shortname_ STRINGIFY(_duplicatenumber_))           \
+#define DECLARE_JET_DUPLICATE_TABLES_LEVELS(_jet_type_, _subtracted_track_type_, _hfcand_type_, _hfparticle_type_, _shortname_, _duplicatenumber_)                   \
+  DECLARE_JET_TABLES_LEVELS(_jet_type_##_duplicatenumber_, _subtracted_track_type_, _hfcand_type_, _hfparticle_type_, _shortname_ STRINGIFY(_duplicatenumber_))      \
   DECLARE_JETMATCHING_TABLE(_jet_type_, _jet_type_##_duplicatenumber_, _shortname_ "JET2" STRINGIFY(_duplicatenumber_))                                              \
   DECLARE_JETMATCHING_TABLE(_jet_type_##_duplicatenumber_, _jet_type_, _shortname_ "JET" STRINGIFY(_duplicatenumber_) "2")                                           \
-  DECLARE_JETMATCHING_TABLE(_jet_type_##MCDetectorLevel, _jet_type_##_duplicatenumber_##MCDetectorLevel, _shortname_ "JETD2" STRINGIFY(_duplicatenumber_))                                              \
-  DECLARE_JETMATCHING_TABLE(_jet_type_##_duplicatenumber_##MCDetectorLevel, _jet_type_##MCDetectorLevel, _shortname_ "JET" STRINGIFY(_duplicatenumber_) "2D")                                           \
-  DECLARE_JETMATCHING_TABLE(_jet_type_##MCParticleLevel, _jet_type_##_duplicatenumber_##MCParticleLevel, _shortname_ "JETP2" STRINGIFY(_duplicatenumber_))                                              \
-  DECLARE_JETMATCHING_TABLE(_jet_type_##_duplicatenumber_##MCParticleLevel, _jet_type_##MCParticleLevel, _shortname_ "JET" STRINGIFY(_duplicatenumber_) "2P")                                           \
+  DECLARE_JETMATCHING_TABLE(_jet_type_##MCDetectorLevel, _jet_type_##_duplicatenumber_##MCDetectorLevel, _shortname_ "JETD2" STRINGIFY(_duplicatenumber_))           \
+  DECLARE_JETMATCHING_TABLE(_jet_type_##_duplicatenumber_##MCDetectorLevel, _jet_type_##MCDetectorLevel, _shortname_ "JET" STRINGIFY(_duplicatenumber_) "2D")        \
+  DECLARE_JETMATCHING_TABLE(_jet_type_##MCParticleLevel, _jet_type_##_duplicatenumber_##MCParticleLevel, _shortname_ "JETP2" STRINGIFY(_duplicatenumber_))           \
+  DECLARE_JETMATCHING_TABLE(_jet_type_##_duplicatenumber_##MCParticleLevel, _jet_type_##MCParticleLevel, _shortname_ "JET" STRINGIFY(_duplicatenumber_) "2P")        \
   DECLARE_JETMATCHING_TABLE(_jet_type_##EventWiseSubtracted, _jet_type_##_duplicatenumber_##EventWiseSubtracted, _shortname_ "JETEWS2" STRINGIFY(_duplicatenumber_)) \
   DECLARE_JETMATCHING_TABLE(_jet_type__duplicatenumber_##EventWiseSubtracted, _jet_type_##EventWiseSubtracted, _shortname_ "JET" STRINGIFY(_duplicatenumber_) "2EWS")
 
