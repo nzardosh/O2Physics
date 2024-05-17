@@ -28,6 +28,7 @@
 #include "Common/DataModel/EventSelection.h"
 #include "Common/DataModel/TrackSelectionTables.h"
 #include "Common/DataModel/Centrality.h"
+#include "Common/DataModel/CollisionAssociationTables.h"
 #include "Common/Core/RecoDecay.h"
 #include "PWGJE/DataModel/EMCALClusters.h"
 
@@ -72,6 +73,7 @@ struct JetDerivedDataProducerTask {
 
   Preslice<aod::EMCALClusterCells> perClusterCells = aod::emcalclustercell::emcalclusterId;
   Preslice<aod::EMCALMatchedTracks> perClusterTracks = aod::emcalclustercell::emcalclusterId;
+  Preslice<aod::TrackAssoc> perTrackCollisions = track_association::trackId;
 
   Service<o2::framework::O2DatabasePDG> pdgDatabase;
 
@@ -130,11 +132,27 @@ struct JetDerivedDataProducerTask {
 
   void processTracks(soa::Join<aod::Tracks, aod::TracksExtra, aod::TracksDCA, aod::TracksCov, aod::TrackSelection, aod::TrackSelectionExtension>::iterator const& track)
   {
-    jTracksTable(track.collisionId(), track.pt(), track.eta(), track.phi(), jetderiveddatautilities::setTrackSelectionBit(track));
-    jTracksExtraTable(track.dcaXY(), track.dcaZ(), track.sigma1Pt()); // these need to be recalculated when we add the track to collision associator
+    std::vector<int> collisionId;
+    collisionId.push_back(track.collisionId());
+    jTracksTable(collisionId, track.pt(), track.eta(), track.phi(), jetderiveddatautilities::setTrackSelectionBit(track));
+    jTracksExtraTable(track.dcaXY(), track.dcaZ(), track.sigma1Pt());
     jTracksParentIndexTable(track.globalIndex());
   }
   PROCESS_SWITCH(JetDerivedDataProducerTask, processTracks, "produces derived track table", true);
+
+  void processTracksWithCollisionAssociator(soa::Join<aod::Tracks, aod::TracksExtra, aod::TracksDCA, aod::TracksCov, aod::TrackSelection, aod::TrackSelectionExtension>::iterator const& track, aod::TrackAssoc const& assocCollisions)
+  {
+    std::vector<int> collisionIds;
+    // need to reclauclate the dcaZ per collision!! Either change how this is done or make a functio that can calculate it here and store an array. need to think about it
+    const auto collisionsPerTrack = tracks.sliceBy(perTrackCollisions, track.globalIndex());
+    for (const auto& collisionPerTrack : collisionsPerTrack) {
+      collisionIds.push_back(collisionPerTrack.collisionId()); // if you put the dca cut here you can then only push back the Ids for tracks that pass the cut
+    }
+    jTracksTable(collisionIds, track.pt(), track.eta(), track.phi(), jetderiveddatautilities::setTrackSelectionBit(track));
+    jTracksExtraTable(track.dcaXY(), track.dcaZ(), track.sigma1Pt()); // these need to be recalculated when we add the track to collision associator
+    jTracksParentIndexTable(track.globalIndex());
+  }
+  PROCESS_SWITCH(JetDerivedDataProducerTask, processTracksWithCollisionAssociator, "produces derived track table taking into account track-to-collision associations", false);
 
   void processMcTrackLabels(soa::Join<aod::Tracks, aod::McTrackLabels>::iterator const& track)
   {

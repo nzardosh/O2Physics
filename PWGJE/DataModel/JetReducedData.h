@@ -196,7 +196,8 @@ DECLARE_SOA_TABLE(StoredJMcCollisionLbs, "AOD1", "JMCCOLLISIONLB",
 
 namespace jtrack
 {
-DECLARE_SOA_INDEX_COLUMN(JCollision, collision);
+DECLARE_SOA_ARRAY_INDEX_COLUMN(JCollision, collisions);
+// DECLARE_SOA_INDEX_COLUMN(JCollision, collision);
 DECLARE_SOA_INDEX_COLUMN(Track, track);
 DECLARE_SOA_COLUMN(Pt, pt, float);
 DECLARE_SOA_COLUMN(Eta, eta, float);
@@ -221,7 +222,7 @@ DECLARE_SOA_DYNAMIC_COLUMN(Sign, sign,
 
 DECLARE_SOA_TABLE(JTracks, "AOD", "JTRACK",
                   o2::soa::Index<>,
-                  jtrack::JCollisionId,
+                  jtrack::JCollisionIds,
                   jtrack::Pt,
                   jtrack::Eta,
                   jtrack::Phi,
@@ -237,7 +238,7 @@ using JTrack = JTracks::iterator;
 
 DECLARE_SOA_TABLE(StoredJTracks, "AOD1", "JTRACK",
                   o2::soa::Index<>,
-                  jtrack::JCollisionId,
+                  jtrack::JCollisionIds,
                   jtrack::Pt,
                   jtrack::Eta,
                   jtrack::Phi,

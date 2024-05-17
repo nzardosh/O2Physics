@@ -111,6 +111,8 @@ struct JetDerivedDataWriter {
   uint32_t precisionPositionMask;
   uint32_t precisionMomentumMask;
 
+  std::map<int32_t, int32_t> collisionMapping;
+
   int eventSelection = -1;
   void init(InitContext&)
   {
@@ -124,17 +126,19 @@ struct JetDerivedDataWriter {
     return true;
   }
 
-  void processCollisions(aod::JCollisions const& collisions)
+  void processCollisionsFlags(aod::JCollisions const& collisions)
   {
     collisionFlag.resize(collisions.size());
     std::fill(collisionFlag.begin(), collisionFlag.end(), false);
   }
+  PROCESS_SWITCH(JetDerivedDataWriter, processCollisionsFlags, "setup the writing for data and MCD", true);
 
-  void processMcCollisions(aod::JMcCollisions const& Mccollisions)
+  void processMcCollisionsFlags(aod::JMcCollisions const& Mccollisions)
   {
     McCollisionFlag.resize(Mccollisions.size());
     std::fill(McCollisionFlag.begin(), McCollisionFlag.end(), false);
   }
+  PROCESS_SWITCH(JetDerivedDataWriter, processMcCollisionsFlags, "setup the writing for MCP", false);
 
   template <typename T>
   void processJets(T& jets)
@@ -171,8 +175,6 @@ struct JetDerivedDataWriter {
       }
     }
   }
-  PROCESS_SWITCH(JetDerivedDataWriter, processCollisions, "setup the writing for data and MCD", true);
-  PROCESS_SWITCH(JetDerivedDataWriter, processMcCollisions, "setup the writing for MCP", false);
   PROCESS_SWITCH_FULL(JetDerivedDataWriter, processJets<aod::ChargedJets>, processChargedJets, "process charged jets", true);
   PROCESS_SWITCH_FULL(JetDerivedDataWriter, processJets<aod::ChargedEventWiseSubtractedJets>, processChargedEventWiseSubtractedJets, "process charged event-wise subtracted jets", false);
   PROCESS_SWITCH_FULL(JetDerivedDataWriter, processJets<aod::ChargedMCDetectorLevelJets>, processChargedMCDJets, "process charged mcd jets", false);
@@ -232,41 +234,109 @@ struct JetDerivedDataWriter {
   }
   PROCESS_SWITCH(JetDerivedDataWriter, processCollisionCounting, "write out collision counting output table", false);
 
-  void processData(soa::Join<aod::JCollisions, aod::JCollisionPIs, aod::JCollisionBCs, aod::JChTrigSels, aod::JFullTrigSels, aod::JChHFTrigSels>::iterator const& collision, soa::Join<aod::JBCs, aod::JBCPIs> const&, soa::Join<aod::JTracks, aod::JTrackExtras, aod::JTrackPIs> const& tracks, soa::Join<aod::JClusters, aod::JClusterPIs, aod::JClusterTracks> const& clusters, aod::HfD0CollBases const&, CandidatesD0Data const& D0s, aod::Hf3PCollBases const&, CandidatesLcData const& Lcs)
+  void processCollisonsData(soa::Join<aod::JCollisions, aod::JCollisionPIs, aod::JCollisionBCs, aod::JChTrigSels, aod::JFullTrigSels, aod::JChHFTrigSels> const& collisions, soa::Join<aod::JBCs, aod::JBCPIs> const&)
   {
     std::map<int32_t, int32_t> bcMapping;
+    collisionMapping.clear();
+    for (const auto& collision : collisions) {
+      if (collisionFlag[collision.globalIndex()]) {
+        if (saveBCsTable) {
+          auto bc = collision.bc_as<soa::Join<aod::JBCs, aod::JBCPIs>>();
+          if (std::find(bcIndicies.begin(), bcIndicies.end(), bc.globalIndex()) == bcIndicies.end()) {
+            storedJBCsTable(bc.runNumber(), bc.globalBC(), bc.timestamp());
+            storedJBCParentIndexTable(bc.bcId());
+            bcIndicies.push_back(bc.globalIndex());
+            bcMapping.insert(std::make_pair(bc.globalIndex(), storedJBCsTable.lastIndex()));
+          }
+        }
+        storedJCollisionsTable(collision.posX(), collision.posY(), collision.posZ(), collision.multiplicity(), collision.centrality(), collision.eventSel(), collision.alias_raw());
+        storedJCollisionsParentIndexTable(collision.collisionId());
+        collisionMapping.insert(std::make_pair(collision.globalIndex(), storedJCollisionsTable.lastIndex()));
+        if (saveBCsTable) {
+          int32_t storedBCID = -1;
+          auto JBCIndex = bcMapping.find(collision.bcId());
+          if (JBCIndex != bcMapping.end()) {
+            storedBCID = JBCIndex->second;
+          }
+          storedJCollisionsBunchCrossingIndexTable(storedBCID);
+        }
+        storedJChargedTriggerSelsTable(collision.chargedTriggerSel());
+        storedJFullTriggerSelsTable(collision.fullTriggerSel());
+        storedJChargedHFTriggerSelsTable(collision.chargedHFTriggerSel());
+      }
+    }
+  }
+  PROCESS_SWITCH(JetDerivedDataWriter, processCollisonsData, "write out collision tables in data", false);
+
+  void processCollisonsMC(soa::Join<aod::JMcCollisions, aod::JMcCollisionPIs> const& mcCollisions, soa::Join<aod::JCollisions, aod::JCollisionPIs, aod::JCollisionBCs, aod::JChTrigSels, aod::JFullTrigSels, aod::JChHFTrigSels> const& collisions, soa::Join<aod::JBCs, aod::JBCPIs> const&)
+  {
+    std::map<int32_t, int32_t> bcMapping;
+    collisionMapping.clear();
+
+    for (auto mcCollision : mcCollisions) {
+      bool collisionSelected = false;
+      const auto collisionsPerMcCollision = collisions.sliceBy(CollisionsPerMcCollision, mcCollision.globalIndex());
+      for (auto collision : collisionsPerMcCollision) {
+        if (collisionFlag[collision.globalIndex()]) {
+          collisionSelected = true;
+        }
+      }
+
+      if (McCollisionFlag[mcCollision.globalIndex()] || collisionSelected) {
+
+        for (auto collision : collisionsPerMcCollision) {
+          if (collisionFlag[collision.globalIndex()]) {
+            if (saveBCsTable) {
+              auto bc = collision.bc_as<soa::Join<aod::JBCs, aod::JBCPIs>>();
+              if (std::find(bcIndicies.begin(), bcIndicies.end(), bc.globalIndex()) == bcIndicies.end()) {
+                storedJBCsTable(bc.runNumber(), bc.globalBC(), bc.timestamp());
+                storedJBCParentIndexTable(bc.bcId());
+                bcIndicies.push_back(bc.globalIndex());
+                bcMapping.insert(std::make_pair(bc.globalIndex(), storedJBCsTable.lastIndex()));
+              }
+            }
+            storedJCollisionsTable(collision.posX(), collision.posY(), collision.posZ(), collision.multiplicity(), collision.centrality(), collision.eventSel(), collision.alias_raw());
+            storedJCollisionsParentIndexTable(collision.collisionId());
+            collisionMapping.insert(std::make_pair(collision.globalIndex(), storedJCollisionsTable.lastIndex()));
+            if (saveBCsTable) {
+              int32_t storedBCID = -1;
+              auto JBCIndex = bcMapping.find(collision.bcId());
+              if (JBCIndex != bcMapping.end()) {
+                storedBCID = JBCIndex->second;
+              }
+              storedJCollisionsBunchCrossingIndexTable(storedBCID);
+            }
+            storedJChargedTriggerSelsTable(collision.chargedTriggerSel());
+            storedJFullTriggerSelsTable(collision.fullTriggerSel());
+            storedJChargedHFTriggerSelsTable(collision.chargedHFTriggerSel());
+          }
+        }
+      }
+    }
+  }
+  PROCESS_SWITCH(JetDerivedDataWriter, processCollisonsMC, "write out collision tables in data", false);
+
+  void processData(soa::Join<aod::JCollisions, aod::JCollisionPIs, aod::JCollisionBCs, aod::JChTrigSels, aod::JFullTrigSels, aod::JChHFTrigSels>::iterator const& collision, soa::Join<aod::JBCs, aod::JBCPIs> const&, soa::Join<aod::JTracks, aod::JTrackExtras, aod::JTrackPIs> const& tracks, soa::Join<aod::JClusters, aod::JClusterPIs, aod::JClusterTracks> const& clusters, aod::HfD0CollBases const&, CandidatesD0Data const& D0s, aod::Hf3PCollBases const&, CandidatesLcData const& Lcs)
+  {
     std::map<int32_t, int32_t> trackMapping;
 
     if (collisionFlag[collision.globalIndex()]) {
-      if (saveBCsTable) {
-        auto bc = collision.bc_as<soa::Join<aod::JBCs, aod::JBCPIs>>();
-        if (std::find(bcIndicies.begin(), bcIndicies.end(), bc.globalIndex()) == bcIndicies.end()) {
-          storedJBCsTable(bc.runNumber(), bc.globalBC(), bc.timestamp());
-          storedJBCParentIndexTable(bc.bcId());
-          bcIndicies.push_back(bc.globalIndex());
-          bcMapping.insert(std::make_pair(bc.globalIndex(), storedJBCsTable.lastIndex()));
-        }
-      }
-
-      storedJCollisionsTable(collision.posX(), collision.posY(), collision.posZ(), collision.multiplicity(), collision.centrality(), collision.eventSel(), collision.alias_raw());
-      storedJCollisionsParentIndexTable(collision.collisionId());
-      if (saveBCsTable) {
-        int32_t storedBCID = -1;
-        auto JBCIndex = bcMapping.find(collision.bcId());
-        if (JBCIndex != bcMapping.end()) {
-          storedBCID = JBCIndex->second;
-        }
-        storedJCollisionsBunchCrossingIndexTable(storedBCID);
-      }
-      storedJChargedTriggerSelsTable(collision.chargedTriggerSel());
-      storedJFullTriggerSelsTable(collision.fullTriggerSel());
-      storedJChargedHFTriggerSelsTable(collision.chargedHFTriggerSel());
-
       for (const auto& track : tracks) {
+        auto JtrackIndex = trackMapping.find(track.globalIndex());
+        if (JtrackIndex != trackMapping.end()) {
+          continue;
+        }
         if (performTrackSelection && !(track.trackSel() & ~(1 << jetderiveddatautilities::JTrackSel::trackSign))) { // skips tracks that pass no selections. This might cause a problem with tracks matched with clusters. We should generate a track selection purely for cluster matched tracks so that they are kept
           continue;
         }
-        storedJTracksTable(storedJCollisionsTable.lastIndex(), o2::math_utils::detail::truncateFloatFraction(track.pt(), precisionMomentumMask), o2::math_utils::detail::truncateFloatFraction(track.eta(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.phi(), precisionPositionMask), track.trackSel());
+        std::vector<int> collisionIds;
+        for (const auto& collisionId : track.collisionIds()) {
+          auto JcollisionIndex = collisionMapping.find(collisionId);
+          if (JcollisionIndex != collisionMapping.end()) {
+            collisionIds.push_back(JcollisionIndex->second);
+          }
+        }
+        storedJTracksTable(collisionIds, o2::math_utils::detail::truncateFloatFraction(track.pt(), precisionMomentumMask), o2::math_utils::detail::truncateFloatFraction(track.eta(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.phi(), precisionPositionMask), track.trackSel());
         storedJTracksExtraTable(o2::math_utils::detail::truncateFloatFraction(track.dcaXY(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.dcaZ(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.sigma1Pt(), precisionMomentumMask));
         storedJTracksParentIndexTable(track.trackId());
         trackMapping.insert(std::make_pair(track.globalIndex(), storedJTracksTable.lastIndex()));
@@ -353,7 +423,6 @@ struct JetDerivedDataWriter {
 
   void processMC(soa::Join<aod::JMcCollisions, aod::JMcCollisionPIs> const& mcCollisions, soa::Join<aod::JCollisions, aod::JCollisionPIs, aod::JCollisionBCs, aod::JChTrigSels, aod::JFullTrigSels, aod::JChHFTrigSels, aod::JMcCollisionLbs> const& collisions, soa::Join<aod::JBCs, aod::JBCPIs> const&, soa::Join<aod::JTracks, aod::JTrackExtras, aod::JTrackPIs, aod::JMcTrackLbs> const& tracks, soa::Join<aod::JClusters, aod::JClusterPIs, aod::JClusterTracks> const& clusters, soa::Join<aod::JMcParticles, aod::JMcParticlePIs> const& particles, aod::HfD0CollBases const&, CandidatesD0MCD const& D0s, CandidatesD0MCP const& D0Particles, aod::Hf3PCollBases const&, CandidatesLcMCD const& Lcs, CandidatesLcMCP const& LcParticles)
   {
-    std::map<int32_t, int32_t> bcMapping;
     std::map<int32_t, int32_t> paticleMapping;
     std::map<int32_t, int32_t> mcCollisionMapping;
     int particleTableIndex = 0;
@@ -450,41 +519,28 @@ struct JetDerivedDataWriter {
 
         for (auto collision : collisionsPerMcCollision) {
           std::map<int32_t, int32_t> trackMapping;
-          if (saveBCsTable) {
-            auto bc = collision.bc_as<soa::Join<aod::JBCs, aod::JBCPIs>>();
-            if (std::find(bcIndicies.begin(), bcIndicies.end(), bc.globalIndex()) == bcIndicies.end()) {
-              storedJBCsTable(bc.runNumber(), bc.globalBC(), bc.timestamp());
-              storedJBCParentIndexTable(bc.bcId());
-              bcIndicies.push_back(bc.globalIndex());
-              bcMapping.insert(std::make_pair(bc.globalIndex(), storedJBCsTable.lastIndex()));
-            }
-          }
-
-          storedJCollisionsTable(collision.posX(), collision.posY(), collision.posZ(), collision.multiplicity(), collision.centrality(), collision.eventSel(), collision.alias_raw());
-          storedJCollisionsParentIndexTable(collision.collisionId());
-
           auto JMcCollisionIndex = mcCollisionMapping.find(mcCollision.globalIndex());
           if (JMcCollisionIndex != mcCollisionMapping.end()) {
             storedJMcCollisionsLabelTable(JMcCollisionIndex->second);
           }
-          if (saveBCsTable) {
-            int32_t storedBCID = -1;
-            auto JBCIndex = bcMapping.find(collision.bcId());
-            if (JBCIndex != bcMapping.end()) {
-              storedBCID = JBCIndex->second;
-            }
-            storedJCollisionsBunchCrossingIndexTable(storedBCID);
-          }
-          storedJChargedTriggerSelsTable(collision.chargedTriggerSel());
-          storedJFullTriggerSelsTable(collision.fullTriggerSel());
-          storedJChargedHFTriggerSelsTable(collision.chargedHFTriggerSel());
 
           const auto tracksPerCollision = tracks.sliceBy(TracksPerCollision, collision.globalIndex());
           for (const auto& track : tracksPerCollision) {
+            auto JtrackIndex = trackMapping.find(track.globalIndex());
+            if (JtrackIndex != trackMapping.end()) {
+              continue;
+            }
             if (performTrackSelection && !(track.trackSel() & ~(1 << jetderiveddatautilities::JTrackSel::trackSign))) { // skips tracks that pass no selections. This might cause a problem with tracks matched with clusters. We should generate a track selection purely for cluster matched tracks so that they are kept
               continue;
             }
-            storedJTracksTable(storedJCollisionsTable.lastIndex(), o2::math_utils::detail::truncateFloatFraction(track.pt(), precisionMomentumMask), o2::math_utils::detail::truncateFloatFraction(track.eta(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.phi(), precisionPositionMask), track.trackSel());
+            std::vector<int> collisionIds;
+            for (const auto& collisionId : track.collisionIds()) {
+              auto JcollisionIndex = collisionMapping.find(collisionId);
+              if (JcollisionIndex != collisionMapping.end()) {
+                collisionIds.push_back(JcollisionIndex->second);
+              }
+            }
+            storedJTracksTable(collisionIds, o2::math_utils::detail::truncateFloatFraction(track.pt(), precisionMomentumMask), o2::math_utils::detail::truncateFloatFraction(track.eta(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.phi(), precisionPositionMask), track.trackSel());
             storedJTracksExtraTable(o2::math_utils::detail::truncateFloatFraction(track.dcaXY(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.dcaZ(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.sigma1Pt(), precisionMomentumMask));
             storedJTracksParentIndexTable(track.trackId());
 
