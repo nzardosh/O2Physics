@@ -83,10 +83,74 @@ constexpr bool isV0McTable()
   return std::is_same_v<std::decay_t<T>, CandidatesV0MCP> || std::is_same_v<std::decay_t<T>, o2::soa::Filtered<CandidatesV0MCP>>; // note not optimal way but needed for jetfindingutilities::analyseParticles()
 }
 
+/**
+ * returns true if the track is a daughter of the V0 candidate
+ *
+ * @param track track that is being checked
+ * @param candidate V0 candidate that is being checked
+ * @param tracks the track table
+ */
+template <typename T, typename U, typename V>
+bool isV0DaughterTrack(T& track, U& candidate, V const& /*tracks*/)
+{
+  if constexpr (isV0Candidate<U>()) {
+    if (candidate.posTrackId() == track.globalIndex() || candidate.negTrackId() == track.globalIndex()) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false;
+  }
+}
+
+/**
+ * returns the index of the JMcParticle matched to the V0 candidate
+ *
+ * @param candidate V0 candidate that is being checked
+ * @param tracks track table
+ * @param particles particle table
+ */
+template <typename T, typename U, typename V>
+auto matchedV0ParticleId(const T& candidate, const U& /*tracks*/, const V& /*particles*/)
+{
+  const auto candidateDaughterParticle = candidate.template posTrack_as<U>().template mcParticle_as<V>();
+  return candidateDaughterParticle.template mothers_first_as<V>().globalIndex(); // can we get the Id directly?
+}
+
+/**
+ * returns the JMcParticle matched to the V0 candidate
+ *
+ * @param candidate v0 candidate that is being checked
+ * @param tracks track table
+ * @param particles particle table
+ */
+template <typename T, typename U, typename V>
+auto matchedV0Particle(const T& candidate, const U& /*tracks*/, const V& /*particles*/)
+{
+  const auto candidateDaughterParticle = candidate.template posTrack_as<U>().template mcParticle_as<V>();
+  return candidateDaughterParticle.template mothers_first_as<V>();
+}
+
+/**
+ * returns a slice of the table depending on the index of the V0 candidate
+ *
+ * @param candidate v0 candidate that is being checked
+ * @param table the table to be sliced
+ */
+template <typename T, typename U, typename V>
+auto slicedPerV0Candidate(T const& table, U const& candidate, V const& perV0Candidate)
+{
+  if constexpr (isV0Candidate<U>()) {
+    return table.sliceBy(perV0Candidate, candidate.globalIndex());
+  } else {
+    return table;
+  }
+}
+
 template <typename T>
 bool isV0Particle(T const& particle)
 {
-
   if (TMath::Abs(particle.pdgCode()) == 310) { // k0s
     return true;
   }
@@ -98,7 +162,7 @@ bool isV0Particle(T const& particle)
 
 enum JV0ParticleDecays {
   K0sToPiPi = 0,
-  LambdaPPi = 1
+  LambdaToPPi = 1
 };
 
 template <typename T>
@@ -114,8 +178,8 @@ int initialiseV0ParticleDecaySelection(std::string v0ParticleDecaySelection)
 {
   if (v0ParticleDecaySelection == "K0sToPiPi") {
     return JV0ParticleDecays::K0sToPiPi;
-  } else if (v0ParticleDecaySelection == "LambdaPPi") {
-    return JV0ParticleDecays::LambdaPPi;
+  } else if (v0ParticleDecaySelection == "LambdaToPPi") {
+    return JV0ParticleDecays::LambdaToPPi;
   }
   return -1;
 }
@@ -123,7 +187,6 @@ int initialiseV0ParticleDecaySelection(std::string v0ParticleDecaySelection)
 template <typename U, typename T>
 uint8_t setV0ParticleDecayBit(T const& particle)
 {
-
   uint8_t bit = 0;
 
   if (particle.has_daughters()) {
@@ -139,11 +202,11 @@ uint8_t setV0ParticleDecayBit(T const& particle)
       }
       i++;
     }
-    if (TMath::Abs(daughter1PdgCode) == 211 && TMath::Abs(daughter2PdgCode) == 211) {
+    if (TMath::Abs(daughter1PdgCode) == 211 && TMath::Abs(daughter2PdgCode) == 211) { // ToDo should we take care of the sign?
       SETBIT(bit, JV0ParticleDecays::K0sToPiPi);
     }
     if ((TMath::Abs(daughter1PdgCode) == 211 && TMath::Abs(daughter2PdgCode) == 2212) || (TMath::Abs(daughter2PdgCode) == 211 && TMath::Abs(daughter1PdgCode) == 2212)) {
-      SETBIT(bit, JV0ParticleDecays::LambdaPPi);
+      SETBIT(bit, JV0ParticleDecays::LambdaToPPi);
     }
   }
   return bit;

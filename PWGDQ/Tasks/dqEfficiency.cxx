@@ -482,6 +482,7 @@ struct AnalysisSameEventPairing {
   Produces<aod::Dielectrons> dielectronList;
   Produces<aod::Dimuons> dimuonList;
   Produces<aod::DielectronsExtra> dielectronExtraList;
+  Produces<aod::DielectronsInfo> dielectronInfoList;
   Produces<aod::DimuonsExtra> dimuonExtraList;
   Produces<aod::DielectronsAll> dielectronAllList;
   Produces<aod::DimuonsAll> dimuonAllList;
@@ -738,6 +739,7 @@ struct AnalysisSameEventPairing {
     uint32_t dileptonFilterMap = 0;
     uint32_t dileptonMcDecision = 0;
     dielectronList.reserve(1);
+    dielectronInfoList.reserve(1);
     dimuonList.reserve(1);
     dielectronExtraList.reserve(1);
     dimuonExtraList.reserve(1);
@@ -786,6 +788,9 @@ struct AnalysisSameEventPairing {
 
       if constexpr (TPairType == VarManager::kDecayToEE) {
         dielectronList(event, VarManager::fgValues[VarManager::kMass], VarManager::fgValues[VarManager::kPt], VarManager::fgValues[VarManager::kEta], VarManager::fgValues[VarManager::kPhi], t1.sign() + t2.sign(), dileptonFilterMap, dileptonMcDecision);
+        if constexpr ((TTrackFillMap & VarManager::ObjTypes::ReducedTrackCollInfo) > 0) {
+          dielectronInfoList(t1.collisionId(), t1.trackId(), t2.trackId()); // ToDo: make sure the correct constexpr is there
+        }
         dielectronExtraList(t1.globalIndex(), t2.globalIndex(), VarManager::fgValues[VarManager::kVertexingTauz], VarManager::fgValues[VarManager::kVertexingLz], VarManager::fgValues[VarManager::kVertexingLxy]);
       }
       if constexpr ((TPairType == VarManager::kDecayToEE) && (TTrackFillMap & VarManager::ObjTypes::ReducedTrackBarrelPID) > 0) {
