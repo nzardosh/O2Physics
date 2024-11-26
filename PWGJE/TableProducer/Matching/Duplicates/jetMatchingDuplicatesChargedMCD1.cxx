@@ -28,4 +28,3 @@ WorkflowSpec defineDataProcessing(ConfigContext const& cfgc)
   tasks.emplace_back(adaptAnalysisTask<Charged1JetMCDMatchingDupliacates>(cfgc, SetDefaultProcesses{}, TaskName{"jet-matching-mcd-ch-1"}));
   return WorkflowSpec{tasks};
 }
- 
