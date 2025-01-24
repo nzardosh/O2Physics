@@ -61,7 +61,8 @@ class trackSelectionRequest
   void setMinTPCCrossedRowsOverFindable(float minTPCCrossedRowsOverFindable_);
   int getMinTPCCrossedRowsOverFindable() const;
   /*void setMaxTPCFractionSharedCls(float maxTPCFractionSharedCls_);
-  int getMaxTPCFractionSharedCls() const;*/ //CHANGE
+  int getMaxTPCFractionSharedCls() const;*/
+  // CHANGE
 
   void setRequireITS(bool requireITS_);
   bool getRequireITS() const;
@@ -100,7 +101,8 @@ class trackSelectionRequest
     if (lTrack.tpcCrossedRowsOverFindableCls() < minTPCcrossedrowsoverfindable)
       return false;
     /*if (lTrack.tpcFractionSharedCls() > maxTPCFractionSharedCls)
-      return false;*/ //CHANGE
+      return false;*/
+    // CHANGE
     if (lTrack.hasITS() == false && requireITS)
       return false;
     if (lTrack.itsNCls() < minITSclusters)
@@ -122,7 +124,8 @@ class trackSelectionRequest
     if (lTrack.tpcCrossedRowsOverFindableCls() < minTPCcrossedrowsoverfindable)
       return false;
     /*if (lTrack.tpcFractionSharedCls() > maxTPCFractionSharedCls)
-      return false;*/ //CHANGE
+      return false;*/
+    // CHANGE
     if (lTrack.hasITS() == false && requireITS)
       return false;
     if (lTrack.itsNCls() < minITSclusters)
@@ -152,8 +155,8 @@ class trackSelectionRequest
   int minTPCclusters;
   int minTPCcrossedrows;
   float minTPCcrossedrowsoverfindable;
-  //float maxTPCFractionSharedCls; //CHANGE
-  // ITS parameters (TracksExtra)
+  // float maxTPCFractionSharedCls; //CHANGE
+  //  ITS parameters (TracksExtra)
   bool requireITS; // in Run 3, equiv to hasITS
   int minITSclusters;
   float maxITSChi2percluster;
