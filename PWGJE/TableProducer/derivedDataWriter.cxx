@@ -88,6 +88,23 @@ struct JetDerivedDataWriter {
     Produces<aod::StoredHfD0PBases> storedD0ParticlesTable;
     Produces<aod::StoredJD0PIds> storedD0ParticleIdsTable;
 
+    Produces<aod::StoredHfDPlusCollBases> storedDPlusCollisionsTable;
+    Produces<aod::StoredJDPlusCollisionIds> storedDPlusCollisionIdsTable;
+    Produces<aod::StoredHfDPlusBases> storedDPlussTable;
+    Produces<aod::StoredHfDPlusPars> storedDPlusParsTable;
+    Produces<aod::StoredHfDPlusParEs> storedDPlusParExtrasTable;
+    Produces<aod::JDumDPlusParDaus> storedDPlusParDaughtersDummyTable;
+    Produces<aod::StoredHfDPlusSels> storedDPlusSelsTable;
+    Produces<aod::StoredHfDPlusMls> storedDPlusMlsTable;
+    Produces<aod::JDumDPlusMlDaus> storedDPlusMlDughtersDummyTable;
+    Produces<aod::StoredHfDPlusMcs> storedDPlusMcsTable;
+    Produces<aod::StoredJDPlusIds> storedDPlusIdsTable;
+    Produces<aod::StoredHfDPlusMcCollBases> storedDPlusMcCollisionsTable;
+    Produces<aod::StoredJDPlusMcCollisionIds> storedDPlusMcCollisionIdsTable;
+    Produces<aod::StoredHfDPlusMcRCollIds> storedDPlusMcCollisionsMatchingTable;
+    Produces<aod::StoredHfDPlusPBases> storedDPlusParticlesTable;
+    Produces<aod::StoredJDPlusPIds> storedDPlusParticleIdsTable;
+    
     Produces<aod::StoredHfLcCollBases> storedLcCollisionsTable;
     Produces<aod::StoredJLcCollisionIds> storedLcCollisionIdsTable;
     Produces<aod::StoredHfLcBases> storedLcsTable;
@@ -138,10 +155,12 @@ struct JetDerivedDataWriter {
   Preslice<soa::Join<aod::JMcParticles, aod::JMcParticlePIs>> ParticlesPerMcCollision = aod::jmcparticle::mcCollisionId;
   Preslice<soa::Join<aod::JTracks, aod::JTrackExtras, aod::JTrackPIs, aod::JMcTrackLbs>> TracksPerCollision = aod::jtrack::collisionId;
   Preslice<aod::McCollisionsD0> D0McCollisionsPerMcCollision = aod::jd0indices::mcCollisionId;
+  Preslice<aod::McCollisionsDPlus> DPlusMcCollisionsPerMcCollision = aod::jdplusindices::mcCollisionId;
   Preslice<aod::McCollisionsLc> LcMcCollisionsPerMcCollision = aod::jlcindices::mcCollisionId;
   Preslice<aod::McCollisionsBplus> BplusMcCollisionsPerMcCollision = aod::jbplusindices::mcCollisionId;
   Preslice<aod::McCollisionsDielectron> DielectronMcCollisionsPerMcCollision = aod::jdielectronindices::mcCollisionId;
   Preslice<aod::CandidatesD0MCP> D0ParticlesPerMcCollision = aod::jd0indices::mcCollisionId;
+  Preslice<aod::CandidatesDPlusMCP> DPlusParticlesPerMcCollision = aod::jdplusindices::mcCollisionId;
   Preslice<aod::CandidatesLcMCP> LcParticlesPerMcCollision = aod::jlcindices::mcCollisionId;
   Preslice<aod::CandidatesBplusMCP> BplusParticlesPerMcCollision = aod::jbplusindices::mcCollisionId;
   PresliceUnsorted<aod::JEMCTracks> EMCTrackPerTrack = aod::jemctrack::trackId;
@@ -179,6 +198,21 @@ struct JetDerivedDataWriter {
       for (const auto& D0 : D0s) {
         jethfutilities::fillHFCandidateTable<isMc>(D0, products.storedD0CollisionsTable.lastIndex(), products.storedD0sTable, products.storedD0ParsTable, products.storedD0ParExtrasTable, products.storedD0ParDaughtersDummyTable, products.storedD0SelsTable, products.storedD0MlsTable, products.storedD0MlDughtersDummyTable, products.storedD0McsTable);
         products.storedD0IdsTable(collisionMapping[collision.globalIndex()], trackMapping[D0.prong0Id()], trackMapping[D0.prong1Id()]);
+      }
+    }
+  }
+
+  template <bool isMc, typename T>
+  void storeDPlus(soa::Join<aod::JCollisions, aod::JCollisionSelections>::iterator const& collision, aod::JTracks const&, aod::CollisionsDPlus const& DPlusCollisions, T const& DPluss)
+  {
+    if (collision.isCollisionSelected()) {
+      for (const auto& DPlusCollision : DPlusCollisions) { // should only ever be one
+        jethfutilities::fillHFCollisionTable(DPlusCollision, products.storedDPlusCollisionsTable);
+        products.storedDPlusCollisionIdsTable(collisionMapping[collision.globalIndex()]);
+      }
+      for (const auto& DPlus : DPluss) {
+        jethfutilities::fillHFCandidateTable<isMc>(DPlus, products.storedDPlusCollisionsTable.lastIndex(), products.storedDPlussTable, products.storedDPlusParsTable, products.storedDPlusParExtrasTable, products.storedDPlusParDaughtersDummyTable, products.storedDPlusSelsTable, products.storedDPlusMlsTable, products.storedDPlusMlDughtersDummyTable, products.storedDPlusMcsTable);
+        products.storedDPlusIdsTable(collisionMapping[collision.globalIndex()], trackMapping[DPlus.prong0Id()], trackMapping[DPlus.prong1Id()], trackMapping[DPlus.prong2Id()]);
       }
     }
   }
@@ -225,6 +259,7 @@ struct JetDerivedDataWriter {
   std::vector<int32_t> mcCollisionMapping;
   std::vector<int32_t> particleMapping;
   std::vector<int32_t> d0McCollisionMapping;
+  std::vector<int32_t> dplusMcCollisionMapping;
   std::vector<int32_t> lcMcCollisionMapping;
   std::vector<int32_t> bplusMcCollisionMapping;
   std::vector<int32_t> dielectronMcCollisionMapping;
@@ -329,6 +364,18 @@ struct JetDerivedDataWriter {
   }
   PROCESS_SWITCH(JetDerivedDataWriter, processD0MCD, "write out mcd output tables for D0", false);
 
+  void processDPlusData(soa::Join<aod::JCollisions, aod::JCollisionSelections>::iterator const& collision, aod::JTracks const& tracks, aod::CollisionsDPlus const& DPlusCollisions, aod::CandidatesDPlusData const& DPluss)
+  {
+    storeDPlus<false>(collision, tracks, DPlusCollisions, DPluss);
+  }
+  PROCESS_SWITCH(JetDerivedDataWriter, processDPlusData, "write out data output tables for DPlus", false);
+
+  void processDPlusMCD(soa::Join<aod::JCollisions, aod::JCollisionSelections>::iterator const& collision, aod::JTracks const& tracks, aod::CollisionsDPlus const& DPlusCollisions, aod::CandidatesDPlusMCD const& DPluss)
+  {
+    storeDPlus<true>(collision, tracks, DPlusCollisions, DPluss);
+  }
+  PROCESS_SWITCH(JetDerivedDataWriter, processDPlusMCD, "write out mcd output tables for DPlus", false);
+  
   void processLcData(soa::Join<aod::JCollisions, aod::JCollisionSelections>::iterator const& collision, aod::JTracks const& tracks, aod::CollisionsLc const& LcCollisions, aod::CandidatesLcData const& Lcs)
   {
     storeLc<false>(collision, tracks, LcCollisions, Lcs);
@@ -447,6 +494,29 @@ struct JetDerivedDataWriter {
   }
   PROCESS_SWITCH(JetDerivedDataWriter, processD0MCP, "write out D0 mcp output tables", false);
 
+  void processDPlusMCP(soa::Join<aod::JMcCollisions, aod::JMcCollisionSelections> const& mcCollisions, aod::McCollisionsDPlus const& DPlusMcCollisions, aod::CandidatesDPlusMCP const& DPlusParticles)
+  {
+    dplusMcCollisionMapping.clear();
+    dplusMcCollisionMapping.resize(DPlusMcCollisions.size(), -1);
+    for (auto const& mcCollision : mcCollisions) {
+      if (mcCollision.isMcCollisionSelected()) {
+        const auto dplusMcCollisionsPerMcCollision = DPlusMcCollisions.sliceBy(DPlusMcCollisionsPerMcCollision, mcCollision.globalIndex());
+        for (const auto& dplusMcCollisionPerMcCollision : dplusMcCollisionsPerMcCollision) { // should only ever be one
+          jethfutilities::fillHFMcCollisionTable(dplusMcCollisionPerMcCollision, products.storedDPlusMcCollisionsTable);
+          products.storedDPlusMcCollisionIdsTable(mcCollisionMapping[mcCollision.globalIndex()]);
+          dplusMcCollisionMapping[dplusMcCollisionPerMcCollision.globalIndex()] = products.storedDPlusMcCollisionsTable.lastIndex();
+        }
+        const auto dplusParticlesPerMcCollision = DPlusParticles.sliceBy(DPlusParticlesPerMcCollision, mcCollision.globalIndex());
+        for (const auto& DPlusParticle : dplusParticlesPerMcCollision) {
+          jethfutilities::fillHFCandidateMcTable(DPlusParticle, products.storedDPlusMcCollisionsTable.lastIndex(), products.storedDPlusParticlesTable);
+          products.storedDPlusParticleIdsTable(mcCollisionMapping[mcCollision.globalIndex()], particleMapping[DPlusParticle.mcParticleId()]);
+        }
+      }
+    }
+  }
+
+  PROCESS_SWITCH(JetDerivedDataWriter, processDPlusMCP, "write out DPlus mcp output tables", false);
+  
   void processLcMCP(soa::Join<aod::JMcCollisions, aod::JMcCollisionSelections> const& mcCollisions, aod::McCollisionsLc const& LcMcCollisions, aod::CandidatesLcMCP const& LcParticles)
   {
     lcMcCollisionMapping.clear();
@@ -582,6 +652,20 @@ struct JetDerivedDataWriter {
   }
   PROCESS_SWITCH(JetDerivedDataWriter, processD0McCollisionMatch, "write out D0 McCollision collision label output tables", false);
 
+  void processDPlusMcCollisionMatch(soa::Join<aod::JMcCollisions, aod::JMcCollisionSelections>::iterator const& mcCollision, soa::Join<aod::McCollisionsDPlus, aod::HfDPlusMcRCollIds> const& DPlusMcCollisions, aod::CollisionsDPlus const&)
+  {
+    if (mcCollision.isMcCollisionSelected()) {
+      for (const auto& DPlusMcCollision : DPlusMcCollisions) { // should just be one
+        std::vector<int32_t> dplusCollisionIDs;
+        for (auto const& dplusCollisionPerMcCollision : DPlusMcCollision.hfCollBases_as<aod::CollisionsDPlus>()) {
+          dplusCollisionIDs.push_back(dplusMcCollisionMapping[dplusCollisionPerMcCollision.globalIndex()]);
+        }
+        products.storedDPlusMcCollisionsMatchingTable(dplusCollisionIDs);
+      }
+    }
+  }
+  PROCESS_SWITCH(JetDerivedDataWriter, processDPlusMcCollisionMatch, "write out DPlus McCollision collision label output tables", false);
+  
   void processLcMcCollisionMatch(soa::Join<aod::JMcCollisions, aod::JMcCollisionSelections>::iterator const& mcCollision, soa::Join<aod::McCollisionsLc, aod::HfLcMcRCollIds> const& LcMcCollisions, aod::CollisionsLc const&)
   {
     if (mcCollision.isMcCollisionSelected()) {

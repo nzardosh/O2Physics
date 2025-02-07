@@ -87,6 +87,10 @@ struct JetDerivedDataProducerTask {
     Produces<aod::JD0McCollisionIds> jD0McCollisionIdsTable;
     Produces<aod::JD0Ids> jD0IdsTable;
     Produces<aod::JD0PIds> jD0ParticleIdsTable;
+    Produces<aod::JDPlusCollisionIds> jDPlusCollisionIdsTable;
+    Produces<aod::JDPlusMcCollisionIds> jDPlusMcCollisionIdsTable;
+    Produces<aod::JDPlusIds> jDPlusIdsTable;
+    Produces<aod::JDPlusPIds> jDPlusParticleIdsTable;
     Produces<aod::JLcCollisionIds> jLcCollisionIdsTable;
     Produces<aod::JLcMcCollisionIds> jLcMcCollisionIdsTable;
     Produces<aod::JLcIds> jLcIdsTable;
@@ -442,6 +446,38 @@ struct JetDerivedDataProducerTask {
   }
   PROCESS_SWITCH(JetDerivedDataProducerTask, processD0MC, "produces derived index for D0 particles", false);
 
+  void processDPlusCollisions(aod::HfDPlusCollIds::iterator const& DPlusCollision)
+  {
+    products.jDPlusCollisionIdsTable(DPlusCollision.collisionId());
+  }
+  PROCESS_SWITCH(JetDerivedDataProducerTask, processDPlusCollisions, "produces derived index for DPlus collisions", false);
+
+  void processDPlusMcCollisions(aod::HfDPlusMcCollIds::iterator const& DPlusMcCollision)
+  {
+    products.jDPlusMcCollisionIdsTable(DPlusMcCollision.mcCollisionId());
+  }
+  PROCESS_SWITCH(JetDerivedDataProducerTask, processDPlusMcCollisions, "produces derived index for DPlus MC collisions", false);
+
+  void processDPlus(aod::HfDPlusIds::iterator const& DPlus, aod::Tracks const&)
+  {
+    auto JProng0ID = trackCollisionMapping.find({DPlus.prong0Id(), DPlus.prong0_as<aod::Tracks>().collisionId()});
+    auto JProng1ID = trackCollisionMapping.find({DPlus.prong1Id(), DPlus.prong1_as<aod::Tracks>().collisionId()});
+    auto JProng2ID = trackCollisionMapping.find({DPlus.prong2Id(), DPlus.prong2_as<aod::Tracks>().collisionId()});
+    if (withCollisionAssociator) {
+      JProng0ID = trackCollisionMapping.find({DPlus.prong0Id(), DPlus.collisionId()});
+      JProng1ID = trackCollisionMapping.find({DPlus.prong1Id(), DPlus.collisionId()});
+      JProng2ID = trackCollisionMapping.find({DPlus.prong2Id(), DPlus.collisionId()});
+    }
+    products.jDPlusIdsTable(DPlus.collisionId(), JProng0ID->second, JProng1ID->second, JProng2ID->second);
+  }
+  PROCESS_SWITCH(JetDerivedDataProducerTask, processDPlus, "produces derived index for DPlus candidates", false);
+
+  void processDPlusMC(aod::HfDPlusPIds::iterator const& DPlus)
+  {
+    products.jDPlusParticleIdsTable(DPlus.mcCollisionId(), DPlus.mcParticleId());
+  }
+  PROCESS_SWITCH(JetDerivedDataProducerTask, processDPlusMC, "produces derived index for DPlus particles", false);
+  
   void processLcCollisions(aod::HfLcCollIds::iterator const& LcCollision)
   {
     products.jLcCollisionIdsTable(LcCollision.collisionId());
