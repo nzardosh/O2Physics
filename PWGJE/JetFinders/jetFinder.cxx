@@ -143,7 +143,7 @@ struct JetFinderTask {
   }
 
   aod::EMCALClusterDefinition clusterDefinition = aod::emcalcluster::getClusterDefinitionFromString(clusterDefinitionS.value);
-  Filter collisionFilter = (nabs(aod::jcollision::posZ) < vertexZCut && aod::jcollision::centrality >= centralityMin && aod::jcollision::centrality < centralityMax && aod::jcollision::trackOccupancyInTimeRange <= trackOccupancyInTimeRangeMax && (!skipMBGapEvents || aod::jcollision::subGeneratorId != static_cast<int>(jetderiveddatautilities::JCollisionSubGeneratorId::mbGap)));
+  Filter collisionFilter = (nabs(aod::jcollision::posZ) < vertexZCut && aod::jcollision::centrality >= centralityMin && aod::jcollision::centrality < centralityMax && aod::jcollision::trackOccupancyInTimeRange <= trackOccupancyInTimeRangeMax);
   Filter mcCollisionFilter = (!skipMBGapEvents || aod::jmccollision::subGeneratorId != static_cast<int>(jetderiveddatautilities::JCollisionSubGeneratorId::mbGap));                                                               // should we add a posZ vtx cut here or leave it to analysers?
   Filter trackCuts = (aod::jtrack::pt >= trackPtMin && aod::jtrack::pt < trackPtMax && aod::jtrack::eta >= trackEtaMin && aod::jtrack::eta <= trackEtaMax && aod::jtrack::phi >= trackPhiMin && aod::jtrack::phi <= trackPhiMax); // do we need eta cut both here and in globalselection?
   Filter partCuts = (aod::jmcparticle::pt >= trackPtMin && aod::jmcparticle::pt < trackPtMax && aod::jmcparticle::eta >= trackEtaMin && aod::jmcparticle::eta <= trackEtaMax && aod::jmcparticle::phi >= trackPhiMin && aod::jmcparticle::phi <= trackPhiMax);
@@ -152,7 +152,7 @@ struct JetFinderTask {
   void processChargedJets(soa::Filtered<aod::JetCollisions>::iterator const& collision,
                           soa::Filtered<aod::JetTracks> const& tracks)
   {
-    if (!jetderiveddatautilities::selectCollision(collision, eventSelectionBits) || !jetderiveddatautilities::selectTrigger(collision, triggerMaskBits) || (doEMCALEventSelectionChargedJets && !jetderiveddatautilities::eventEMCAL(collision))) {
+    if (!jetderiveddatautilities::selectCollision(collision, eventSelectionBits, skipMBGapEvents) || !jetderiveddatautilities::selectTrigger(collision, triggerMaskBits) || (doEMCALEventSelectionChargedJets && !jetderiveddatautilities::eventEMCAL(collision))) {
       return;
     }
     inputParticles.clear();
@@ -165,7 +165,7 @@ struct JetFinderTask {
   void processChargedEvtWiseSubJets(soa::Filtered<aod::JetCollisions>::iterator const& collision,
                                     soa::Filtered<aod::JetTracksSub> const& tracks)
   {
-    if (!jetderiveddatautilities::selectCollision(collision, eventSelectionBits) || !jetderiveddatautilities::selectTrigger(collision, triggerMaskBits) || (doEMCALEventSelectionChargedJets && !jetderiveddatautilities::eventEMCAL(collision))) {
+    if (!jetderiveddatautilities::selectCollision(collision, eventSelectionBits, skipMBGapEvents) || !jetderiveddatautilities::selectTrigger(collision, triggerMaskBits) || (doEMCALEventSelectionChargedJets && !jetderiveddatautilities::eventEMCAL(collision))) {
       return;
     }
     inputParticles.clear();

@@ -44,6 +44,11 @@ struct eventWiseConstituentSubtractorTask {
   Produces<aod::JMcParticleDielectronSubs> particleSubtractedDielectronTable;
 
   Configurable<bool> skipMBGapEvents{"skipMBGapEvents", true, "decide to run over MB gap events or not"};
+  Configurable<float> vertexZCut{"vertexZCut", 10.0, "z-vertex cut on event"};
+  Configurable<std::string> eventSelections{"eventSelections", "", "choose event selection"};
+  Configurable<float> centralityMin{"centralityMin", -999.0, "minimum centrality"};
+  Configurable<float> centralityMax{"centralityMax", 999.0, "maximum centrality"};
+  Configurable<int> trackOccupancyInTimeRangeMax{"trackOccupancyInTimeRangeMax", 999999, "maximum occupancy of tracks in neighbouring collisions in a given time range"};
 
   Configurable<float> trackPtMin{"trackPtMin", 0.15, "minimum track pT"};
   Configurable<float> trackPtMax{"trackPtMax", 1000.0, "maximum track pT"};
@@ -70,9 +75,11 @@ struct eventWiseConstituentSubtractorTask {
   std::string particleSelection;
 
   Service<o2::framework::O2DatabasePDG> pdgDatabase;
+  std::vector<int> eventSelectionBits;
 
   void init(o2::framework::InitContext&)
   {
+    eventSelectionBits = jetderiveddatautilities::initialiseEventSelectionBits(static_cast<std::string>(config.eventSelections));
     trackSelection = jetderiveddatautilities::initialiseTrackSelection(static_cast<std::string>(trackSelections));
     particleSelection = static_cast<std::string>(particleSelections);
 
@@ -116,7 +123,7 @@ struct eventWiseConstituentSubtractorTask {
 
   void processCollisions(soa::Join<aod::JetCollisions, aod::BkgChargedRhos>::iterator const& collision, soa::Filtered<aod::JetTracks> const& tracks)
   {
-    if (skipMBGapEvents && collision.subGeneratorId() == jetderiveddatautilities::JCollisionSubGeneratorId::mbGap) {
+    if (!jetderiveddatautilities::selectCollision(collision, eventSelectionBits, skipMBGapEvents) || collision.centrality() < config.centralityMin || collision.centrality() >= config.centralityMax || collision.trackOccupancyInTimeRange() > config.trackOccupancyInTimeRangeMax || std::abs(collision.posZ()) > config.vertexZCut) {
       return;
     }
     inputParticles.clear();

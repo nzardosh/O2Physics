@@ -190,16 +190,12 @@ struct RhoEstimatorTask {
 
   void processChargedCollisions(aod::JetCollision const& collision, soa::Filtered<aod::JetTracks> const& tracks)
   {
-    if (!jetderiveddatautilities::selectCollision(collision, eventSelectionBits) || collision.centrality() < config.centralityMin || collision.centrality() >= config.centralityMax || collision.trackOccupancyInTimeRange() > config.trackOccupancyInTimeRangeMax || std::abs(collision.posZ()) > config.vertexZCut) {
+    if (!jetderiveddatautilities::selectCollision(collision, eventSelectionBits, skipMBGapEvents) || collision.centrality() < config.centralityMin || collision.centrality() >= config.centralityMax || collision.trackOccupancyInTimeRange() > config.trackOccupancyInTimeRangeMax || std::abs(collision.posZ()) > config.vertexZCut) {
       rhoChargedTable(0.0, 0.0);
       return;
     }
     if (collisionFlag.size() != 0 && !collisionFlag[collision.globalIndex()]) {
       rhoChargedTable(0.0, 0.0);
-      return;
-    }
-    if (config.skipMBGapEvents && collision.subGeneratorId() == jetderiveddatautilities::JCollisionSubGeneratorId::mbGap) {
-      rhoChargedTable(-1., -1.);
       return;
     }
     inputParticles.clear();
