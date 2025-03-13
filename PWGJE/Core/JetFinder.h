@@ -84,6 +84,8 @@ class JetFinder
   fastjet::Selector selGhosts;
   double fastjetExtraParam = -99.0;
 
+  std::vector<fastjet::PseudoJet> outjets;
+
   /// Sets the jet finding parameters
   void setParams();
 

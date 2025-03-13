@@ -226,11 +226,12 @@ struct HfProducesDerivedData : o2::framework::ProducesGroup {
     }
   }
 
-  template <typename CollisionType, typename ParticleType, typename TMass>
+  template <typename CollisionType, typename ParticleType, typename TMass, typename T>
   void processMcParticles(CollisionType const& mcCollisions,
                           o2::framework::Preslice<ParticleType> const& mcParticlesPerMcCollision,
                           ParticleType const& mcParticles,
-                          TMass const massParticle)
+                          TMass const massParticle,
+                          T & registry)
   {
     // Fill MC collision properties
     auto sizeTableMcColl = mcCollisions.size();
@@ -252,6 +253,8 @@ struct HfProducesDerivedData : o2::framework::ProducesGroup {
       // Fill MC particle properties
       reserveTablesParticles(sizeTablePart);
       for (const auto& particle : particlesThisMcColl) {
+        registry.fill(HIST("hPtPart"), particle.pt());
+        registry.fill(HIST("hMassPart"), massParticle);
         fillTablesParticle(particle, massParticle);
       }
     }
