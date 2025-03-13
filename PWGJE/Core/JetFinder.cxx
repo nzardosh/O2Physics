@@ -55,9 +55,11 @@ fastjet::ClusterSequenceArea JetFinder::findJets(std::vector<fastjet::PseudoJet>
 {
   setParams();
   jets.clear();
+  outjets.clear();
   fastjet::ClusterSequenceArea clusterSeq(inputParticles, jetDef, areaDef);
   jets = clusterSeq.inclusive_jets();
   jets = selJets(jets);
+  outjets = fastjet::sorted_by_pt(jets);
   jets = fastjet::sorted_by_pt(jets);
   if (isReclustering) {
     jetR = jetR / 5.0;

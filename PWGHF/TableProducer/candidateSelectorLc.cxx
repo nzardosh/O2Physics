@@ -108,6 +108,11 @@ struct HfCandidateSelectorLc {
 
   void init(InitContext const&)
   {
+    registry.add("CandidatesAll", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+    registry.add("CandidatesSelectedTopol", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+    registry.add("CandidatesSelectedPID", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+    registry.add("CandidatesSelectedML", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+    registry.add("CandidatesSelectedALL", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
     std::array<bool, 4> processes = {doprocessNoBayesPidWithDCAFitterN, doprocessBayesPidWithDCAFitterN, doprocessNoBayesPidWithKFParticle, doprocessBayesPidWithKFParticle};
     if (std::accumulate(processes.begin(), processes.end(), 0) != 1) {
       LOGP(fatal, "One and only one process function must be enabled at a time.");
@@ -203,7 +208,7 @@ struct HfCandidateSelectorLc {
     if (candidate.decayLength() <= cuts->get(pTBin, "decay length")) {
       return false;
     }
-
+/*
     // candidate decay length XY
     if (candidate.decayLengthXY() <= cuts->get(pTBin, "decLengthXY")) {
       return false;
@@ -218,7 +223,7 @@ struct HfCandidateSelectorLc {
     if (std::abs(candidate.impactParameterXY()) > cuts->get(pTBin, "impParXY")) {
       return false;
     }
-
+*/
     if (!isSelectedCandidateProngDca(candidate)) {
       return false;
     }
@@ -316,6 +321,7 @@ struct HfCandidateSelectorLc {
   {
     // looping over 3-prong candidates
     for (const auto& candidate : candidates) {
+      registry.fill(HIST("CandidatesAll"), candidate.pt());
 
       // final selection flag
       auto statusLcToPKPi = 0;
@@ -377,6 +383,7 @@ struct HfCandidateSelectorLc {
         }
         continue;
       }
+      registry.fill(HIST("CandidatesSelectedTopol"), candidate.pt());
 
       if (activateQA) {
         registry.fill(HIST("hSelections"), 2 + aod::SelectionStep::RecoTopol, candidate.pt());
@@ -440,6 +447,7 @@ struct HfCandidateSelectorLc {
         }
         continue;
       }
+      registry.fill(HIST("CandidatesSelectedPID"), candidate.pt());
 
       if (activateQA) {
         registry.fill(HIST("hSelections"), 2 + aod::SelectionStep::RecoPID, candidate.pt());
@@ -467,6 +475,7 @@ struct HfCandidateSelectorLc {
           hfSelLcCandidate(statusLcToPKPi, statusLcToPiKP);
           continue;
         }
+        registry.fill(HIST("CandidatesSelectedML"), candidate.pt());
 
         if (activateQA) {
           registry.fill(HIST("hSelections"), 2 + aod::SelectionStep::RecoMl, candidate.pt());
@@ -481,6 +490,9 @@ struct HfCandidateSelectorLc {
       }
 
       hfSelLcCandidate(statusLcToPKPi, statusLcToPiKP);
+      if (statusLcToPKPi==1 || statusLcToPiKP==1){
+         registry.fill(HIST("CandidatesSelectedALL"), candidate.pt());
+      }
     }
   }
 

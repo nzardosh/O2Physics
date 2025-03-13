@@ -17,7 +17,7 @@
 #include <vector>
 
 #include "CommonConstants/PhysicsConstants.h"
-
+#include "Framework/HistogramRegistry.h"
 #include "PWGJE/Core/JetFindingUtilities.h"
 #include "PWGJE/Core/JetDerivedDataUtilities.h"
 #include "Common/Core/RecoDecay.h"
@@ -150,10 +150,43 @@ struct JetFinderHFTask {
 
     registry.add("hJet", "sparse for data or mcd jets", {HistType::kTHnC, {{jetRadiiBins, ""}, {jetPtBinNumber, jetPtMinDouble, jetPtMaxDouble}, {40, -1.0, 1.0}, {18, 0.0, 7.0}}});
     registry.add("hJetMCP", "sparse for mcp jets", {HistType::kTHnC, {{jetRadiiBins, ""}, {jetPtBinNumber, jetPtMinDouble, jetPtMaxDouble}, {40, -1.0, 1.0}, {18, 0.0, 7.0}}});
+    
+registry.add("hCollision", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{8, 0.0, 8.0}}});
+registry.add("hParticlePt", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+registry.add("hParticlePhi", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, -7.0 , 7.0}}});
+registry.add("hParticleEta", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, -1.0, 1.0}}});
+registry.add("hCandidatePtAll", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+registry.add("hCandidatePtAllPrompt", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+registry.add("hCandidatePtAllNonPrompt", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+registry.add("hCandidate1Pt", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+registry.add("hCandidate1Phi", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, -7.0 , 7.0}}});
+registry.add("hCandidate1Eta", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, -1.0, 1.0}}});
+registry.add("hCandidate2Pt", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+registry.add("hCandidate2Phi", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, -7.0 , 7.0}}});
+registry.add("hCandidate2Eta", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, -1.0, 1.0}}});
+registry.add("hCandidate3Pt", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+registry.add("hCandidate3Phi", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, -7.0 , 7.0}}});
+registry.add("hCandidate3Eta", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, -1.0, 1.0}}});
+registry.add("hCandidatePtFilter", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+registry.add("hCandidatePtFilterPrompt", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+registry.add("hCandidatePtFilterNonPrompt", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+registry.add("hJetPt", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+registry.add("hJetPhi", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, -7.0 , 7.0}}});
+registry.add("hJetEta", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, -1.0, 1.0}}});
+  registry.add("hCandSelections", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{5, -0.5, 4.5}}});
+  registry.add("hCandidateMCDPt", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+      registry.add("hCandidate0MCDPt", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+    registry.add("hCandidate1MCDPt", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+  registry.add("hCandidate2MCDPt", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+  registry.add("hCandidate3MCDPt", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+  registry.add("hCandidate4MCDPt", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+  registry.add("hJetMCDPt", "3-prong candidates;inv. mass (#pi K #pi) (GeV/#it{c}^{2});entries", {HistType::kTH1F, {{100, 0.0, 100.0}}});
+
+
   }
 
   aod::EMCALClusterDefinition clusterDefinition = aod::emcalcluster::getClusterDefinitionFromString(clusterDefinitionS.value);
-  Filter collisionFilter = (nabs(aod::jcollision::posZ) < vertexZCut && aod::jcollision::centrality >= centralityMin && aod::jcollision::centrality < centralityMax && aod::jcollision::trackOccupancyInTimeRange <= trackOccupancyInTimeRangeMax && (!skipMBGapEvents || aod::jcollision::subGeneratorId != static_cast<int>(jetderiveddatautilities::JCollisionSubGeneratorId::mbGap)));
+  Filter collisionFilter = (nabs(aod::jcollision::posZ) < vertexZCut && aod::jcollision::centrality >= centralityMin && aod::jcollision::centrality < centralityMax && aod::jcollision::trackOccupancyInTimeRange <= trackOccupancyInTimeRangeMax && ((skipMBGapEvents.node()==false) || aod::jcollision::subGeneratorId != static_cast<int>(jetderiveddatautilities::JCollisionSubGeneratorId::mbGap)));
   Filter mcCollisionFilter = (!skipMBGapEvents || aod::jmccollision::subGeneratorId != static_cast<int>(jetderiveddatautilities::JCollisionSubGeneratorId::mbGap)); // should we add a posZ vtx cut here or leave it to analysers?
   Filter trackCuts = (aod::jtrack::pt >= trackPtMin && aod::jtrack::pt < trackPtMax && aod::jtrack::eta >= trackEtaMin && aod::jtrack::eta <= trackEtaMax && aod::jtrack::phi >= trackPhiMin && aod::jtrack::phi <= trackPhiMax);
   Filter partCuts = (aod::jmcparticle::pt >= trackPtMin && aod::jmcparticle::pt < trackPtMax && aod::jmcparticle::eta >= trackEtaMin && aod::jmcparticle::eta <= trackEtaMax && aod::jmcparticle::phi >= trackPhiMin && aod::jmcparticle::phi <= trackPhiMax);
@@ -175,48 +208,86 @@ struct JetFinderHFTask {
   template <bool isEvtWiseSub, typename T, typename U, typename V, typename M, typename N, typename O>
   void analyseCharged(T const& collision, U const& tracks, V const& candidate, M& jetsTableInput, N& constituentsTableInput, O& /*originalTracks*/, float minJetPt, float maxJetPt)
   {
+    registry.fill(HIST("hCandidate1MCDPt"), candidate.pt());
     if (!jetderiveddatautilities::selectCollision(collision, eventSelectionBits) || !jetderiveddatautilities::selectTrigger(collision, triggerMaskBits)) {
       return;
     }
     inputParticles.clear();
+    registry.fill(HIST("hCandidate2MCDPt"), candidate.pt());
 
     if constexpr (jetcandidateutilities::isCandidate<V>()) {
       if (!jetfindingutilities::analyseCandidate(inputParticles, candidate, candPtMin, candPtMax, candYMin, candYMax)) {
         return;
       }
     }
-
+registry.fill(HIST("hCandidate3MCDPt"), candidate.pt());
     if constexpr (jetcandidateutilities::isMcCandidate<V>()) {
       if (!jetfindingutilities::analyseCandidateMC(inputParticles, candidate, candPtMin, candPtMax, candYMin, candYMax, rejectBackgroundMCDCandidates)) {
         return;
       }
     }
+    registry.fill(HIST("hCandidate4MCDPt"), candidate.pt());
     if constexpr (isEvtWiseSub) {
       jetfindingutilities::analyseTracks<U, typename U::iterator>(inputParticles, tracks, trackSelection, trackingEfficiency);
     } else {
       jetfindingutilities::analyseTracks(inputParticles, tracks, trackSelection, trackingEfficiency, std::optional{candidate});
     }
     jetfindingutilities::findJets(jetFinder, inputParticles, minJetPt, maxJetPt, jetRadius, jetAreaFractionMin, collision, jetsTableInput, constituentsTableInput, registry.get<THn>(HIST("hJet")), fillTHnSparse, true);
+    for (auto jet : jetFinder.outjets) {
+              registry.fill(HIST("hJetMCDPt"), jet.pt());
+            }
   }
 
   // function that generalically processes gen level events
   template <bool checkIsDaughter, typename T, typename U, typename V>
   void analyseMCP(T const& collision, U const& particles, V const& candidate, int jetTypeParticleLevel, float minJetPt, float maxJetPt)
   {
+
+    registry.fill(HIST("hCandidate1Pt"), candidate.pt());
+      registry.fill(HIST("hCandidate1Phi"), candidate.phi());
+      registry.fill(HIST("hCandidate1Eta"), candidate.eta());
+
     if (rejectIncorrectDecaysMCP && !jetcandidateutilities::isMatchedCandidate(candidate)) { // is this even needed in the new derived format? it means any simulations run have to force the decay channel
       return;
     }
+
+    registry.fill(HIST("hCandidate2Pt"), candidate.pt());
+      registry.fill(HIST("hCandidate2Phi"), candidate.phi());
+      registry.fill(HIST("hCandidate2Eta"), candidate.eta());
+
+      registry.fill(HIST("hCandSelections"), 0.5);
+     auto candMass = jetcandidateutilities::getCandidatePDGMass(candidate);
+  if (!std::isnan(candidate.y())) {
+    registry.fill(HIST("hCandSelections"), 1.5);
+    if (candidate.y() > candYMin && candidate.y() < candYMax) {
+    registry.fill(HIST("hCandSelections"), 2.5);
+    if (candidate.pt() > candPtMin && candidate.pt() < candPtMax) {
+    registry.fill(HIST("hCandSelections"), 3.5);
+  }
+  }
+  }
 
     inputParticles.clear();
     if (!jetfindingutilities::analyseCandidate(inputParticles, candidate, candPtMin, candPtMax, candYMin, candYMax)) {
       return;
     }
+    registry.fill(HIST("hCandidate3Pt"), candidate.pt());
+      registry.fill(HIST("hCandidate3Phi"), candidate.phi());
+      registry.fill(HIST("hCandidate3Eta"), candidate.eta());
     if constexpr (checkIsDaughter) {
       jetfindingutilities::analyseParticles<true>(inputParticles, particleSelection, jetTypeParticleLevel, particles, pdgDatabase, std::optional{candidate});
     } else {
       jetfindingutilities::analyseParticles<false>(inputParticles, particleSelection, jetTypeParticleLevel, particles, pdgDatabase, std::optional{candidate});
     }
     jetfindingutilities::findJets(jetFinder, inputParticles, minJetPt, maxJetPt, jetRadius, jetAreaFractionMin, collision, jetsTable, constituentsTable, registry.get<THn>(HIST("hJetMCP")), fillTHnSparse, true);
+    for (auto inputParticle : inputParticles) {
+      registry.fill(HIST("hParticlePt"), inputParticle.pt());
+      registry.fill(HIST("hParticlePhi"), inputParticle.phi());
+      registry.fill(HIST("hParticleEta"), inputParticle.eta());
+    }
+    for (auto jet : jetFinder.outjets) {
+              registry.fill(HIST("hJetPt"), jet.pt());
+            }
   }
 
   void processDummy(aod::JetCollisions const&)
@@ -240,9 +311,18 @@ struct JetFinderHFTask {
   }
   PROCESS_SWITCH(JetFinderHFTask, processChargedEvtWiseSubJetsData, "charged hf jet finding on data with event-wise constituent subtraction", false);
 
+void processChargedCandidatesMCD(CandidateTableMCD const& candidates)
+  {
+for (auto candidate : candidates) {
+registry.fill(HIST("hCandidate0MCDPt"), candidate.pt());
+}
+  }
+  PROCESS_SWITCH(JetFinderHFTask, processChargedCandidatesMCD, "hf jet finding on MC particle level", true);
+  
   void processChargedJetsMCD(soa::Filtered<aod::JetCollisions>::iterator const& collision, soa::Filtered<aod::JetTracks> const& tracks, CandidateTableMCD const& candidates)
   {
     for (typename CandidateTableMCD::iterator const& candidate : candidates) {
+      registry.fill(HIST("hCandidateMCDPt"), candidate.pt());
       analyseCharged<false>(collision, tracks, candidate, jetsTable, constituentsTable, tracks, jetPtMin, jetPtMax);
     }
   }
@@ -256,11 +336,59 @@ struct JetFinderHFTask {
   }
   PROCESS_SWITCH(JetFinderHFTask, processChargedEvtWiseSubJetsMCD, "charged hf jet finding on MC detector level with event-wise constituent subtraction", false);
 
+void processChargedCandidates(CandidateTableMCP const& candidates)
+  {
+for (auto candidate : candidates) {
+registry.fill(HIST("hCandidatePtAll"), candidate.pt());
+if (candidate.originMcGen() ==1){
+registry.fill(HIST("hCandidatePtAllPrompt"), candidate.pt());
+}
+if (candidate.originMcGen() ==2){
+registry.fill(HIST("hCandidatePtAllNonPrompt"), candidate.pt());
+}
+}
+  }
+  PROCESS_SWITCH(JetFinderHFTask, processChargedCandidates, "hf jet finding on MC particle level", true);
+
+
+  void processChargedJetsMCP1(soa::Filtered<aod::JetMcCollisions>::iterator const& collision){
+registry.fill(HIST("hCollision"), 1.5);
+  }
+  PROCESS_SWITCH(JetFinderHFTask, processChargedJetsMCP1, "hf jet finding on MC particle level", true);
+
+  void processChargedJetsMCP2(aod::JetMcCollision const&){
+registry.fill(HIST("hCollision"), 2.5);
+  }
+  PROCESS_SWITCH(JetFinderHFTask, processChargedJetsMCP2, "hf jet finding on MC particle level", true);
+
+  void processChargedJetsMCP3(soa::Filtered<aod::JetMcCollisions>::iterator const& collision){
+    if (collision.subGeneratorId() != static_cast<int>(jetderiveddatautilities::JCollisionSubGeneratorId::mbGap)) {
+      registry.fill(HIST("hCollision"), 3.5);
+    }
+  }
+  PROCESS_SWITCH(JetFinderHFTask, processChargedJetsMCP3, "hf jet finding on MC particle level", true);
+
+  void processChargedJetsMCP4(aod::JetMcCollision const& collision){
+    registry.fill(HIST("hCollision"), 4.5);
+    if (collision.subGeneratorId() != static_cast<int>(jetderiveddatautilities::JCollisionSubGeneratorId::mbGap)) {
+      registry.fill(HIST("hCollision"), 5.5);
+    }
+  }
+  PROCESS_SWITCH(JetFinderHFTask, processChargedJetsMCP4, "hf jet finding on MC particle level", true);
+  
   void processChargedJetsMCP(soa::Filtered<aod::JetMcCollisions>::iterator const& collision,
                              soa::Filtered<aod::JetParticles> const& particles,
                              CandidateTableMCP const& candidates)
   {
+    registry.fill(HIST("hCollision"), 0.5);
     for (typename CandidateTableMCP::iterator const& candidate : candidates) {
+      registry.fill(HIST("hCandidatePtFilter"), candidate.pt());
+      if (candidate.originMcGen() ==1){
+registry.fill(HIST("hCandidatePtFilterPrompt"), candidate.pt());
+}
+if (candidate.originMcGen() ==2){
+registry.fill(HIST("hCandidatePtFilterNonPrompt"), candidate.pt());
+}
       analyseMCP<true>(collision, particles, candidate, 1, jetPtMin, jetPtMax);
     }
   }
