@@ -73,8 +73,22 @@ struct TrackPropagation {
 
   HistogramRegistry registry{"registry"};
 
+  std::vector<float> pTTrack;
+  std::vector<float> etaTrack;
+  std::vector<float> phiTrack;
+  int nCycles = 20;
+
   void init(o2::framework::InitContext& initContext)
   {
+    pTTrack.reserve(nCycles);
+    etaTrack.reserve(nCycles);
+    phiTrack.reserve(nCycles);
+
+    for (int i = 0; i < nCycles; ++i) {
+      pTTrack.push_back(1.0 * (i + 1));
+      etaTrack.push_back(-0.9 + (1.8 / nCycles * i));
+      phiTrack.push_back(0.0 + (6.28 / nCycles * i));
+    }
     int nEnabledProcesses = 0;
     if (doprocessStandard) {
       LOG(info) << "Enabling processStandard";
@@ -256,7 +270,7 @@ struct TrackPropagation {
       // LOG(info) <<  " trackPropagation (this value filled in tuner table)--> "  << q2OverPtNew;
       if constexpr (fillCovMat) {
         tracksParPropagated(track.collisionId(), trackType, mTrackParCov.getX(), mTrackParCov.getAlpha(), mTrackParCov.getY(), mTrackParCov.getZ(), mTrackParCov.getSnp(), mTrackParCov.getTgl(), mTrackParCov.getQ2Pt());
-        tracksParExtensionPropagated(mTrackParCov.getPt(), mTrackParCov.getP(), mTrackParCov.getEta(), mTrackParCov.getPhi());
+        tracksParExtensionPropagated(pTTrack[track.globalIndex()%nCycles], mTrackParCov.getP(), etaTrack[track.globalIndex()%nCycles], phiTrack[track.globalIndex()%nCycles]);
         // TODO do we keep the rho as 0? Also the sigma's are duplicated information
         tracksParCovPropagated(std::sqrt(mTrackParCov.getSigmaY2()), std::sqrt(mTrackParCov.getSigmaZ2()), std::sqrt(mTrackParCov.getSigmaSnp2()),
                                std::sqrt(mTrackParCov.getSigmaTgl2()), std::sqrt(mTrackParCov.getSigma1Pt2()), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);

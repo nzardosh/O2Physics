@@ -53,6 +53,8 @@ struct JetSubstructureHFTask {
   // Jet level configurables
   Configurable<float> zCut{"zCut", 0.1, "soft drop z cut"};
   Configurable<float> beta{"beta", 0.0, "soft drop beta"};
+  Configurable<float> kappa{"kappa", 1.0, "angularity kappa"};
+  Configurable<float> alpha{"alpha", 1.0, "angularity alpha"};
   Configurable<float> pairConstituentPtMin{"pairConstituentPtMin", 1.0, "pt cut off for constituents going into pairs"};
 
   Service<o2::framework::O2DatabasePDG> pdg;
@@ -70,6 +72,8 @@ struct JetSubstructureHFTask {
   std::vector<float> pairPtVec;
   std::vector<float> pairEnergyVec;
   std::vector<float> pairThetaVec;
+
+  float angularity;
 
   HistogramRegistry registry;
   void init(InitContext const&)
@@ -208,6 +212,19 @@ struct JetSubstructureHFTask {
     }
   }
 
+  template <typename T, typename U, typename V>
+  void jetSubstructureSimple(T const& jet, U const& /*tracks*/, V const& /*candidates*/)
+  {
+    angularity = 0.0;
+    for (auto& candidate : jet.template candidates_as<V>()) {
+      angularity += std::pow(candidate.pt(), kappa) * std::pow(jetutilities::deltaR(jet, candidate), alpha);
+    }
+    for (auto& constituent : jet.template tracks_as<U>()) {
+      angularity += std::pow(constituent.pt(), kappa) * std::pow(jetutilities::deltaR(jet, constituent), alpha);
+    }
+    angularity /= (jet.pt() * (jet.r() / 100.f));
+  }
+
   template <bool isSubtracted, typename T, typename U, typename V, typename M>
   void analyseCharged(T const& jet, U const& tracks, V const& candidates, M& outputTable)
   {
@@ -221,7 +238,8 @@ struct JetSubstructureHFTask {
     nSub = jetsubstructureutilities::getNSubjettiness(jet, tracks, tracks, candidates, 2, fastjet::contrib::CA_Axes(), true, zCut, beta);
     jetReclustering<false, isSubtracted>(jet);
     jetPairing(jet, tracks, candidates);
-    outputTable(energyMotherVec, ptLeadingVec, ptSubLeadingVec, thetaVec, nSub[0], nSub[1], nSub[2], pairPtVec, pairEnergyVec, pairThetaVec);
+    jetSubstructureSimple(jet, tracks, candidates);
+    outputTable(energyMotherVec, ptLeadingVec, ptSubLeadingVec, thetaVec, nSub[0], nSub[1], nSub[2], pairPtVec, pairEnergyVec, pairThetaVec, angularity);
   }
 
   void processDummy(JetTracks const&)
@@ -267,7 +285,8 @@ struct JetSubstructureHFTask {
     nSub = jetsubstructureutilities::getNSubjettiness(jet, particles, particles, candidates, 2, fastjet::contrib::CA_Axes(), true, zCut, beta);
     jetReclustering<true, false>(jet);
     jetPairing(jet, particles, candidates);
-    jetSubstructureMCPTable(energyMotherVec, ptLeadingVec, ptSubLeadingVec, thetaVec, nSub[0], nSub[1], nSub[2], pairPtVec, pairEnergyVec, pairThetaVec);
+    jetSubstructureSimple(jet, particles, candidates);
+    jetSubstructureMCPTable(energyMotherVec, ptLeadingVec, ptSubLeadingVec, thetaVec, nSub[0], nSub[1], nSub[2], pairPtVec, pairEnergyVec, pairThetaVec, angularity);
   }
   PROCESS_SWITCH(JetSubstructureHFTask, processChargedJetsMCP, "HF jet substructure on MC particle level", false);
 };
