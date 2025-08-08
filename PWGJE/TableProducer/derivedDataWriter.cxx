@@ -165,13 +165,9 @@ struct JetDerivedDataWriter {
   Preslice<aod::CandidatesBplusMCP> BplusParticlesPerMcCollision = aod::jcandidateindices::mcCollisionId;
   PresliceUnsorted<aod::JEMCTracks> EMCTrackPerTrack = aod::jemctrack::trackId;
 
-  uint32_t precisionPositionMask;
-  uint32_t precisionMomentumMask;
 
   void init(InitContext&)
   {
-    precisionPositionMask = 0xFFFFFC00; // 13 bits
-    precisionMomentumMask = 0xFFFFFC00; // 13 bits  this is currently keept at 13 bits wihich gives roughly a resolution of 1/8000. This can be increased to 15 bits if really needed
   }
 
   template <typename T>
@@ -316,8 +312,8 @@ struct JetDerivedDataWriter {
           if (!trackSelection(track)) { // skips tracks that pass no selections. This might cause a problem with tracks matched with clusters. We should generate a track selection purely for cluster matched tracks so that they are kept. This includes also the track pT selction.
             continue;
           }
-          products.storedJTracksTable(collisionMapping[collision.globalIndex()], o2::math_utils::detail::truncateFloatFraction(track.pt(), precisionMomentumMask), o2::math_utils::detail::truncateFloatFraction(track.eta(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.phi(), precisionPositionMask), track.trackSel());
-          products.storedJTracksExtraTable(o2::math_utils::detail::truncateFloatFraction(track.dcaX(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.dcaY(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.dcaZ(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.dcaXY(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.dcaXYZ(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.sigmadcaZ(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.sigmadcaXY(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.sigmadcaXYZ(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.sigma1Pt(), precisionMomentumMask));
+          products.storedJTracksTable(collisionMapping[collision.globalIndex()], track.pt(),  track.eta(),  track.phi(),  track.trackSel());
+          products.storedJTracksExtraTable(track.dcaX(),  track.dcaY(),  track.dcaZ(),  track.dcaXY(),  track.dcaXYZ(),  track.sigmadcaZ(),  track.sigmadcaXY(),  track.sigmadcaXYZ(),  track.sigma1Pt());
           products.storedJTracksParentIndexTable(track.trackId());
           trackMapping[track.globalIndex()] = products.storedJTracksTable.lastIndex();
         }
@@ -463,7 +459,7 @@ struct JetDerivedDataWriter {
               i++;
             }
           }
-          products.storedJMcParticlesTable(mcCollisionMapping[mcCollision.globalIndex()], o2::math_utils::detail::truncateFloatFraction(particle.pt(), precisionMomentumMask), o2::math_utils::detail::truncateFloatFraction(particle.eta(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(particle.phi(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(particle.y(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(particle.e(), precisionMomentumMask), particle.pdgCode(), particle.getGenStatusCode(), particle.getHepMCStatusCode(), particle.isPhysicalPrimary(), mothersIds, daughtersIds);
+          products.storedJMcParticlesTable(mcCollisionMapping[mcCollision.globalIndex()], particle.pt(),  particle.eta(),  particle.phi(),  particle.y(),  particle.e(),  particle.pdgCode(), particle.getGenStatusCode(), particle.getHepMCStatusCode(), particle.isPhysicalPrimary(), mothersIds, daughtersIds);
           products.storedJParticlesParentIndexTable(particle.mcParticleId());
         }
       }
