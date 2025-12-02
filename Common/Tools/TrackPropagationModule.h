@@ -107,9 +107,29 @@ class TrackPropagationModule
   o2::track::TrackParametrizationWithError<float> mTrackParCov;
   bool autoDetectDcaCalib = false; // track tuner setting
 
+  std::vector<float> pTTrack;
+  std::vector<float> etaTrack;
+  std::vector<float> phiTrack;
+  int nCycles = 20;
+
   template <typename TConfigurableGroup, typename TInitContext, typename THistoRegistry>
   void init(TConfigurableGroup const& cGroup, TrackTuner& trackTunerObj, THistoRegistry& registry, TInitContext& initContext)
   {
+
+    pTTrack.clear();
+    etaTrack.clear();
+    phiTrack.clear();
+
+    pTTrack.reserve(nCycles);
+    etaTrack.reserve(nCycles);
+    phiTrack.reserve(nCycles);
+
+    for (int i = 0; i < nCycles; ++i) {
+      pTTrack.push_back(1.0 * (i + 1));
+      etaTrack.push_back(-0.9 + (1.8 / nCycles * i));
+      phiTrack.push_back(0.0 + (6.28 / nCycles * i));
+    }
+
     // Checking if the tables are requested in the workflow and enabling them
     fillTracks = isTableRequiredInWorkflow(initContext, "Tracks");
     fillTracksCov = isTableRequiredInWorkflow(initContext, "TracksCov");
@@ -333,7 +353,7 @@ class TrackPropagationModule
       // LOG(info) <<  " trackPropagation (this value filled in tuner table)--> "  << q2OverPtNew;
       if (fillTracksCov) {
         cursors.tracksParPropagated(track.collisionId(), trackType, mTrackParCov.getX(), mTrackParCov.getAlpha(), mTrackParCov.getY(), mTrackParCov.getZ(), mTrackParCov.getSnp(), mTrackParCov.getTgl(), mTrackParCov.getQ2Pt());
-        cursors.tracksParExtensionPropagated(mTrackParCov.getPt(), mTrackParCov.getP(), mTrackParCov.getEta(), mTrackParCov.getPhi());
+        cursors.tracksParExtensionPropagated(pTTrack[track.globalIndex()%nCycles], mTrackParCov.getP(), etaTrack[track.globalIndex()%nCycles], phiTrack[track.globalIndex()%nCycles]);
         // TODO do we keep the rho as 0? Also the sigma's are duplicated information
         cursors.tracksParCovPropagated(std::sqrt(mTrackParCov.getSigmaY2()), std::sqrt(mTrackParCov.getSigmaZ2()), std::sqrt(mTrackParCov.getSigmaSnp2()),
                                        std::sqrt(mTrackParCov.getSigmaTgl2()), std::sqrt(mTrackParCov.getSigma1Pt2()), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -349,7 +369,7 @@ class TrackPropagationModule
         }
       } else {
         cursors.tracksParPropagated(track.collisionId(), trackType, mTrackPar.getX(), mTrackPar.getAlpha(), mTrackPar.getY(), mTrackPar.getZ(), mTrackPar.getSnp(), mTrackPar.getTgl(), mTrackPar.getQ2Pt());
-        cursors.tracksParExtensionPropagated(mTrackPar.getPt(), mTrackPar.getP(), mTrackPar.getEta(), mTrackPar.getPhi());
+        cursors.tracksParExtensionPropagated(pTTrack[track.globalIndex()%nCycles], mTrackParCov.getP(), etaTrack[track.globalIndex()%nCycles], phiTrack[track.globalIndex()%nCycles]);
         if (fillTracksDCA) {
           cursors.tracksDCA(mDcaInfo[0], mDcaInfo[1]);
         }
