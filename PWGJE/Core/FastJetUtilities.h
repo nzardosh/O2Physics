@@ -33,7 +33,6 @@ enum class JetConstituentStatus {
 namespace fastjetutilities
 {
 
-
 // Class defined to store additional info which is passed to the FastJet object
 class fastjet_user_info : public fastjet::PseudoJet::UserInfoBase
 {
