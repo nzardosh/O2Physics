@@ -25,12 +25,15 @@
 #include <Framework/AnalysisHelpers.h>
 #include <Framework/Configurable.h>
 #include <Framework/InitContext.h>
+
+#ifndef O2_NO_WORKFLOW_MAIN
 #include <Framework/runDataProcessing.h> // IWYU pragma: export
+#endif
 
 #include <vector>
 
 template <typename JetsBase, typename JetsTag, typename SplittingsBasetoTagMatchingTable, typename SplittingsTagtoBaseMatchingTable, typename PairsBasetoTagMatchingTable, typename PairsTagtoBaseMatchingTable, typename SplittingsBase, typename SplittingsTag, typename PairsBase, typename PairsTag, typename CandidatesBase, typename CandidatesTag, typename TracksBase, typename TracksTag, typename ClustersBase>
-struct JetSubstructureMatching {
+struct JetSubstructureMatchingMC {
 
   o2::framework::Produces<SplittingsBasetoTagMatchingTable> splittingsBasetoTagMatchingTable;
   o2::framework::Produces<SplittingsTagtoBaseMatchingTable> splittingsTagtoBaseMatchingTable;
@@ -275,7 +278,167 @@ struct JetSubstructureMatching {
       pairsBasetoTagMatchingTable(baseToTagMatchingIndex);
     }
   }
-  PROCESS_SWITCH(JetSubstructureMatching, processData, "charged jet substructure", true);
+  PROCESS_SWITCH(JetSubstructureMatchingMC, processData, "charged jet substructure", true);
 };
+
+extern template struct JetSubstructureMatchingMC<o2::soa::Join<o2::aod::ChargedMCDetectorLevelJets, o2::aod::ChargedMCDetectorLevelJetConstituents, o2::aod::ChargedMCDetectorLevelJetsMatchedToChargedMCParticleLevelJets>,
+                                                 o2::soa::Join<o2::aod::ChargedMCParticleLevelJets, o2::aod::ChargedMCParticleLevelJetConstituents, o2::aod::ChargedMCParticleLevelJetsMatchedToChargedMCDetectorLevelJets>,
+                                                 o2::aod::ChargedMCDetectorLevelSPsMatchedToChargedMCParticleLevelSPs,
+                                                 o2::aod::ChargedMCParticleLevelSPsMatchedToChargedMCDetectorLevelSPs,
+                                                 o2::aod::ChargedMCDetectorLevelPRsMatchedToChargedMCParticleLevelPRs,
+                                                 o2::aod::ChargedMCParticleLevelPRsMatchedToChargedMCDetectorLevelPRs,
+                                                 o2::aod::ChargedMCDetectorLevelSPs,
+                                                 o2::aod::ChargedMCParticleLevelSPs,
+                                                 o2::aod::ChargedMCDetectorLevelPRs,
+                                                 o2::aod::ChargedMCParticleLevelPRs,
+                                                 o2::aod::JCollisions,
+                                                 o2::aod::JMcCollisions,
+                                                 o2::aod::JetTracksMCD,
+                                                 o2::aod::JetParticles,
+                                                 o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingMC<o2::soa::Join<o2::aod::D0ChargedMCDetectorLevelJets, o2::aod::D0ChargedMCDetectorLevelJetConstituents, o2::aod::D0ChargedMCDetectorLevelJetsMatchedToD0ChargedMCParticleLevelJets>,
+                                                 o2::soa::Join<o2::aod::D0ChargedMCParticleLevelJets, o2::aod::D0ChargedMCParticleLevelJetConstituents, o2::aod::D0ChargedMCParticleLevelJetsMatchedToD0ChargedMCDetectorLevelJets>,
+                                                 o2::aod::D0ChargedMCDetectorLevelSPsMatchedToD0ChargedMCParticleLevelSPs,
+                                                 o2::aod::D0ChargedMCParticleLevelSPsMatchedToD0ChargedMCDetectorLevelSPs,
+                                                 o2::aod::D0ChargedMCDetectorLevelPRsMatchedToD0ChargedMCParticleLevelPRs,
+                                                 o2::aod::D0ChargedMCParticleLevelPRsMatchedToD0ChargedMCDetectorLevelPRs,
+                                                 o2::aod::D0ChargedMCDetectorLevelSPs,
+                                                 o2::aod::D0ChargedMCParticleLevelSPs,
+                                                 o2::aod::D0ChargedMCDetectorLevelPRs,
+                                                 o2::aod::D0ChargedMCParticleLevelPRs,
+                                                 o2::aod::CandidatesD0MCD,
+                                                 o2::aod::CandidatesD0MCP,
+                                                 o2::aod::JetTracksMCD,
+                                                 o2::aod::JetParticles,
+                                                 o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingMC<o2::soa::Join<o2::aod::DplusChargedMCDetectorLevelJets, o2::aod::DplusChargedMCDetectorLevelJetConstituents, o2::aod::DplusChargedMCDetectorLevelJetsMatchedToDplusChargedMCParticleLevelJets>,
+                                                 o2::soa::Join<o2::aod::DplusChargedMCParticleLevelJets, o2::aod::DplusChargedMCParticleLevelJetConstituents, o2::aod::DplusChargedMCParticleLevelJetsMatchedToDplusChargedMCDetectorLevelJets>,
+                                                 o2::aod::DplusChargedMCDetectorLevelSPsMatchedToDplusChargedMCParticleLevelSPs,
+                                                 o2::aod::DplusChargedMCParticleLevelSPsMatchedToDplusChargedMCDetectorLevelSPs,
+                                                 o2::aod::DplusChargedMCDetectorLevelPRsMatchedToDplusChargedMCParticleLevelPRs,
+                                                 o2::aod::DplusChargedMCParticleLevelPRsMatchedToDplusChargedMCDetectorLevelPRs,
+                                                 o2::aod::DplusChargedMCDetectorLevelSPs,
+                                                 o2::aod::DplusChargedMCParticleLevelSPs,
+                                                 o2::aod::DplusChargedMCDetectorLevelPRs,
+                                                 o2::aod::DplusChargedMCParticleLevelPRs,
+                                                 o2::aod::CandidatesDplusMCD,
+                                                 o2::aod::CandidatesDplusMCP,
+                                                 o2::aod::JetTracksMCD,
+                                                 o2::aod::JetParticles,
+                                                 o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingMC<o2::soa::Join<o2::aod::DsChargedMCDetectorLevelJets, o2::aod::DsChargedMCDetectorLevelJetConstituents, o2::aod::DsChargedMCDetectorLevelJetsMatchedToDsChargedMCParticleLevelJets>,
+                                                 o2::soa::Join<o2::aod::DsChargedMCParticleLevelJets, o2::aod::DsChargedMCParticleLevelJetConstituents, o2::aod::DsChargedMCParticleLevelJetsMatchedToDsChargedMCDetectorLevelJets>,
+                                                 o2::aod::DsChargedMCDetectorLevelSPsMatchedToDsChargedMCParticleLevelSPs,
+                                                 o2::aod::DsChargedMCParticleLevelSPsMatchedToDsChargedMCDetectorLevelSPs,
+                                                 o2::aod::DsChargedMCDetectorLevelPRsMatchedToDsChargedMCParticleLevelPRs,
+                                                 o2::aod::DsChargedMCParticleLevelPRsMatchedToDsChargedMCDetectorLevelPRs,
+                                                 o2::aod::DsChargedMCDetectorLevelSPs,
+                                                 o2::aod::DsChargedMCParticleLevelSPs,
+                                                 o2::aod::DsChargedMCDetectorLevelPRs,
+                                                 o2::aod::DsChargedMCParticleLevelPRs,
+                                                 o2::aod::CandidatesDsMCD,
+                                                 o2::aod::CandidatesDsMCP,
+                                                 o2::aod::JetTracksMCD,
+                                                 o2::aod::JetParticles,
+                                                 o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingMC<o2::soa::Join<o2::aod::DstarChargedMCDetectorLevelJets, o2::aod::DstarChargedMCDetectorLevelJetConstituents, o2::aod::DstarChargedMCDetectorLevelJetsMatchedToDstarChargedMCParticleLevelJets>,
+                                                 o2::soa::Join<o2::aod::DstarChargedMCParticleLevelJets, o2::aod::DstarChargedMCParticleLevelJetConstituents, o2::aod::DstarChargedMCParticleLevelJetsMatchedToDstarChargedMCDetectorLevelJets>,
+                                                 o2::aod::DstarChargedMCDetectorLevelSPsMatchedToDstarChargedMCParticleLevelSPs,
+                                                 o2::aod::DstarChargedMCParticleLevelSPsMatchedToDstarChargedMCDetectorLevelSPs,
+                                                 o2::aod::DstarChargedMCDetectorLevelPRsMatchedToDstarChargedMCParticleLevelPRs,
+                                                 o2::aod::DstarChargedMCParticleLevelPRsMatchedToDstarChargedMCDetectorLevelPRs,
+                                                 o2::aod::DstarChargedMCDetectorLevelSPs,
+                                                 o2::aod::DstarChargedMCParticleLevelSPs,
+                                                 o2::aod::DstarChargedMCDetectorLevelPRs,
+                                                 o2::aod::DstarChargedMCParticleLevelPRs,
+                                                 o2::aod::CandidatesDstarMCD,
+                                                 o2::aod::CandidatesDstarMCP,
+                                                 o2::aod::JetTracksMCD,
+                                                 o2::aod::JetParticles,
+                                                 o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingMC<o2::soa::Join<o2::aod::LcChargedMCDetectorLevelJets, o2::aod::LcChargedMCDetectorLevelJetConstituents, o2::aod::LcChargedMCDetectorLevelJetsMatchedToLcChargedMCParticleLevelJets>,
+                                                 o2::soa::Join<o2::aod::LcChargedMCParticleLevelJets, o2::aod::LcChargedMCParticleLevelJetConstituents, o2::aod::LcChargedMCParticleLevelJetsMatchedToLcChargedMCDetectorLevelJets>,
+                                                 o2::aod::LcChargedMCDetectorLevelSPsMatchedToLcChargedMCParticleLevelSPs,
+                                                 o2::aod::LcChargedMCParticleLevelSPsMatchedToLcChargedMCDetectorLevelSPs,
+                                                 o2::aod::LcChargedMCDetectorLevelPRsMatchedToLcChargedMCParticleLevelPRs,
+                                                 o2::aod::LcChargedMCParticleLevelPRsMatchedToLcChargedMCDetectorLevelPRs,
+                                                 o2::aod::LcChargedMCDetectorLevelSPs,
+                                                 o2::aod::LcChargedMCParticleLevelSPs,
+                                                 o2::aod::LcChargedMCDetectorLevelPRs,
+                                                 o2::aod::LcChargedMCParticleLevelPRs,
+                                                 o2::aod::CandidatesLcMCD,
+                                                 o2::aod::CandidatesLcMCP,
+                                                 o2::aod::JetTracksMCD,
+                                                 o2::aod::JetParticles,
+                                                 o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingMC<o2::soa::Join<o2::aod::B0ChargedMCDetectorLevelJets, o2::aod::B0ChargedMCDetectorLevelJetConstituents, o2::aod::B0ChargedMCDetectorLevelJetsMatchedToB0ChargedMCParticleLevelJets>,
+                                                 o2::soa::Join<o2::aod::B0ChargedMCParticleLevelJets, o2::aod::B0ChargedMCParticleLevelJetConstituents, o2::aod::B0ChargedMCParticleLevelJetsMatchedToB0ChargedMCDetectorLevelJets>,
+                                                 o2::aod::B0ChargedMCDetectorLevelSPsMatchedToB0ChargedMCParticleLevelSPs,
+                                                 o2::aod::B0ChargedMCParticleLevelSPsMatchedToB0ChargedMCDetectorLevelSPs,
+                                                 o2::aod::B0ChargedMCDetectorLevelPRsMatchedToB0ChargedMCParticleLevelPRs,
+                                                 o2::aod::B0ChargedMCParticleLevelPRsMatchedToB0ChargedMCDetectorLevelPRs,
+                                                 o2::aod::B0ChargedMCDetectorLevelSPs,
+                                                 o2::aod::B0ChargedMCParticleLevelSPs,
+                                                 o2::aod::B0ChargedMCDetectorLevelPRs,
+                                                 o2::aod::B0ChargedMCParticleLevelPRs,
+                                                 o2::aod::CandidatesB0MCD,
+                                                 o2::aod::CandidatesB0MCP,
+                                                 o2::aod::JetTracksMCD,
+                                                 o2::aod::JetParticles,
+                                                 o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingMC<o2::soa::Join<o2::aod::BplusChargedMCDetectorLevelJets, o2::aod::BplusChargedMCDetectorLevelJetConstituents, o2::aod::BplusChargedMCDetectorLevelJetsMatchedToBplusChargedMCParticleLevelJets>,
+                                                 o2::soa::Join<o2::aod::BplusChargedMCParticleLevelJets, o2::aod::BplusChargedMCParticleLevelJetConstituents, o2::aod::BplusChargedMCParticleLevelJetsMatchedToBplusChargedMCDetectorLevelJets>,
+                                                 o2::aod::BplusChargedMCDetectorLevelSPsMatchedToBplusChargedMCParticleLevelSPs,
+                                                 o2::aod::BplusChargedMCParticleLevelSPsMatchedToBplusChargedMCDetectorLevelSPs,
+                                                 o2::aod::BplusChargedMCDetectorLevelPRsMatchedToBplusChargedMCParticleLevelPRs,
+                                                 o2::aod::BplusChargedMCParticleLevelPRsMatchedToBplusChargedMCDetectorLevelPRs,
+                                                 o2::aod::BplusChargedMCDetectorLevelSPs,
+                                                 o2::aod::BplusChargedMCParticleLevelSPs,
+                                                 o2::aod::BplusChargedMCDetectorLevelPRs,
+                                                 o2::aod::BplusChargedMCParticleLevelPRs,
+                                                 o2::aod::CandidatesBplusMCD,
+                                                 o2::aod::CandidatesBplusMCP,
+                                                 o2::aod::JetTracksMCD,
+                                                 o2::aod::JetParticles,
+                                                 o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingMC<o2::soa::Join<o2::aod::XicToXiPiPiChargedMCDetectorLevelJets, o2::aod::XicToXiPiPiChargedMCDetectorLevelJetConstituents, o2::aod::XicToXiPiPiChargedMCDetectorLevelJetsMatchedToXicToXiPiPiChargedMCParticleLevelJets>,
+                                                 o2::soa::Join<o2::aod::XicToXiPiPiChargedMCParticleLevelJets, o2::aod::XicToXiPiPiChargedMCParticleLevelJetConstituents, o2::aod::XicToXiPiPiChargedMCParticleLevelJetsMatchedToXicToXiPiPiChargedMCDetectorLevelJets>,
+                                                 o2::aod::XicToXiPiPiChargedMCDetectorLevelSPsMatchedToXicToXiPiPiChargedMCParticleLevelSPs,
+                                                 o2::aod::XicToXiPiPiChargedMCParticleLevelSPsMatchedToXicToXiPiPiChargedMCDetectorLevelSPs,
+                                                 o2::aod::XicToXiPiPiChargedMCDetectorLevelPRsMatchedToXicToXiPiPiChargedMCParticleLevelPRs,
+                                                 o2::aod::XicToXiPiPiChargedMCParticleLevelPRsMatchedToXicToXiPiPiChargedMCDetectorLevelPRs,
+                                                 o2::aod::XicToXiPiPiChargedMCDetectorLevelSPs,
+                                                 o2::aod::XicToXiPiPiChargedMCParticleLevelSPs,
+                                                 o2::aod::XicToXiPiPiChargedMCDetectorLevelPRs,
+                                                 o2::aod::XicToXiPiPiChargedMCParticleLevelPRs,
+                                                 o2::aod::CandidatesXicToXiPiPiMCD,
+                                                 o2::aod::CandidatesXicToXiPiPiMCP,
+                                                 o2::aod::JetTracksMCD,
+                                                 o2::aod::JetParticles,
+                                                 o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingMC<o2::soa::Join<o2::aod::DielectronChargedMCDetectorLevelJets, o2::aod::DielectronChargedMCDetectorLevelJetConstituents, o2::aod::DielectronChargedMCDetectorLevelJetsMatchedToDielectronChargedMCParticleLevelJets>,
+                                                 o2::soa::Join<o2::aod::DielectronChargedMCParticleLevelJets, o2::aod::DielectronChargedMCParticleLevelJetConstituents, o2::aod::DielectronChargedMCParticleLevelJetsMatchedToDielectronChargedMCDetectorLevelJets>,
+                                                 o2::aod::DielectronChargedMCDetectorLevelSPsMatchedToDielectronChargedMCParticleLevelSPs,
+                                                 o2::aod::DielectronChargedMCParticleLevelSPsMatchedToDielectronChargedMCDetectorLevelSPs,
+                                                 o2::aod::DielectronChargedMCDetectorLevelPRsMatchedToDielectronChargedMCParticleLevelPRs,
+                                                 o2::aod::DielectronChargedMCParticleLevelPRsMatchedToDielectronChargedMCDetectorLevelPRs,
+                                                 o2::aod::DielectronChargedMCDetectorLevelSPs,
+                                                 o2::aod::DielectronChargedMCParticleLevelSPs,
+                                                 o2::aod::DielectronChargedMCDetectorLevelPRs,
+                                                 o2::aod::DielectronChargedMCParticleLevelPRs,
+                                                 o2::aod::CandidatesDielectronMCD,
+                                                 o2::aod::CandidatesDielectronMCP,
+                                                 o2::aod::JetTracksMCD,
+                                                 o2::aod::JetParticles,
+                                                 o2::aod::JDummys>;
 
 #endif // PWGJE_TABLEPRODUCER_MATCHING_SUBSTRUCTURE_JETSUBSTRUCTUREMATCHING_H_

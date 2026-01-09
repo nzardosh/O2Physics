@@ -16,7 +16,7 @@
 #include "PWGJE/DataModel/Jet.h"
 #include "PWGJE/DataModel/JetReducedData.h"
 #include "PWGJE/DataModel/JetSubstructure.h"
-#include "PWGJE/TableProducer/Matching/Substructure/jetSubstructureMatching.h"
+#include "PWGJE/TableProducer/Matching/Substructure/jetSubstructureMatchingMC.h"
 
 #include <Framework/ASoA.h>
 #include <Framework/AnalysisTask.h>
@@ -30,21 +30,21 @@ using namespace o2;
 using namespace o2::framework;
 using namespace o2::framework::expressions;
 
-using DsChargedJetSubstructureMatchingMC = JetSubstructureMatching<soa::Join<aod::DsChargedMCDetectorLevelJets, aod::DsChargedMCDetectorLevelJetConstituents, aod::DsChargedMCDetectorLevelJetsMatchedToDsChargedMCParticleLevelJets>,
-                                                                   soa::Join<aod::DsChargedMCParticleLevelJets, aod::DsChargedMCParticleLevelJetConstituents, aod::DsChargedMCParticleLevelJetsMatchedToDsChargedMCDetectorLevelJets>,
-                                                                   aod::DsChargedMCDetectorLevelSPsMatchedToDsChargedMCParticleLevelSPs,
-                                                                   aod::DsChargedMCParticleLevelSPsMatchedToDsChargedMCDetectorLevelSPs,
-                                                                   aod::DsChargedMCDetectorLevelPRsMatchedToDsChargedMCParticleLevelPRs,
-                                                                   aod::DsChargedMCParticleLevelPRsMatchedToDsChargedMCDetectorLevelPRs,
-                                                                   aod::DsChargedMCDetectorLevelSPs,
-                                                                   aod::DsChargedMCParticleLevelSPs,
-                                                                   aod::DsChargedMCDetectorLevelPRs,
-                                                                   aod::DsChargedMCParticleLevelPRs,
-                                                                   aod::CandidatesDsMCD,
-                                                                   aod::CandidatesDsMCP,
-                                                                   aod::JetTracksMCD,
-                                                                   aod::JetParticles,
-                                                                   aod::JDummys>;
+using DsChargedJetSubstructureMatchingMC = JetSubstructureMatchingMC<soa::Join<aod::DsChargedMCDetectorLevelJets, aod::DsChargedMCDetectorLevelJetConstituents, aod::DsChargedMCDetectorLevelJetsMatchedToDsChargedMCParticleLevelJets>,
+                                                                     soa::Join<aod::DsChargedMCParticleLevelJets, aod::DsChargedMCParticleLevelJetConstituents, aod::DsChargedMCParticleLevelJetsMatchedToDsChargedMCDetectorLevelJets>,
+                                                                     aod::DsChargedMCDetectorLevelSPsMatchedToDsChargedMCParticleLevelSPs,
+                                                                     aod::DsChargedMCParticleLevelSPsMatchedToDsChargedMCDetectorLevelSPs,
+                                                                     aod::DsChargedMCDetectorLevelPRsMatchedToDsChargedMCParticleLevelPRs,
+                                                                     aod::DsChargedMCParticleLevelPRsMatchedToDsChargedMCDetectorLevelPRs,
+                                                                     aod::DsChargedMCDetectorLevelSPs,
+                                                                     aod::DsChargedMCParticleLevelSPs,
+                                                                     aod::DsChargedMCDetectorLevelPRs,
+                                                                     aod::DsChargedMCParticleLevelPRs,
+                                                                     aod::CandidatesDsMCD,
+                                                                     aod::CandidatesDsMCP,
+                                                                     aod::JetTracksMCD,
+                                                                     aod::JetParticles,
+                                                                     aod::JDummys>;
 
 WorkflowSpec defineDataProcessing(ConfigContext const& cfgc)
 {

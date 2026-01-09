@@ -16,7 +16,7 @@
 #include "PWGJE/DataModel/Jet.h"
 #include "PWGJE/DataModel/JetReducedData.h"
 #include "PWGJE/DataModel/JetSubstructure.h"
-#include "PWGJE/TableProducer/Matching/Substructure/jetSubstructureMatching.h"
+#include "PWGJE/TableProducer/Matching/Substructure/jetSubstructureMatchingMC.h"
 
 #include <Framework/ASoA.h>
 #include <Framework/AnalysisTask.h>
@@ -30,21 +30,21 @@ using namespace o2;
 using namespace o2::framework;
 using namespace o2::framework::expressions;
 
-using XicToXiPiPiChargedJetSubstructureMatchingMC = JetSubstructureMatching<soa::Join<aod::XicToXiPiPiChargedMCDetectorLevelJets, aod::XicToXiPiPiChargedMCDetectorLevelJetConstituents, aod::XicToXiPiPiChargedMCDetectorLevelJetsMatchedToXicToXiPiPiChargedMCParticleLevelJets>,
-                                                                            soa::Join<aod::XicToXiPiPiChargedMCParticleLevelJets, aod::XicToXiPiPiChargedMCParticleLevelJetConstituents, aod::XicToXiPiPiChargedMCParticleLevelJetsMatchedToXicToXiPiPiChargedMCDetectorLevelJets>,
-                                                                            aod::XicToXiPiPiChargedMCDetectorLevelSPsMatchedToXicToXiPiPiChargedMCParticleLevelSPs,
-                                                                            aod::XicToXiPiPiChargedMCParticleLevelSPsMatchedToXicToXiPiPiChargedMCDetectorLevelSPs,
-                                                                            aod::XicToXiPiPiChargedMCDetectorLevelPRsMatchedToXicToXiPiPiChargedMCParticleLevelPRs,
-                                                                            aod::XicToXiPiPiChargedMCParticleLevelPRsMatchedToXicToXiPiPiChargedMCDetectorLevelPRs,
-                                                                            aod::XicToXiPiPiChargedMCDetectorLevelSPs,
-                                                                            aod::XicToXiPiPiChargedMCParticleLevelSPs,
-                                                                            aod::XicToXiPiPiChargedMCDetectorLevelPRs,
-                                                                            aod::XicToXiPiPiChargedMCParticleLevelPRs,
-                                                                            aod::CandidatesXicToXiPiPiMCD,
-                                                                            aod::CandidatesXicToXiPiPiMCP,
-                                                                            aod::JetTracksMCD,
-                                                                            aod::JetParticles,
-                                                                            aod::JDummys>;
+using XicToXiPiPiChargedJetSubstructureMatchingMC = JetSubstructureMatchingMC<soa::Join<aod::XicToXiPiPiChargedMCDetectorLevelJets, aod::XicToXiPiPiChargedMCDetectorLevelJetConstituents, aod::XicToXiPiPiChargedMCDetectorLevelJetsMatchedToXicToXiPiPiChargedMCParticleLevelJets>,
+                                                                              soa::Join<aod::XicToXiPiPiChargedMCParticleLevelJets, aod::XicToXiPiPiChargedMCParticleLevelJetConstituents, aod::XicToXiPiPiChargedMCParticleLevelJetsMatchedToXicToXiPiPiChargedMCDetectorLevelJets>,
+                                                                              aod::XicToXiPiPiChargedMCDetectorLevelSPsMatchedToXicToXiPiPiChargedMCParticleLevelSPs,
+                                                                              aod::XicToXiPiPiChargedMCParticleLevelSPsMatchedToXicToXiPiPiChargedMCDetectorLevelSPs,
+                                                                              aod::XicToXiPiPiChargedMCDetectorLevelPRsMatchedToXicToXiPiPiChargedMCParticleLevelPRs,
+                                                                              aod::XicToXiPiPiChargedMCParticleLevelPRsMatchedToXicToXiPiPiChargedMCDetectorLevelPRs,
+                                                                              aod::XicToXiPiPiChargedMCDetectorLevelSPs,
+                                                                              aod::XicToXiPiPiChargedMCParticleLevelSPs,
+                                                                              aod::XicToXiPiPiChargedMCDetectorLevelPRs,
+                                                                              aod::XicToXiPiPiChargedMCParticleLevelPRs,
+                                                                              aod::CandidatesXicToXiPiPiMCD,
+                                                                              aod::CandidatesXicToXiPiPiMCP,
+                                                                              aod::JetTracksMCD,
+                                                                              aod::JetParticles,
+                                                                              aod::JDummys>;
 
 WorkflowSpec defineDataProcessing(ConfigContext const& cfgc)
 {

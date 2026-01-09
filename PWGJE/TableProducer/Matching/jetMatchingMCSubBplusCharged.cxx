@@ -28,15 +28,15 @@ using namespace o2;
 using namespace o2::framework;
 using namespace o2::framework::expressions;
 
-using D0ChargedJetMatchingMCSub = JetMatchingMcSub<soa::Join<aod::D0ChargedMCDetectorLevelJets, aod::D0ChargedMCDetectorLevelJetConstituents>,
-                                                   soa::Join<aod::D0ChargedMCDetectorLevelEventWiseSubtractedJets, aod::D0ChargedMCDetectorLevelEventWiseSubtractedJetConstituents>,
-                                                   aod::D0ChargedMCDetectorLevelJetsMatchedToD0ChargedMCDetectorLevelEventWiseSubtractedJets,
-                                                   aod::D0ChargedMCDetectorLevelEventWiseSubtractedJetsMatchedToD0ChargedMCDetectorLevelJets,
-                                                   aod::CandidatesD0MCD>;
+using BplusChargedJetMatchingMCSub = JetMatchingMcSub<soa::Join<aod::BplusChargedMCDetectorLevelJets, aod::BplusChargedMCDetectorLevelJetConstituents>,
+                                                      soa::Join<aod::BplusChargedMCDetectorLevelEventWiseSubtractedJets, aod::BplusChargedMCDetectorLevelEventWiseSubtractedJetConstituents>,
+                                                      aod::BplusChargedMCDetectorLevelJetsMatchedToBplusChargedMCDetectorLevelEventWiseSubtractedJets,
+                                                      aod::BplusChargedMCDetectorLevelEventWiseSubtractedJetsMatchedToBplusChargedMCDetectorLevelJets,
+                                                      aod::CandidatesBplusMCD>;
 
 WorkflowSpec defineDataProcessing(ConfigContext const& cfgc)
 {
   std::vector<o2::framework::DataProcessorSpec> tasks;
-  tasks.emplace_back(adaptAnalysisTask<D0ChargedJetMatchingMCSub>(cfgc, TaskName{"jet-matching-mc-sub-d0-ch"}));
+  tasks.emplace_back(adaptAnalysisTask<BplusChargedJetMatchingMCSub>(cfgc, TaskName{"jet-matching-mc-sub-bplus-ch"}));
   return WorkflowSpec{tasks};
 }

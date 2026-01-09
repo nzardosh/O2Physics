@@ -34,7 +34,9 @@
 #include <Framework/InitContext.h>
 #include <Framework/Logger.h>
 #include <Framework/O2DatabasePDGPlugin.h>
+#ifndef O2_NO_WORKFLOW_MAIN
 #include <Framework/runDataProcessing.h> // IWYU pragma: export
+#endif
 
 #include <THn.h>
 #include <TMathBase.h>
@@ -278,5 +280,31 @@ struct JetFinderTask {
 
   PROCESS_SWITCH(JetFinderTask, processParticleLevelFullJets, "Particle level full jet finding", false);
 };
+
+// ============================================================================
+// Explicit Template Instantiation Declarations (extern template)
+// These prevent implicit instantiation in translation units that include this header.
+// The actual instantiations are in jetFinderTemplateInstantiations.cxx
+// ============================================================================
+
+// Charged jets
+extern template struct JetFinderTask<o2::aod::ChargedJets, o2::aod::ChargedJetConstituents, o2::aod::ChargedEventWiseSubtractedJets, o2::aod::ChargedEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderTask<o2::aod::ChargedMCDetectorLevelJets, o2::aod::ChargedMCDetectorLevelJetConstituents, o2::aod::ChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::ChargedMCDetectorLevelEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderTask<o2::aod::ChargedMCParticleLevelJets, o2::aod::ChargedMCParticleLevelJetConstituents, o2::aod::ChargedMCParticleLevelEventWiseSubtractedJets, o2::aod::ChargedMCParticleLevelEventWiseSubtractedJetConstituents>;
+
+// Neutral jets
+extern template struct JetFinderTask<o2::aod::NeutralJets, o2::aod::NeutralJetConstituents, o2::aod::NeutralEventWiseSubtractedJets, o2::aod::NeutralEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderTask<o2::aod::NeutralMCDetectorLevelJets, o2::aod::NeutralMCDetectorLevelJetConstituents, o2::aod::NeutralMCDetectorLevelEventWiseSubtractedJets, o2::aod::NeutralMCDetectorLevelEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderTask<o2::aod::NeutralMCParticleLevelJets, o2::aod::NeutralMCParticleLevelJetConstituents, o2::aod::NeutralMCParticleLevelEventWiseSubtractedJets, o2::aod::NeutralMCParticleLevelEventWiseSubtractedJetConstituents>;
+
+// Full jets
+extern template struct JetFinderTask<o2::aod::FullJets, o2::aod::FullJetConstituents, o2::aod::FullEventWiseSubtractedJets, o2::aod::FullEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderTask<o2::aod::FullMCDetectorLevelJets, o2::aod::FullMCDetectorLevelJetConstituents, o2::aod::FullMCDetectorLevelEventWiseSubtractedJets, o2::aod::FullMCDetectorLevelEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderTask<o2::aod::FullMCParticleLevelJets, o2::aod::FullMCParticleLevelJetConstituents, o2::aod::FullMCParticleLevelEventWiseSubtractedJets, o2::aod::FullMCParticleLevelEventWiseSubtractedJetConstituents>;
+
+// duplicates
+extern template struct JetFinderTask<o2::aod::Charged1Jets, o2::aod::Charged1JetConstituents, o2::aod::Charged1EventWiseSubtractedJets, o2::aod::Charged1EventWiseSubtractedJetConstituents>;
+extern template struct JetFinderTask<o2::aod::Charged1MCDetectorLevelJets, o2::aod::Charged1MCDetectorLevelJetConstituents, o2::aod::Charged1MCDetectorLevelEventWiseSubtractedJets, o2::aod::Charged1MCDetectorLevelEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderTask<o2::aod::Charged1MCParticleLevelJets, o2::aod::Charged1MCParticleLevelJetConstituents, o2::aod::Charged1MCParticleLevelEventWiseSubtractedJets, o2::aod::Charged1MCParticleLevelEventWiseSubtractedJetConstituents>;
 
 #endif // PWGJE_JETFINDERS_JETFINDER_H_

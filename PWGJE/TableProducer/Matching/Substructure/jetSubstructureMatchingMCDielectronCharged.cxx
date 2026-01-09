@@ -16,7 +16,7 @@
 #include "PWGJE/DataModel/Jet.h"
 #include "PWGJE/DataModel/JetReducedData.h"
 #include "PWGJE/DataModel/JetSubstructure.h"
-#include "PWGJE/TableProducer/Matching/Substructure/jetSubstructureMatching.h"
+#include "PWGJE/TableProducer/Matching/Substructure/jetSubstructureMatchingMC.h"
 
 #include <Framework/ASoA.h>
 #include <Framework/AnalysisTask.h>
@@ -30,21 +30,21 @@ using namespace o2;
 using namespace o2::framework;
 using namespace o2::framework::expressions;
 
-using DielectronChargedJetSubstructureMatchingMC = JetSubstructureMatching<soa::Join<aod::DielectronChargedMCDetectorLevelJets, aod::DielectronChargedMCDetectorLevelJetConstituents, aod::DielectronChargedMCDetectorLevelJetsMatchedToDielectronChargedMCParticleLevelJets>,
-                                                                           soa::Join<aod::DielectronChargedMCParticleLevelJets, aod::DielectronChargedMCParticleLevelJetConstituents, aod::DielectronChargedMCParticleLevelJetsMatchedToDielectronChargedMCDetectorLevelJets>,
-                                                                           aod::DielectronChargedMCDetectorLevelSPsMatchedToDielectronChargedMCParticleLevelSPs,
-                                                                           aod::DielectronChargedMCParticleLevelSPsMatchedToDielectronChargedMCDetectorLevelSPs,
-                                                                           aod::DielectronChargedMCDetectorLevelPRsMatchedToDielectronChargedMCParticleLevelPRs,
-                                                                           aod::DielectronChargedMCParticleLevelPRsMatchedToDielectronChargedMCDetectorLevelPRs,
-                                                                           aod::DielectronChargedMCDetectorLevelSPs,
-                                                                           aod::DielectronChargedMCParticleLevelSPs,
-                                                                           aod::DielectronChargedMCDetectorLevelPRs,
-                                                                           aod::DielectronChargedMCParticleLevelPRs,
-                                                                           aod::CandidatesDielectronMCD,
-                                                                           aod::CandidatesDielectronMCP,
-                                                                           aod::JetTracksMCD,
-                                                                           aod::JetParticles,
-                                                                           aod::JDummys>;
+using DielectronChargedJetSubstructureMatchingMC = JetSubstructureMatchingMC<soa::Join<aod::DielectronChargedMCDetectorLevelJets, aod::DielectronChargedMCDetectorLevelJetConstituents, aod::DielectronChargedMCDetectorLevelJetsMatchedToDielectronChargedMCParticleLevelJets>,
+                                                                             soa::Join<aod::DielectronChargedMCParticleLevelJets, aod::DielectronChargedMCParticleLevelJetConstituents, aod::DielectronChargedMCParticleLevelJetsMatchedToDielectronChargedMCDetectorLevelJets>,
+                                                                             aod::DielectronChargedMCDetectorLevelSPsMatchedToDielectronChargedMCParticleLevelSPs,
+                                                                             aod::DielectronChargedMCParticleLevelSPsMatchedToDielectronChargedMCDetectorLevelSPs,
+                                                                             aod::DielectronChargedMCDetectorLevelPRsMatchedToDielectronChargedMCParticleLevelPRs,
+                                                                             aod::DielectronChargedMCParticleLevelPRsMatchedToDielectronChargedMCDetectorLevelPRs,
+                                                                             aod::DielectronChargedMCDetectorLevelSPs,
+                                                                             aod::DielectronChargedMCParticleLevelSPs,
+                                                                             aod::DielectronChargedMCDetectorLevelPRs,
+                                                                             aod::DielectronChargedMCParticleLevelPRs,
+                                                                             aod::CandidatesDielectronMCD,
+                                                                             aod::CandidatesDielectronMCP,
+                                                                             aod::JetTracksMCD,
+                                                                             aod::JetParticles,
+                                                                             aod::JDummys>;
 
 WorkflowSpec defineDataProcessing(ConfigContext const& cfgc)
 {

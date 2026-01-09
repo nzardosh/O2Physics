@@ -30,7 +30,10 @@
 #include <Framework/InitContext.h>
 #include <Framework/Logger.h>
 #include <Framework/O2DatabasePDGPlugin.h>
+
+#ifndef O2_NO_WORKFLOW_MAIN
 #include <Framework/runDataProcessing.h> // IWYU pragma: export
+#endif
 
 #include <THn.h>
 #include <TMathBase.h>
@@ -243,5 +246,16 @@ struct JetFinderV0Task {
   }
   PROCESS_SWITCH(JetFinderV0Task, processChargedJetsMCP, "hf jet finding on MC particle level", false);
 };
+
+// ============================================================================
+// Explicit Template Instantiation Declarations (extern template)
+// These prevent implicit instantiation in translation units that include this header.
+// The actual instantiations are in jetFinderTemplateInstantiations.cxx
+// ============================================================================
+
+// V0 instantiations
+extern template struct JetFinderV0Task<o2::aod::CandidatesV0Data, o2::aod::CandidatesV0MCD, o2::aod::CandidatesV0MCP, o2::aod::V0ChargedJets, o2::aod::V0ChargedJetConstituents>;
+extern template struct JetFinderV0Task<o2::aod::CandidatesV0Data, o2::aod::CandidatesV0MCD, o2::aod::CandidatesV0MCP, o2::aod::V0ChargedMCDetectorLevelJets, o2::aod::V0ChargedMCDetectorLevelJetConstituents>;
+extern template struct JetFinderV0Task<o2::aod::CandidatesV0Data, o2::aod::CandidatesV0MCD, o2::aod::CandidatesV0MCP, o2::aod::V0ChargedMCParticleLevelJets, o2::aod::V0ChargedMCParticleLevelJetConstituents>;
 
 #endif // PWGJE_JETFINDERS_JETFINDERV0_H_

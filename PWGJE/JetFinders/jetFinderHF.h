@@ -34,7 +34,10 @@
 #include <Framework/InitContext.h>
 #include <Framework/Logger.h>
 #include <Framework/O2DatabasePDGPlugin.h>
+
+#ifndef O2_NO_WORKFLOW_MAIN
 #include <Framework/runDataProcessing.h> // IWYU pragma: export
+#endif
 
 #include <THn.h>
 #include <TMathBase.h>
@@ -314,5 +317,56 @@ struct JetFinderHFTask {
   }
   PROCESS_SWITCH(JetFinderHFTask, processChargedEvtWiseSubJetsMCP, "hf jet finding on MC particle level", false);
 };
+
+// ============================================================================
+// Explicit Template Instantiation Declarations (extern template)
+// These prevent implicit instantiation in translation units that include this header.
+// The actual instantiations are in jetFinderTemplateInstantiations.cxx
+// ============================================================================
+
+// D0 instantiations
+extern template struct JetFinderHFTask<o2::aod::CandidatesD0Data, o2::aod::CandidatesD0MCD, o2::aod::CandidatesD0MCP, o2::aod::JetTracksSubD0, o2::aod::JetParticlesSubD0, o2::aod::D0ChargedJets, o2::aod::D0ChargedJetConstituents, o2::aod::D0ChargedEventWiseSubtractedJets, o2::aod::D0ChargedEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesD0Data, o2::aod::CandidatesD0MCD, o2::aod::CandidatesD0MCP, o2::aod::JetTracksSubD0, o2::aod::JetParticlesSubD0, o2::aod::D0ChargedMCDetectorLevelJets, o2::aod::D0ChargedMCDetectorLevelJetConstituents, o2::aod::D0ChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::D0ChargedMCDetectorLevelEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesD0Data, o2::aod::CandidatesD0MCD, o2::aod::CandidatesD0MCP, o2::aod::JetTracksSubD0, o2::aod::JetParticlesSubD0, o2::aod::D0ChargedMCParticleLevelJets, o2::aod::D0ChargedMCParticleLevelJetConstituents, o2::aod::D0ChargedMCParticleLevelEventWiseSubtractedJets, o2::aod::D0ChargedMCParticleLevelEventWiseSubtractedJetConstituents>;
+
+// Dplus instantiations
+extern template struct JetFinderHFTask<o2::aod::CandidatesDplusData, o2::aod::CandidatesDplusMCD, o2::aod::CandidatesDplusMCP, o2::aod::JetTracksSubDplus, o2::aod::JetParticlesSubDplus, o2::aod::DplusChargedJets, o2::aod::DplusChargedJetConstituents, o2::aod::DplusChargedEventWiseSubtractedJets, o2::aod::DplusChargedEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesDplusData, o2::aod::CandidatesDplusMCD, o2::aod::CandidatesDplusMCP, o2::aod::JetTracksSubDplus, o2::aod::JetParticlesSubDplus, o2::aod::DplusChargedMCDetectorLevelJets, o2::aod::DplusChargedMCDetectorLevelJetConstituents, o2::aod::DplusChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::DplusChargedMCDetectorLevelEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesDplusData, o2::aod::CandidatesDplusMCD, o2::aod::CandidatesDplusMCP, o2::aod::JetTracksSubDplus, o2::aod::JetParticlesSubDplus, o2::aod::DplusChargedMCParticleLevelJets, o2::aod::DplusChargedMCParticleLevelJetConstituents, o2::aod::DplusChargedMCParticleLevelEventWiseSubtractedJets, o2::aod::DplusChargedMCParticleLevelEventWiseSubtractedJetConstituents>;
+
+// Ds instantiations
+extern template struct JetFinderHFTask<o2::aod::CandidatesDsData, o2::aod::CandidatesDsMCD, o2::aod::CandidatesDsMCP, o2::aod::JetTracksSubDs, o2::aod::JetParticlesSubDs, o2::aod::DsChargedJets, o2::aod::DsChargedJetConstituents, o2::aod::DsChargedEventWiseSubtractedJets, o2::aod::DsChargedEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesDsData, o2::aod::CandidatesDsMCD, o2::aod::CandidatesDsMCP, o2::aod::JetTracksSubDs, o2::aod::JetParticlesSubDs, o2::aod::DsChargedMCDetectorLevelJets, o2::aod::DsChargedMCDetectorLevelJetConstituents, o2::aod::DsChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::DsChargedMCDetectorLevelEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesDsData, o2::aod::CandidatesDsMCD, o2::aod::CandidatesDsMCP, o2::aod::JetTracksSubDs, o2::aod::JetParticlesSubDs, o2::aod::DsChargedMCParticleLevelJets, o2::aod::DsChargedMCParticleLevelJetConstituents, o2::aod::DsChargedMCParticleLevelEventWiseSubtractedJets, o2::aod::DsChargedMCParticleLevelEventWiseSubtractedJetConstituents>;
+
+// Dstar instantiations
+extern template struct JetFinderHFTask<o2::aod::CandidatesDstarData, o2::aod::CandidatesDstarMCD, o2::aod::CandidatesDstarMCP, o2::aod::JetTracksSubDstar, o2::aod::JetParticlesSubDstar, o2::aod::DstarChargedJets, o2::aod::DstarChargedJetConstituents, o2::aod::DstarChargedEventWiseSubtractedJets, o2::aod::DstarChargedEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesDstarData, o2::aod::CandidatesDstarMCD, o2::aod::CandidatesDstarMCP, o2::aod::JetTracksSubDstar, o2::aod::JetParticlesSubDstar, o2::aod::DstarChargedMCDetectorLevelJets, o2::aod::DstarChargedMCDetectorLevelJetConstituents, o2::aod::DstarChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::DstarChargedMCDetectorLevelEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesDstarData, o2::aod::CandidatesDstarMCD, o2::aod::CandidatesDstarMCP, o2::aod::JetTracksSubDstar, o2::aod::JetParticlesSubDstar, o2::aod::DstarChargedMCParticleLevelJets, o2::aod::DstarChargedMCParticleLevelJetConstituents, o2::aod::DstarChargedMCParticleLevelEventWiseSubtractedJets, o2::aod::DstarChargedMCParticleLevelEventWiseSubtractedJetConstituents>;
+
+// Lc instantiations
+extern template struct JetFinderHFTask<o2::aod::CandidatesLcData, o2::aod::CandidatesLcMCD, o2::aod::CandidatesLcMCP, o2::aod::JetTracksSubLc, o2::aod::JetParticlesSubLc, o2::aod::LcChargedJets, o2::aod::LcChargedJetConstituents, o2::aod::LcChargedEventWiseSubtractedJets, o2::aod::LcChargedEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesLcData, o2::aod::CandidatesLcMCD, o2::aod::CandidatesLcMCP, o2::aod::JetTracksSubLc, o2::aod::JetParticlesSubLc, o2::aod::LcChargedMCDetectorLevelJets, o2::aod::LcChargedMCDetectorLevelJetConstituents, o2::aod::LcChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::LcChargedMCDetectorLevelEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesLcData, o2::aod::CandidatesLcMCD, o2::aod::CandidatesLcMCP, o2::aod::JetTracksSubLc, o2::aod::JetParticlesSubLc, o2::aod::LcChargedMCParticleLevelJets, o2::aod::LcChargedMCParticleLevelJetConstituents, o2::aod::LcChargedMCParticleLevelEventWiseSubtractedJets, o2::aod::LcChargedMCParticleLevelEventWiseSubtractedJetConstituents>;
+
+// B0 instantiations
+extern template struct JetFinderHFTask<o2::aod::CandidatesB0Data, o2::aod::CandidatesB0MCD, o2::aod::CandidatesB0MCP, o2::aod::JetTracksSubB0, o2::aod::JetParticlesSubB0, o2::aod::B0ChargedJets, o2::aod::B0ChargedJetConstituents, o2::aod::B0ChargedEventWiseSubtractedJets, o2::aod::B0ChargedEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesB0Data, o2::aod::CandidatesB0MCD, o2::aod::CandidatesB0MCP, o2::aod::JetTracksSubB0, o2::aod::JetParticlesSubB0, o2::aod::B0ChargedMCDetectorLevelJets, o2::aod::B0ChargedMCDetectorLevelJetConstituents, o2::aod::B0ChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::B0ChargedMCDetectorLevelEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesB0Data, o2::aod::CandidatesB0MCD, o2::aod::CandidatesB0MCP, o2::aod::JetTracksSubB0, o2::aod::JetParticlesSubB0, o2::aod::B0ChargedMCParticleLevelJets, o2::aod::B0ChargedMCParticleLevelJetConstituents, o2::aod::B0ChargedMCParticleLevelEventWiseSubtractedJets, o2::aod::B0ChargedMCParticleLevelEventWiseSubtractedJetConstituents>;
+
+// Bplus instantiations
+extern template struct JetFinderHFTask<o2::aod::CandidatesBplusData, o2::aod::CandidatesBplusMCD, o2::aod::CandidatesBplusMCP, o2::aod::JetTracksSubBplus, o2::aod::JetParticlesSubBplus, o2::aod::BplusChargedJets, o2::aod::BplusChargedJetConstituents, o2::aod::BplusChargedEventWiseSubtractedJets, o2::aod::BplusChargedEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesBplusData, o2::aod::CandidatesBplusMCD, o2::aod::CandidatesBplusMCP, o2::aod::JetTracksSubBplus, o2::aod::JetParticlesSubBplus, o2::aod::BplusChargedMCDetectorLevelJets, o2::aod::BplusChargedMCDetectorLevelJetConstituents, o2::aod::BplusChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::BplusChargedMCDetectorLevelEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesBplusData, o2::aod::CandidatesBplusMCD, o2::aod::CandidatesBplusMCP, o2::aod::JetTracksSubBplus, o2::aod::JetParticlesSubBplus, o2::aod::BplusChargedMCParticleLevelJets, o2::aod::BplusChargedMCParticleLevelJetConstituents, o2::aod::BplusChargedMCParticleLevelEventWiseSubtractedJets, o2::aod::BplusChargedMCParticleLevelEventWiseSubtractedJetConstituents>;
+
+// XicToXiPiPi instantiations
+extern template struct JetFinderHFTask<o2::aod::CandidatesXicToXiPiPiData, o2::aod::CandidatesXicToXiPiPiMCD, o2::aod::CandidatesXicToXiPiPiMCP, o2::aod::JetTracksSubXicToXiPiPi, o2::aod::JetParticlesSubXicToXiPiPi, o2::aod::XicToXiPiPiChargedJets, o2::aod::XicToXiPiPiChargedJetConstituents, o2::aod::XicToXiPiPiChargedEventWiseSubtractedJets, o2::aod::XicToXiPiPiChargedEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesXicToXiPiPiData, o2::aod::CandidatesXicToXiPiPiMCD, o2::aod::CandidatesXicToXiPiPiMCP, o2::aod::JetTracksSubXicToXiPiPi, o2::aod::JetParticlesSubXicToXiPiPi, o2::aod::XicToXiPiPiChargedMCDetectorLevelJets, o2::aod::XicToXiPiPiChargedMCDetectorLevelJetConstituents, o2::aod::XicToXiPiPiChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::XicToXiPiPiChargedMCDetectorLevelEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesXicToXiPiPiData, o2::aod::CandidatesXicToXiPiPiMCD, o2::aod::CandidatesXicToXiPiPiMCP, o2::aod::JetTracksSubXicToXiPiPi, o2::aod::JetParticlesSubXicToXiPiPi, o2::aod::XicToXiPiPiChargedMCParticleLevelJets, o2::aod::XicToXiPiPiChargedMCParticleLevelJetConstituents, o2::aod::XicToXiPiPiChargedMCParticleLevelEventWiseSubtractedJets, o2::aod::XicToXiPiPiChargedMCParticleLevelEventWiseSubtractedJetConstituents>;
+
+// Dielectron instantiations
+extern template struct JetFinderHFTask<o2::aod::CandidatesDielectronData, o2::aod::CandidatesDielectronMCD, o2::aod::CandidatesDielectronMCP, o2::aod::JetTracksSubDielectron, o2::aod::JetParticlesSubDielectron, o2::aod::DielectronChargedJets, o2::aod::DielectronChargedJetConstituents, o2::aod::DielectronChargedEventWiseSubtractedJets, o2::aod::DielectronChargedEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesDielectronData, o2::aod::CandidatesDielectronMCD, o2::aod::CandidatesDielectronMCP, o2::aod::JetTracksSubDielectron, o2::aod::JetParticlesSubDielectron, o2::aod::DielectronChargedMCDetectorLevelJets, o2::aod::DielectronChargedMCDetectorLevelJetConstituents, o2::aod::DielectronChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::DielectronChargedMCDetectorLevelEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFTask<o2::aod::CandidatesDielectronData, o2::aod::CandidatesDielectronMCD, o2::aod::CandidatesDielectronMCP, o2::aod::JetTracksSubDielectron, o2::aod::JetParticlesSubDielectron, o2::aod::DielectronChargedMCParticleLevelJets, o2::aod::DielectronChargedMCParticleLevelJetConstituents, o2::aod::DielectronChargedMCParticleLevelEventWiseSubtractedJets, o2::aod::DielectronChargedMCParticleLevelEventWiseSubtractedJetConstituents>;
 
 #endif // PWGJE_JETFINDERS_JETFINDERHF_H_

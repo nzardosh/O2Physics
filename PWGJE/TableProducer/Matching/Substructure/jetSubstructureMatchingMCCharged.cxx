@@ -16,7 +16,7 @@
 #include "PWGJE/DataModel/Jet.h"
 #include "PWGJE/DataModel/JetReducedData.h"
 #include "PWGJE/DataModel/JetSubstructure.h"
-#include "PWGJE/TableProducer/Matching/Substructure/jetSubstructureMatching.h"
+#include "PWGJE/TableProducer/Matching/Substructure/jetSubstructureMatchingMC.h"
 
 #include <Framework/ASoA.h>
 #include <Framework/AnalysisTask.h>
@@ -30,21 +30,21 @@ using namespace o2;
 using namespace o2::framework;
 using namespace o2::framework::expressions;
 
-using ChargedJetSubstructureMatchingMC = JetSubstructureMatching<soa::Join<aod::ChargedMCDetectorLevelJets, aod::ChargedMCDetectorLevelJetConstituents, aod::ChargedMCDetectorLevelJetsMatchedToChargedMCParticleLevelJets>,
-                                                                 soa::Join<aod::ChargedMCParticleLevelJets, aod::ChargedMCParticleLevelJetConstituents, aod::ChargedMCParticleLevelJetsMatchedToChargedMCDetectorLevelJets>,
-                                                                 aod::ChargedMCDetectorLevelSPsMatchedToChargedMCParticleLevelSPs,
-                                                                 aod::ChargedMCParticleLevelSPsMatchedToChargedMCDetectorLevelSPs,
-                                                                 aod::ChargedMCDetectorLevelPRsMatchedToChargedMCParticleLevelPRs,
-                                                                 aod::ChargedMCParticleLevelPRsMatchedToChargedMCDetectorLevelPRs,
-                                                                 aod::ChargedMCDetectorLevelSPs,
-                                                                 aod::ChargedMCParticleLevelSPs,
-                                                                 aod::ChargedMCDetectorLevelPRs,
-                                                                 aod::ChargedMCParticleLevelPRs,
-                                                                 aod::JCollisions,
-                                                                 aod::JMcCollisions,
-                                                                 aod::JetTracksMCD,
-                                                                 aod::JetParticles,
-                                                                 aod::JDummys>;
+using ChargedJetSubstructureMatchingMC = JetSubstructureMatchingMC<soa::Join<aod::ChargedMCDetectorLevelJets, aod::ChargedMCDetectorLevelJetConstituents, aod::ChargedMCDetectorLevelJetsMatchedToChargedMCParticleLevelJets>,
+                                                                   soa::Join<aod::ChargedMCParticleLevelJets, aod::ChargedMCParticleLevelJetConstituents, aod::ChargedMCParticleLevelJetsMatchedToChargedMCDetectorLevelJets>,
+                                                                   aod::ChargedMCDetectorLevelSPsMatchedToChargedMCParticleLevelSPs,
+                                                                   aod::ChargedMCParticleLevelSPsMatchedToChargedMCDetectorLevelSPs,
+                                                                   aod::ChargedMCDetectorLevelPRsMatchedToChargedMCParticleLevelPRs,
+                                                                   aod::ChargedMCParticleLevelPRsMatchedToChargedMCDetectorLevelPRs,
+                                                                   aod::ChargedMCDetectorLevelSPs,
+                                                                   aod::ChargedMCParticleLevelSPs,
+                                                                   aod::ChargedMCDetectorLevelPRs,
+                                                                   aod::ChargedMCParticleLevelPRs,
+                                                                   aod::JCollisions,
+                                                                   aod::JMcCollisions,
+                                                                   aod::JetTracksMCD,
+                                                                   aod::JetParticles,
+                                                                   aod::JDummys>;
 
 WorkflowSpec defineDataProcessing(ConfigContext const& cfgc)
 {

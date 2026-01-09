@@ -14,17 +14,17 @@ if(FastJet_FOUND)
 
 o2physics_add_dpl_workflow(jet-finder-data-charged-1
                     SOURCES jetFinderDataCharged1.cxx
-                    PUBLIC_LINK_LIBRARIES O2::Framework O2Physics::PWGJECore O2Physics::AnalysisCore O2::FrameworkPhysicsSupport
+                    PUBLIC_LINK_LIBRARIES O2::Framework O2Physics::PWGJECore O2Physics::AnalysisCore O2::FrameworkPhysicsSupport O2Physics::PWGJEJetFinderTemplates
                     COMPONENT_NAME Analysis)
 
 o2physics_add_dpl_workflow(jet-finder-mcd-charged-1
                     SOURCES jetFinderMCDCharged1.cxx
-                    PUBLIC_LINK_LIBRARIES O2::Framework O2Physics::PWGJECore O2Physics::AnalysisCore O2::FrameworkPhysicsSupport
+                    PUBLIC_LINK_LIBRARIES O2::Framework O2Physics::PWGJECore O2Physics::AnalysisCore O2::FrameworkPhysicsSupport O2Physics::PWGJEJetFinderTemplates
                     COMPONENT_NAME Analysis)
 
 o2physics_add_dpl_workflow(jet-finder-mcp-charged-1
                     SOURCES jetFinderMCPCharged1.cxx
-                    PUBLIC_LINK_LIBRARIES O2::Framework O2Physics::PWGJECore O2Physics::AnalysisCore O2::FrameworkPhysicsSupport
+                    PUBLIC_LINK_LIBRARIES O2::Framework O2Physics::PWGJECore O2Physics::AnalysisCore O2::FrameworkPhysicsSupport O2Physics::PWGJEJetFinderTemplates
                     COMPONENT_NAME Analysis)
 
 

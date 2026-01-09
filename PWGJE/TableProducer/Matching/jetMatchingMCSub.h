@@ -23,7 +23,10 @@
 #include <Framework/AnalysisHelpers.h>
 #include <Framework/Configurable.h>
 #include <Framework/InitContext.h>
+
+#ifndef O2_NO_WORKFLOW_MAIN
 #include <Framework/runDataProcessing.h> // IWYU pragma: export
+#endif
 
 #include <vector>
 
@@ -85,5 +88,65 @@ struct JetMatchingMcSub {
   }
   PROCESS_SWITCH(JetMatchingMcSub, processJets, "Perform jet matching", true);
 };
+
+extern template struct JetMatchingMcSub<o2::soa::Join<o2::aod::ChargedMCDetectorLevelJets, o2::aod::ChargedMCDetectorLevelJetConstituents>,
+                                        o2::soa::Join<o2::aod::ChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::ChargedMCDetectorLevelEventWiseSubtractedJetConstituents>,
+                                        o2::aod::ChargedMCDetectorLevelJetsMatchedToChargedMCDetectorLevelEventWiseSubtractedJets,
+                                        o2::aod::ChargedMCDetectorLevelEventWiseSubtractedJetsMatchedToChargedMCDetectorLevelJets,
+                                        o2::aod::JDummys>;
+
+extern template struct JetMatchingMcSub<o2::soa::Join<o2::aod::D0ChargedMCDetectorLevelJets, o2::aod::D0ChargedMCDetectorLevelJetConstituents>,
+                                        o2::soa::Join<o2::aod::D0ChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::D0ChargedMCDetectorLevelEventWiseSubtractedJetConstituents>,
+                                        o2::aod::D0ChargedMCDetectorLevelJetsMatchedToD0ChargedMCDetectorLevelEventWiseSubtractedJets,
+                                        o2::aod::D0ChargedMCDetectorLevelEventWiseSubtractedJetsMatchedToD0ChargedMCDetectorLevelJets,
+                                        o2::aod::CandidatesD0MCD>;
+
+extern template struct JetMatchingMcSub<o2::soa::Join<o2::aod::DplusChargedMCDetectorLevelJets, o2::aod::DplusChargedMCDetectorLevelJetConstituents>,
+                                        o2::soa::Join<o2::aod::DplusChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::DplusChargedMCDetectorLevelEventWiseSubtractedJetConstituents>,
+                                        o2::aod::DplusChargedMCDetectorLevelJetsMatchedToDplusChargedMCDetectorLevelEventWiseSubtractedJets,
+                                        o2::aod::DplusChargedMCDetectorLevelEventWiseSubtractedJetsMatchedToDplusChargedMCDetectorLevelJets,
+                                        o2::aod::CandidatesDplusMCD>;
+
+extern template struct JetMatchingMcSub<o2::soa::Join<o2::aod::DsChargedMCDetectorLevelJets, o2::aod::DsChargedMCDetectorLevelJetConstituents>,
+                                        o2::soa::Join<o2::aod::DsChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::DsChargedMCDetectorLevelEventWiseSubtractedJetConstituents>,
+                                        o2::aod::DsChargedMCDetectorLevelJetsMatchedToDsChargedMCDetectorLevelEventWiseSubtractedJets,
+                                        o2::aod::DsChargedMCDetectorLevelEventWiseSubtractedJetsMatchedToDsChargedMCDetectorLevelJets,
+                                        o2::aod::CandidatesDsMCD>;
+
+extern template struct JetMatchingMcSub<o2::soa::Join<o2::aod::DstarChargedMCDetectorLevelJets, o2::aod::DstarChargedMCDetectorLevelJetConstituents>,
+                                        o2::soa::Join<o2::aod::DstarChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::DstarChargedMCDetectorLevelEventWiseSubtractedJetConstituents>,
+                                        o2::aod::DstarChargedMCDetectorLevelJetsMatchedToDstarChargedMCDetectorLevelEventWiseSubtractedJets,
+                                        o2::aod::DstarChargedMCDetectorLevelEventWiseSubtractedJetsMatchedToDstarChargedMCDetectorLevelJets,
+                                        o2::aod::CandidatesDstarMCD>;
+
+extern template struct JetMatchingMcSub<o2::soa::Join<o2::aod::LcChargedMCDetectorLevelJets, o2::aod::LcChargedMCDetectorLevelJetConstituents>,
+                                        o2::soa::Join<o2::aod::LcChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::LcChargedMCDetectorLevelEventWiseSubtractedJetConstituents>,
+                                        o2::aod::LcChargedMCDetectorLevelJetsMatchedToLcChargedMCDetectorLevelEventWiseSubtractedJets,
+                                        o2::aod::LcChargedMCDetectorLevelEventWiseSubtractedJetsMatchedToLcChargedMCDetectorLevelJets,
+                                        o2::aod::CandidatesLcMCD>;
+
+extern template struct JetMatchingMcSub<o2::soa::Join<o2::aod::B0ChargedMCDetectorLevelJets, o2::aod::B0ChargedMCDetectorLevelJetConstituents>,
+                                        o2::soa::Join<o2::aod::B0ChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::B0ChargedMCDetectorLevelEventWiseSubtractedJetConstituents>,
+                                        o2::aod::B0ChargedMCDetectorLevelJetsMatchedToB0ChargedMCDetectorLevelEventWiseSubtractedJets,
+                                        o2::aod::B0ChargedMCDetectorLevelEventWiseSubtractedJetsMatchedToB0ChargedMCDetectorLevelJets,
+                                        o2::aod::CandidatesB0MCD>;
+
+extern template struct JetMatchingMcSub<o2::soa::Join<o2::aod::BplusChargedMCDetectorLevelJets, o2::aod::BplusChargedMCDetectorLevelJetConstituents>,
+                                        o2::soa::Join<o2::aod::BplusChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::BplusChargedMCDetectorLevelEventWiseSubtractedJetConstituents>,
+                                        o2::aod::BplusChargedMCDetectorLevelJetsMatchedToBplusChargedMCDetectorLevelEventWiseSubtractedJets,
+                                        o2::aod::BplusChargedMCDetectorLevelEventWiseSubtractedJetsMatchedToBplusChargedMCDetectorLevelJets,
+                                        o2::aod::CandidatesBplusMCD>;
+
+extern template struct JetMatchingMcSub<o2::soa::Join<o2::aod::XicToXiPiPiChargedMCDetectorLevelJets, o2::aod::XicToXiPiPiChargedMCDetectorLevelJetConstituents>,
+                                        o2::soa::Join<o2::aod::XicToXiPiPiChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::XicToXiPiPiChargedMCDetectorLevelEventWiseSubtractedJetConstituents>,
+                                        o2::aod::XicToXiPiPiChargedMCDetectorLevelJetsMatchedToXicToXiPiPiChargedMCDetectorLevelEventWiseSubtractedJets,
+                                        o2::aod::XicToXiPiPiChargedMCDetectorLevelEventWiseSubtractedJetsMatchedToXicToXiPiPiChargedMCDetectorLevelJets,
+                                        o2::aod::CandidatesXicToXiPiPiMCD>;
+
+extern template struct JetMatchingMcSub<o2::soa::Join<o2::aod::DielectronChargedMCDetectorLevelJets, o2::aod::DielectronChargedMCDetectorLevelJetConstituents>,
+                                        o2::soa::Join<o2::aod::DielectronChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::DielectronChargedMCDetectorLevelEventWiseSubtractedJetConstituents>,
+                                        o2::aod::DielectronChargedMCDetectorLevelJetsMatchedToDielectronChargedMCDetectorLevelEventWiseSubtractedJets,
+                                        o2::aod::DielectronChargedMCDetectorLevelEventWiseSubtractedJetsMatchedToDielectronChargedMCDetectorLevelJets,
+                                        o2::aod::CandidatesDielectronMCD>;
 
 #endif // PWGJE_TABLEPRODUCER_MATCHING_JETMATCHINGMCSUB_H_

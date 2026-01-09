@@ -26,7 +26,10 @@
 #include <Framework/AnalysisHelpers.h>
 #include <Framework/Configurable.h>
 #include <Framework/InitContext.h>
+
+#ifndef O2_NO_WORKFLOW_MAIN
 #include <Framework/runDataProcessing.h> // IWYU pragma: export
+#endif
 
 #include <vector>
 
@@ -279,5 +282,155 @@ struct JetSubstructureMatchingSub {
   }
   PROCESS_SWITCH(JetSubstructureMatchingSub, processData, "charged jet substructure", true);
 };
+
+extern template struct JetSubstructureMatchingSub<o2::soa::Join<o2::aod::ChargedJets, o2::aod::ChargedJetConstituents, o2::aod::ChargedJetsMatchedToChargedEventWiseSubtractedJets>,
+                                                  o2::soa::Join<o2::aod::ChargedEventWiseSubtractedJets, o2::aod::ChargedEventWiseSubtractedJetConstituents, o2::aod::ChargedEventWiseSubtractedJetsMatchedToChargedJets>,
+                                                  o2::aod::ChargedSPsMatchedToChargedEventWiseSubtractedSPs,
+                                                  o2::aod::ChargedEventWiseSubtractedSPsMatchedToChargedSPs,
+                                                  o2::aod::ChargedPRsMatchedToChargedEventWiseSubtractedPRs,
+                                                  o2::aod::ChargedEventWiseSubtractedPRsMatchedToChargedPRs,
+                                                  o2::aod::ChargedSPs,
+                                                  o2::aod::ChargedEventWiseSubtractedSPs,
+                                                  o2::aod::ChargedPRs,
+                                                  o2::aod::ChargedEventWiseSubtractedPRs,
+                                                  o2::aod::JCollisions,
+                                                  o2::aod::JetTracks,
+                                                  o2::aod::JetTracksSub,
+                                                  o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingSub<o2::soa::Join<o2::aod::D0ChargedJets, o2::aod::D0ChargedJetConstituents, o2::aod::D0ChargedJetsMatchedToD0ChargedEventWiseSubtractedJets>,
+                                                  o2::soa::Join<o2::aod::D0ChargedEventWiseSubtractedJets, o2::aod::D0ChargedEventWiseSubtractedJetConstituents, o2::aod::D0ChargedEventWiseSubtractedJetsMatchedToD0ChargedJets>,
+                                                  o2::aod::D0ChargedSPsMatchedToD0ChargedEventWiseSubtractedSPs,
+                                                  o2::aod::D0ChargedEventWiseSubtractedSPsMatchedToD0ChargedSPs,
+                                                  o2::aod::D0ChargedPRsMatchedToD0ChargedEventWiseSubtractedPRs,
+                                                  o2::aod::D0ChargedEventWiseSubtractedPRsMatchedToD0ChargedPRs,
+                                                  o2::aod::D0ChargedSPs,
+                                                  o2::aod::D0ChargedEventWiseSubtractedSPs,
+                                                  o2::aod::D0ChargedPRs,
+                                                  o2::aod::D0ChargedEventWiseSubtractedPRs,
+                                                  o2::aod::CandidatesD0Data,
+                                                  o2::aod::JetTracks,
+                                                  o2::aod::JetTracksSubD0,
+                                                  o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingSub<o2::soa::Join<o2::aod::DplusChargedJets, o2::aod::DplusChargedJetConstituents, o2::aod::DplusChargedJetsMatchedToDplusChargedEventWiseSubtractedJets>,
+                                                  o2::soa::Join<o2::aod::DplusChargedEventWiseSubtractedJets, o2::aod::DplusChargedEventWiseSubtractedJetConstituents, o2::aod::DplusChargedEventWiseSubtractedJetsMatchedToDplusChargedJets>,
+                                                  o2::aod::DplusChargedSPsMatchedToDplusChargedEventWiseSubtractedSPs,
+                                                  o2::aod::DplusChargedEventWiseSubtractedSPsMatchedToDplusChargedSPs,
+                                                  o2::aod::DplusChargedPRsMatchedToDplusChargedEventWiseSubtractedPRs,
+                                                  o2::aod::DplusChargedEventWiseSubtractedPRsMatchedToDplusChargedPRs,
+                                                  o2::aod::DplusChargedSPs,
+                                                  o2::aod::DplusChargedEventWiseSubtractedSPs,
+                                                  o2::aod::DplusChargedPRs,
+                                                  o2::aod::DplusChargedEventWiseSubtractedPRs,
+                                                  o2::aod::CandidatesDplusData,
+                                                  o2::aod::JetTracks,
+                                                  o2::aod::JetTracksSubDplus,
+                                                  o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingSub<o2::soa::Join<o2::aod::DsChargedJets, o2::aod::DsChargedJetConstituents, o2::aod::DsChargedJetsMatchedToDsChargedEventWiseSubtractedJets>,
+                                                  o2::soa::Join<o2::aod::DsChargedEventWiseSubtractedJets, o2::aod::DsChargedEventWiseSubtractedJetConstituents, o2::aod::DsChargedEventWiseSubtractedJetsMatchedToDsChargedJets>,
+                                                  o2::aod::DsChargedSPsMatchedToDsChargedEventWiseSubtractedSPs,
+                                                  o2::aod::DsChargedEventWiseSubtractedSPsMatchedToDsChargedSPs,
+                                                  o2::aod::DsChargedPRsMatchedToDsChargedEventWiseSubtractedPRs,
+                                                  o2::aod::DsChargedEventWiseSubtractedPRsMatchedToDsChargedPRs,
+                                                  o2::aod::DsChargedSPs,
+                                                  o2::aod::DsChargedEventWiseSubtractedSPs,
+                                                  o2::aod::DsChargedPRs,
+                                                  o2::aod::DsChargedEventWiseSubtractedPRs,
+                                                  o2::aod::CandidatesDsData,
+                                                  o2::aod::JetTracks,
+                                                  o2::aod::JetTracksSubDs,
+                                                  o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingSub<o2::soa::Join<o2::aod::DstarChargedJets, o2::aod::DstarChargedJetConstituents, o2::aod::DstarChargedJetsMatchedToDstarChargedEventWiseSubtractedJets>,
+                                                  o2::soa::Join<o2::aod::DstarChargedEventWiseSubtractedJets, o2::aod::DstarChargedEventWiseSubtractedJetConstituents, o2::aod::DstarChargedEventWiseSubtractedJetsMatchedToDstarChargedJets>,
+                                                  o2::aod::DstarChargedSPsMatchedToDstarChargedEventWiseSubtractedSPs,
+                                                  o2::aod::DstarChargedEventWiseSubtractedSPsMatchedToDstarChargedSPs,
+                                                  o2::aod::DstarChargedPRsMatchedToDstarChargedEventWiseSubtractedPRs,
+                                                  o2::aod::DstarChargedEventWiseSubtractedPRsMatchedToDstarChargedPRs,
+                                                  o2::aod::DstarChargedSPs,
+                                                  o2::aod::DstarChargedEventWiseSubtractedSPs,
+                                                  o2::aod::DstarChargedPRs,
+                                                  o2::aod::DstarChargedEventWiseSubtractedPRs,
+                                                  o2::aod::CandidatesDstarData,
+                                                  o2::aod::JetTracks,
+                                                  o2::aod::JetTracksSubDstar,
+                                                  o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingSub<o2::soa::Join<o2::aod::LcChargedJets, o2::aod::LcChargedJetConstituents, o2::aod::LcChargedJetsMatchedToLcChargedEventWiseSubtractedJets>,
+                                                  o2::soa::Join<o2::aod::LcChargedEventWiseSubtractedJets, o2::aod::LcChargedEventWiseSubtractedJetConstituents, o2::aod::LcChargedEventWiseSubtractedJetsMatchedToLcChargedJets>,
+                                                  o2::aod::LcChargedSPsMatchedToLcChargedEventWiseSubtractedSPs,
+                                                  o2::aod::LcChargedEventWiseSubtractedSPsMatchedToLcChargedSPs,
+                                                  o2::aod::LcChargedPRsMatchedToLcChargedEventWiseSubtractedPRs,
+                                                  o2::aod::LcChargedEventWiseSubtractedPRsMatchedToLcChargedPRs,
+                                                  o2::aod::LcChargedSPs,
+                                                  o2::aod::LcChargedEventWiseSubtractedSPs,
+                                                  o2::aod::LcChargedPRs,
+                                                  o2::aod::LcChargedEventWiseSubtractedPRs,
+                                                  o2::aod::CandidatesLcData,
+                                                  o2::aod::JetTracks,
+                                                  o2::aod::JetTracksSubLc,
+                                                  o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingSub<o2::soa::Join<o2::aod::B0ChargedJets, o2::aod::B0ChargedJetConstituents, o2::aod::B0ChargedJetsMatchedToB0ChargedEventWiseSubtractedJets>,
+                                                  o2::soa::Join<o2::aod::B0ChargedEventWiseSubtractedJets, o2::aod::B0ChargedEventWiseSubtractedJetConstituents, o2::aod::B0ChargedEventWiseSubtractedJetsMatchedToB0ChargedJets>,
+                                                  o2::aod::B0ChargedSPsMatchedToB0ChargedEventWiseSubtractedSPs,
+                                                  o2::aod::B0ChargedEventWiseSubtractedSPsMatchedToB0ChargedSPs,
+                                                  o2::aod::B0ChargedPRsMatchedToB0ChargedEventWiseSubtractedPRs,
+                                                  o2::aod::B0ChargedEventWiseSubtractedPRsMatchedToB0ChargedPRs,
+                                                  o2::aod::B0ChargedSPs,
+                                                  o2::aod::B0ChargedEventWiseSubtractedSPs,
+                                                  o2::aod::B0ChargedPRs,
+                                                  o2::aod::B0ChargedEventWiseSubtractedPRs,
+                                                  o2::aod::CandidatesB0Data,
+                                                  o2::aod::JetTracks,
+                                                  o2::aod::JetTracksSubB0,
+                                                  o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingSub<o2::soa::Join<o2::aod::BplusChargedJets, o2::aod::BplusChargedJetConstituents, o2::aod::BplusChargedJetsMatchedToBplusChargedEventWiseSubtractedJets>,
+                                                  o2::soa::Join<o2::aod::BplusChargedEventWiseSubtractedJets, o2::aod::BplusChargedEventWiseSubtractedJetConstituents, o2::aod::BplusChargedEventWiseSubtractedJetsMatchedToBplusChargedJets>,
+                                                  o2::aod::BplusChargedSPsMatchedToBplusChargedEventWiseSubtractedSPs,
+                                                  o2::aod::BplusChargedEventWiseSubtractedSPsMatchedToBplusChargedSPs,
+                                                  o2::aod::BplusChargedPRsMatchedToBplusChargedEventWiseSubtractedPRs,
+                                                  o2::aod::BplusChargedEventWiseSubtractedPRsMatchedToBplusChargedPRs,
+                                                  o2::aod::BplusChargedSPs,
+                                                  o2::aod::BplusChargedEventWiseSubtractedSPs,
+                                                  o2::aod::BplusChargedPRs,
+                                                  o2::aod::BplusChargedEventWiseSubtractedPRs,
+                                                  o2::aod::CandidatesBplusData,
+                                                  o2::aod::JetTracks,
+                                                  o2::aod::JetTracksSubBplus,
+                                                  o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingSub<o2::soa::Join<o2::aod::XicToXiPiPiChargedJets, o2::aod::XicToXiPiPiChargedJetConstituents, o2::aod::XicToXiPiPiChargedJetsMatchedToXicToXiPiPiChargedEventWiseSubtractedJets>,
+                                                  o2::soa::Join<o2::aod::XicToXiPiPiChargedEventWiseSubtractedJets, o2::aod::XicToXiPiPiChargedEventWiseSubtractedJetConstituents, o2::aod::XicToXiPiPiChargedEventWiseSubtractedJetsMatchedToXicToXiPiPiChargedJets>,
+                                                  o2::aod::XicToXiPiPiChargedSPsMatchedToXicToXiPiPiChargedEventWiseSubtractedSPs,
+                                                  o2::aod::XicToXiPiPiChargedEventWiseSubtractedSPsMatchedToXicToXiPiPiChargedSPs,
+                                                  o2::aod::XicToXiPiPiChargedPRsMatchedToXicToXiPiPiChargedEventWiseSubtractedPRs,
+                                                  o2::aod::XicToXiPiPiChargedEventWiseSubtractedPRsMatchedToXicToXiPiPiChargedPRs,
+                                                  o2::aod::XicToXiPiPiChargedSPs,
+                                                  o2::aod::XicToXiPiPiChargedEventWiseSubtractedSPs,
+                                                  o2::aod::XicToXiPiPiChargedPRs,
+                                                  o2::aod::XicToXiPiPiChargedEventWiseSubtractedPRs,
+                                                  o2::aod::CandidatesXicToXiPiPiData,
+                                                  o2::aod::JetTracks,
+                                                  o2::aod::JetTracksSubXicToXiPiPi,
+                                                  o2::aod::JDummys>;
+
+extern template struct JetSubstructureMatchingSub<o2::soa::Join<o2::aod::DielectronChargedJets, o2::aod::DielectronChargedJetConstituents, o2::aod::DielectronChargedJetsMatchedToDielectronChargedEventWiseSubtractedJets>,
+                                                  o2::soa::Join<o2::aod::DielectronChargedEventWiseSubtractedJets, o2::aod::DielectronChargedEventWiseSubtractedJetConstituents, o2::aod::DielectronChargedEventWiseSubtractedJetsMatchedToDielectronChargedJets>,
+                                                  o2::aod::DielectronChargedSPsMatchedToDielectronChargedEventWiseSubtractedSPs,
+                                                  o2::aod::DielectronChargedEventWiseSubtractedSPsMatchedToDielectronChargedSPs,
+                                                  o2::aod::DielectronChargedPRsMatchedToDielectronChargedEventWiseSubtractedPRs,
+                                                  o2::aod::DielectronChargedEventWiseSubtractedPRsMatchedToDielectronChargedPRs,
+                                                  o2::aod::DielectronChargedSPs,
+                                                  o2::aod::DielectronChargedEventWiseSubtractedSPs,
+                                                  o2::aod::DielectronChargedPRs,
+                                                  o2::aod::DielectronChargedEventWiseSubtractedPRs,
+                                                  o2::aod::CandidatesDielectronData,
+                                                  o2::aod::JetTracks,
+                                                  o2::aod::JetTracksSubDielectron,
+                                                  o2::aod::JDummys>;
 
 #endif // PWGJE_TABLEPRODUCER_MATCHING_SUBSTRUCTURE_JETSUBSTRUCTUREMATCHINGSUB_H_

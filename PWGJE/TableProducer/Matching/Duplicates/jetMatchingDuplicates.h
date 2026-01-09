@@ -24,7 +24,10 @@
 #include <Framework/AnalysisHelpers.h>
 #include <Framework/Configurable.h>
 #include <Framework/InitContext.h>
+
+#ifndef O2_NO_WORKFLOW_MAIN
 #include <Framework/runDataProcessing.h> // IWYU pragma: export
+#endif
 
 #include <vector>
 
@@ -84,5 +87,26 @@ struct JetMatchingDuplicates {
   }
   PROCESS_SWITCH(JetMatchingDuplicates, processJets, "Perform jet matching", true);
 };
+
+extern template struct JetMatchingDuplicates<o2::soa::Join<o2::aod::ChargedJets, o2::aod::ChargedJetConstituents>,
+                                             o2::soa::Join<o2::aod::Charged1Jets, o2::aod::Charged1JetConstituents>,
+                                             o2::aod::ChargedJetsMatchedToCharged1Jets,
+                                             o2::aod::Charged1JetsMatchedToChargedJets,
+                                             o2::aod::JTracks,
+                                             o2::aod::JDummys>;
+
+extern template struct JetMatchingDuplicates<o2::soa::Join<o2::aod::ChargedMCDetectorLevelJets, o2::aod::ChargedMCDetectorLevelJetConstituents>,
+                                             o2::soa::Join<o2::aod::Charged1MCDetectorLevelJets, o2::aod::Charged1MCDetectorLevelJetConstituents>,
+                                             o2::aod::ChargedMCDetectorLevelJetsMatchedToCharged1MCDetectorLevelJets,
+                                             o2::aod::Charged1MCDetectorLevelJetsMatchedToChargedMCDetectorLevelJets,
+                                             o2::aod::JTracks,
+                                             o2::aod::JDummys>;
+
+extern template struct JetMatchingDuplicates<o2::soa::Join<o2::aod::ChargedMCParticleLevelJets, o2::aod::ChargedMCParticleLevelJetConstituents>,
+                                             o2::soa::Join<o2::aod::Charged1MCParticleLevelJets, o2::aod::Charged1MCParticleLevelJetConstituents>,
+                                             o2::aod::ChargedMCParticleLevelJetsMatchedToCharged1MCParticleLevelJets,
+                                             o2::aod::Charged1MCParticleLevelJetsMatchedToChargedMCParticleLevelJets,
+                                             o2::aod::JMcParticles,
+                                             o2::aod::JDummys>;
 
 #endif // PWGJE_TABLEPRODUCER_MATCHING_DUPLICATES_JETMATCHINGDUPLICATES_H_

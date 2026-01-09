@@ -14,8 +14,8 @@
 /// \author Nima Zardoshti <nima.zardoshti@cern.ch>
 /// \author Jochen Klein <jochen.klein@cern.ch>
 
-#ifndef PWGJE_JETFINDERS_JETFINDERHF_H_
-#define PWGJE_JETFINDERS_JETFINDERHF_H_
+#ifndef PWGJE_JETFINDERS_JETFINDERHFHFBAR_H_
+#define PWGJE_JETFINDERS_JETFINDERHFHFBAR_H_
 
 #include "PWGJE/Core/JetDerivedDataUtilities.h"
 #include "PWGJE/Core/JetFinder.h"
@@ -34,7 +34,10 @@
 #include <Framework/InitContext.h>
 #include <Framework/Logger.h>
 #include <Framework/O2DatabasePDGPlugin.h>
+
+#ifndef O2_NO_WORKFLOW_MAIN
 #include <Framework/runDataProcessing.h> // IWYU pragma: export
+#endif
 
 #include <THn.h>
 #include <TMathBase.h>
@@ -317,4 +320,20 @@ struct JetFinderHFHFBarTask {
   PROCESS_SWITCH(JetFinderHFHFBarTask, processChargedJetsMCP, "hf jet finding on MC particle level", false);
 };
 
-#endif // PWGJE_JETFINDERS_JETFINDERHF_H_
+// ============================================================================
+// Explicit Template Instantiation Declarations (extern template)
+// These prevent implicit instantiation in translation units that include this header.
+// The actual instantiations are in jetFinderTemplateInstantiations.cxx
+// ============================================================================
+
+// D0D0Bar instantiations
+extern template struct JetFinderHFHFBarTask<o2::aod::CandidatesD0Data, o2::aod::CandidatesD0MCD, o2::aod::CandidatesD0MCP, o2::aod::JetTracksSubD0, o2::aod::JetParticlesSubD0, o2::aod::D0ChargedJets, o2::aod::D0ChargedJetConstituents, o2::aod::D0ChargedEventWiseSubtractedJets, o2::aod::D0ChargedEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFHFBarTask<o2::aod::CandidatesD0Data, o2::aod::CandidatesD0MCD, o2::aod::CandidatesD0MCP, o2::aod::JetTracksSubD0, o2::aod::JetParticlesSubD0, o2::aod::D0ChargedMCDetectorLevelJets, o2::aod::D0ChargedMCDetectorLevelJetConstituents, o2::aod::D0ChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::D0ChargedMCDetectorLevelEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFHFBarTask<o2::aod::CandidatesD0Data, o2::aod::CandidatesD0MCD, o2::aod::CandidatesD0MCP, o2::aod::JetTracksSubD0, o2::aod::JetParticlesSubD0, o2::aod::D0ChargedMCParticleLevelJets, o2::aod::D0ChargedMCParticleLevelJetConstituents, o2::aod::D0ChargedMCParticleLevelEventWiseSubtractedJets, o2::aod::D0ChargedMCParticleLevelEventWiseSubtractedJetConstituents>;
+
+// DplusDminus instantiations
+extern template struct JetFinderHFHFBarTask<o2::aod::CandidatesDplusData, o2::aod::CandidatesDplusMCD, o2::aod::CandidatesDplusMCP, o2::aod::JetTracksSubDplus, o2::aod::JetParticlesSubDplus, o2::aod::DplusChargedJets, o2::aod::DplusChargedJetConstituents, o2::aod::DplusChargedEventWiseSubtractedJets, o2::aod::DplusChargedEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFHFBarTask<o2::aod::CandidatesDplusData, o2::aod::CandidatesDplusMCD, o2::aod::CandidatesDplusMCP, o2::aod::JetTracksSubDplus, o2::aod::JetParticlesSubDplus, o2::aod::DplusChargedMCDetectorLevelJets, o2::aod::DplusChargedMCDetectorLevelJetConstituents, o2::aod::DplusChargedMCDetectorLevelEventWiseSubtractedJets, o2::aod::DplusChargedMCDetectorLevelEventWiseSubtractedJetConstituents>;
+extern template struct JetFinderHFHFBarTask<o2::aod::CandidatesDplusData, o2::aod::CandidatesDplusMCD, o2::aod::CandidatesDplusMCP, o2::aod::JetTracksSubDplus, o2::aod::JetParticlesSubDplus, o2::aod::DplusChargedMCParticleLevelJets, o2::aod::DplusChargedMCParticleLevelJetConstituents, o2::aod::DplusChargedMCParticleLevelEventWiseSubtractedJets, o2::aod::DplusChargedMCParticleLevelEventWiseSubtractedJetConstituents>;
+
+#endif // PWGJE_JETFINDERS_JETFINDERHFHFBAR_H_
