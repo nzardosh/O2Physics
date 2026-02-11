@@ -511,7 +511,8 @@ struct JetDerivedDataWriter {
             continue;
           }
           products.storedJTracksTable(collisionMapping[collision.globalIndex()], o2::math_utils::detail::truncateFloatFraction(track.pt(), precisionMomentumMask), o2::math_utils::detail::truncateFloatFraction(track.eta(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.phi(), precisionPositionMask), track.trackSel());
-          products.storedJTracksExtraTable(o2::math_utils::detail::truncateFloatFraction(track.dcaX(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.dcaY(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.dcaZ(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.dcaXY(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.dcaXYZ(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.sigmadcaZ(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.sigmadcaXY(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.sigmadcaXYZ(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(track.sigma1Pt(), precisionMomentumMask));
+          products.storedJTracksTable(collisionMapping[collision.globalIndex()], track.pt(), track.eta(), track.phi(), track.trackSel());
+          products.storedJTracksExtraTable(track.dcaX(), track.dcaY(), track.dcaZ(), track.dcaXY(), track.dcaXYZ(), track.sigmadcaZ(), track.sigmadcaXY(), track.sigmadcaXYZ(), track.sigma1Pt());
           products.storedJTracksParentIndexTable(track.trackId());
           trackMapping[track.globalIndex()] = products.storedJTracksTable.lastIndex();
         }
@@ -711,7 +712,7 @@ struct JetDerivedDataWriter {
               continue;
             }
           }
-          products.storedJMcParticlesTable(mcCollisionMapping[mcCollision.globalIndex()], o2::math_utils::detail::truncateFloatFraction(particle.pt(), precisionMomentumMask), o2::math_utils::detail::truncateFloatFraction(particle.eta(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(particle.phi(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(particle.y(), precisionPositionMask), o2::math_utils::detail::truncateFloatFraction(particle.e(), precisionMomentumMask), particle.pdgCode(), particle.statusCode(), particle.flags(), mothersIds, daughtersIds);
+          products.storedJMcParticlesTable(mcCollisionMapping[mcCollision.globalIndex()], particle.pt(), particle.eta(), particle.phi(), particle.y(), particle.e(), particle.pdgCode(), particle.statusCode(), particle.flags(), mothersIds, daughtersIds);
           products.storedJParticlesParentIndexTable(particle.mcParticleId());
         }
       }
