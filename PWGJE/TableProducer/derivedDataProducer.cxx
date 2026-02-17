@@ -164,6 +164,7 @@ struct JetDerivedDataProducerTask {
     Configurable<bool> includeUpcs{"includeUpcs", true, "include option to identify UPC events"};
     Configurable<bool> v0ChargedDecaysOnly{"v0ChargedDecaysOnly", true, "store V0s (at particle-level) only if they decay to charged particles"};
     Configurable<bool> isMCGenOnly{"isMCGenOnly", false, "analysis is run over mcGen only"};
+    Configurable<bool> isEmbedding{"isEmbedding", false, "isEmbedding"};
 
     o2::framework::Configurable<bool> applyTrackingEfficiency{"applyTrackingEfficiency", {false}, "configurable to decide whether to apply artificial tracking efficiency (discarding tracks) in jet finding"};
     o2::framework::Configurable<std::vector<double>> trackingEfficiencyPtBinning{"trackingEfficiencyPtBinning", {0., 10, 999.}, "pt binning of tracking efficiency array if applyTrackingEfficiency is true"};
@@ -482,7 +483,7 @@ struct JetDerivedDataProducerTask {
 
   void processTracks(soa::Join<aod::Tracks, aod::TracksExtra, aod::TracksCov, aod::TracksDCA, aod::TracksDCACov, aod::TrackSelection, aod::TrackSelectionExtension>::iterator const& track, aod::Collisions const&)
   {
-    products.jTracksTable(track.collisionId(), track.pt(), track.eta(), track.phi(), jetderiveddatautilities::setTrackSelectionBit(track, track.dcaZ(), config.dcaZMax, trackMCSelection[track.globalIndex()]));
+    products.jTracksTable(track.collisionId(), track.pt(), track.eta(), track.phi(), jetderiveddatautilities::setTrackSelectionBit(track, track.dcaZ(), config.dcaZMax, trackMCSelection[track.globalIndex()], config.isEmbedding));
     auto trackParCov = getTrackParCov(track);
     auto xyzTrack = trackParCov.getXYZGlo();
     float sigmaDCAXYZ2;
@@ -510,7 +511,7 @@ struct JetDerivedDataProducerTask {
         auto track = collisionTrackIndex.track_as<soa::Join<aod::Tracks, aod::TracksExtra, aod::TracksCov, aod::TracksDCA, aod::TracksDCACov, aod::TrackSelection, aod::TrackSelectionExtension>>();
         auto trackParCov = getTrackParCov(track);
         if (track.collisionId() == collision.globalIndex()) {
-          products.jTracksTable(collision.globalIndex(), track.pt(), track.eta(), track.phi(), jetderiveddatautilities::setTrackSelectionBit(track, track.dcaZ(), config.dcaZMax, trackMCSelection[track.globalIndex()]));
+          products.jTracksTable(collision.globalIndex(), track.pt(), track.eta(), track.phi(), jetderiveddatautilities::setTrackSelectionBit(track, track.dcaZ(), config.dcaZMax, trackMCSelection[track.globalIndex()], config.isEmbedding));
           products.jTracksParentIndexTable(track.globalIndex());
           auto xyzTrack = trackParCov.getXYZGlo();
           float sigmaDCAXYZ2;
@@ -525,7 +526,7 @@ struct JetDerivedDataProducerTask {
           collisionInfo.setPos({collision.posX(), collision.posY(), collision.posZ()});
           collisionInfo.setCov(collision.covXX(), collision.covXY(), collision.covYY(), collision.covXZ(), collision.covYZ(), collision.covZZ());
           o2::base::Propagator::Instance()->propagateToDCABxByBz(collisionInfo, trackParCov, 2.f, noMatCorr, &dcaCovInfo);
-          products.jTracksTable(collision.globalIndex(), trackParCov.getPt(), trackParCov.getEta(), trackParCov.getPhi(), jetderiveddatautilities::setTrackSelectionBit(track, dcaCovInfo.getZ(), config.dcaZMax, trackMCSelection[track.globalIndex()])); // only qualitytracksWDCA are a reliable selection
+          products.jTracksTable(collision.globalIndex(), trackParCov.getPt(), trackParCov.getEta(), trackParCov.getPhi(), jetderiveddatautilities::setTrackSelectionBit(track, dcaCovInfo.getZ(), config.dcaZMax, trackMCSelection[track.globalIndex()], config.isEmbedding)); // only qualitytracksWDCA are a reliable selection
           products.jTracksParentIndexTable(track.globalIndex());
           auto xyzTrack = trackParCov.getXYZGlo();
           float dcaXY = dcaCovInfo.getY();
@@ -551,7 +552,7 @@ struct JetDerivedDataProducerTask {
   void processTracksRun2(soa::Join<aod::Tracks, aod::TracksExtra, aod::TracksCov, aod::TracksDCA, aod::TrackSelection, aod::TrackSelectionExtension>::iterator const& track)
   {
     // TracksDCACov table is not yet available for Run 2 converted data. Remove this process function and use only processTracks when that becomes available.
-    products.jTracksTable(track.collisionId(), track.pt(), track.eta(), track.phi(), jetderiveddatautilities::setTrackSelectionBit(track, track.dcaZ(), config.dcaZMax, trackMCSelection[track.globalIndex()]));
+    products.jTracksTable(track.collisionId(), track.pt(), track.eta(), track.phi(), jetderiveddatautilities::setTrackSelectionBit(track, track.dcaZ(), config.dcaZMax, trackMCSelection[track.globalIndex()], config.isEmbedding));
     float sigmaDCAXYZ2 = 0.0;
     float dcaXYZ = getDcaXYZ(track, &sigmaDCAXYZ2);
     float dcaX = -99.0;
