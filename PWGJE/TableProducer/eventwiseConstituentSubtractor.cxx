@@ -130,7 +130,7 @@ struct eventWiseConstituentSubtractorTask {
       }
       inputParticles.clear();
       tracksSubtracted.clear();
-      jetfindingutilities::analyseTracks(inputParticles, tracks, trackSelection, &candidate);
+      jetfindingutilities::analyseTracks(inputParticles, tracks, trackSelection, false, &candidate);
 
       tracksSubtracted = eventWiseConstituentSubtractor.JetBkgSubUtils::doEventConstSub(inputParticles, candidate.rho(), candidate.rhoM());
       for (auto const& trackSubtracted : tracksSubtracted) {
@@ -167,7 +167,7 @@ struct eventWiseConstituentSubtractorTask {
     }
     inputParticles.clear();
     tracksSubtracted.clear();
-    jetfindingutilities::analyseTracks<soa::Filtered<aod::JetTracks>, soa::Filtered<aod::JetTracks>::iterator>(inputParticles, tracks, trackSelection);
+    jetfindingutilities::analyseTracks<soa::Filtered<aod::JetTracks>, soa::Filtered<aod::JetTracks>::iterator>(inputParticles, tracks, trackSelection, false);
 
     tracksSubtracted = eventWiseConstituentSubtractor.JetBkgSubUtils::doEventConstSub(inputParticles, collision.rho(), collision.rhoM());
 
